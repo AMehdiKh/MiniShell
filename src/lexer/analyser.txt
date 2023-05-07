@@ -1,0 +1,28 @@
+|:
+        first_token: -bash: syntax error near unexpected token `|'
+        after '|'  : -bash: syntax error near unexpected token `|'
+        after '('  : -bash: syntax error near unexpected token `|'
+        after '&&' : -bash: syntax error near unexpected token `|'
+        after '||' : -bash: syntax error near unexpected token `|'
+        after '>/<': -bash: syntax error near unexpected token `|'
+        last_token : -bash: syntax error near unexpected token `|'
+
+(:
+        after ')'  : -bash: syntax error near unexpected token `|'
+        after TOKEN: -bash: syntax error near unexpected token `|'
+        after '>/<': -bash: syntax error near unexpected token `|'
+        last_token : -bash: syntax error near unexpected token `|'
+
+):
+        first_token: -bash: syntax error near unexpected token `|'
+        after '|'  : -bash: syntax error near unexpected token `|'
+        after '('  : -bash: syntax error near unexpected token `|'
+        after '&&' : -bash: syntax error near unexpected token `|'
+        after '||' : -bash: syntax error near unexpected token `|'
+        after '>/<': -bash: syntax error near unexpected token `|'
+
+TOKEN:
+        after ')'  : -bash: syntax error near unexpected token `|'
+
+>/<:
+        last_token : -bash: syntax error near unexpected token `|'
