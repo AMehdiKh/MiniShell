@@ -6,17 +6,17 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 20:37:59 by Ael-khel          #+#    #+#             */
-/*   Updated: 2022/10/15 11:00:31 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/07 21:33:09 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstdelone(t_list *lst, void (*del)(void *))
+void	ft_lstdelone(t_list *lst)
 {
 	if (lst && del)
 	{
-		del(lst->content);
+		free(lst->content);
 		free(lst);
 	}
 }

@@ -6,13 +6,13 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/06 06:33:50 by Ael-khel          #+#    #+#             */
-/*   Updated: 2022/10/15 11:00:28 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/07 21:33:43 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void *))
+void	ft_lstclear(t_list **lst)
 {
 	t_list	*freed;
 
@@ -20,6 +20,6 @@ void	ft_lstclear(t_list **lst, void (*del)(void *))
 	{
 		freed = *lst;
 		*lst = (*lst)->next;
-		ft_lstdelone(freed, del);
+		ft_lstdelone(freed);
 	}
 }

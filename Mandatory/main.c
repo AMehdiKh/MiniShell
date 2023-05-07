@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/04 02:10:31 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/08 00:38:11 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <unistd.h>
-
 
 char	*ft_unclosed_quote(char *line)
 {
@@ -64,6 +63,8 @@ int	main(int ac, char **av, char **env)
 		if (shell->line && !*shell->line)
 			continue ;
 		add_history(shell->line);
+		if (ft_check_meta(shell))
+			continue ;
 		if (ft_lexer(shell))
 			continue ;
 	}
