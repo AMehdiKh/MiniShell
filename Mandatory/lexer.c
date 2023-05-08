@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 19:37:33 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/07 23:26:39 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/08 02:03:34 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,66 +22,71 @@ int	ft_lexer(t_shell *shell)
 	{
 		ft_newnode(shell, &shell->lexer);
 		if (*list->content == '>')
-			ft_write_redi(shell, &list);
+			ft_write_redi(shell);
 		else if (*list->content == '<')
-			ft_read_redi(shell, &list);
+			ft_read_redi(shell);
+		else if (*list->content == '|')
+			ft_lexer_pipe(shell);
+		else
+			ft_lexer_cmd(shell);
 	}
+	free(shell->line);
 	ft_lstclear(shell->lexer);
 	return (shell->lexer_status);
 }
 
-void	ft_read_redi(t_shell *shell, t_list **list)
+void	ft_read_redi(t_shell *shell)
 {
 	t_list	*tmp;
 	char	*syntax_err;
 
-	syntax_err = ft_syntax_err(*list);
+	syntax_err = ft_syntax_err(shell->list);
 	if (syntax_err)
 	{
 		shell->lexer_status = 2;
 		shell->exit_status = shell->lexer_status;
-		ft_lstclear(lst);
+		ft_lstclear(shell->list);
 		ft_dprintf(2, "MiniShell: syntax error near unexpected token `%s'\n",
 			syntax_err);
 		free(syntax_err);
 		return ;
 	}
-	if (ft_strlen(*list->content) == 1)
+	if (ft_strlen(shell->list->content) == 1)
 		shell->lexer->type = R_FILE;
 	else
 		shell->lexer->type = HEREDOC;
-	shell->lexer->word = ft_remove_quotes(*list->next->content);
-	tmp = *list->next->next;
-	ft_lstdelone(*list->next);
-	ft_lstdelone(*list);
-	*list = tmp;
+	shell->lexer->word = ft_remove_quotes(shell->list->next->content);
+	tmp = shell->list->next->next;
+	ft_lstdelone(shell->list->next);
+	ft_lstdelone(shell->list);
+	shell->list = tmp;
 }
 
-void	ft_write_redi(t_shell *shell, t_list **list)
+void	ft_write_redi(t_shell *shell)
 {
 	t_list	*tmp;
 	char	*syntax_err;
 
-	syntax_err = ft_syntax_err(list);
+	syntax_err = ft_syntax_err(shell->list);
 	if (syntax_err)
 	{
 		shell->lexer_status = 2;
 		shell->exit_status = shell->lexer_status;
-		ft_lstclear(lst);
+		ft_lstclear(shell->list);
 		ft_dprintf(2, "MiniShell: syntax error near unexpected token `%s'\n",
 			syntax_err);
 		free(syntax_err);
 		return ;
 	}
-	if (ft_strlen(*list->content) == 1)
+	if (ft_strlen(shell->list->content) == 1)
 		shell->lexer->type = W_T_FILE;
 	else
 		shell->lexer->type = W_A_FILE;
-	shell->lexer->word = ft_remove_quotes(*list->next->content);
-	tmp = *list->next->next;
-	ft_lstdelone(*list->next);
-	ft_lstdelone(*list);
-	*list = tmp;
+	shell->lexer->word = ft_remove_quotes(shell->list->next->content);
+	tmp = shell->list->next->next;
+	ft_lstdelone(shell->list->next);
+	ft_lstdelone(shell->list);
+	shell->list = tmp;
 }
 
 char	*ft_syntax_err(t_list *list)
@@ -129,58 +134,8 @@ int	ft_check_meta(t_shell *shell)
 		tmp = tmp->next;
 	}
 	return (0);
-}
+}			shell->exit_status = 2;
 
-void	ft_readRedi_heredoc(t_shell *shell)
-{
-	char	**filename;
-
-	shell->lexer->type = R_FILE;
-	shell->i += 1;
-	if (!ft_strncmp((shell->line + shell->i), "<<", 1))
-	{
-		shell->lexer->type = HEREDOC;
-		shell->i += 1;
-	}
-	while (shell->line[shell->i] == ' ')
-		++shell->i;
-	shell->lexer_status = valid_filename(shell, NULL);
-	shell->exit_status = shell->lexer_status;
-	if (shell->lexer_status)
-		return ;
-	if (ft_strncmp((shell->line + shell->i), shell->lexer->word,
-			ft_strlen(shell->lexer->word)))
-		shell->i += (ft_strlen(filename[0]) + 2);
-	else
-		shell->i += ft_strlen(filename[0]);
-}
-
-void	ft_write_redi(t_shell *shell)
-{
-	char	**filename;
-
-	if (ft_strlen)
-	shell->lexer->type = W_T_FILE;
-	shell->i += 1;
-	if (!ft_strncmp((shell->line + shell->i), ">", 1))
-	{
-		shell->lexer->type = W_A_FILE;
-		shell->i += 1;
-	}
-	while (shell->line[shell->i] == ' ')
-		++shell->i;
-	shell->lexer_status = valid_filename(shell, NULL);
-	shell->exit_status = shell->lexer_status;
-	if (shell->lexer_status)
-		return ;
-	if (ft_strncmp((shell->line + shell->i), shell->lexer->word,
-			ft_strlen(shell->lexer->word)))
-		shell->i += (ft_strlen(filename[0]) + 2);
-	else
-		shell->i += ft_strlen(filename[0]);
-	while (shell->line[shell->i] == ' ')
-		++shell->i;
-}
 
 void	ft_newnode(t_shell *shell, t_lexer **node)
 {

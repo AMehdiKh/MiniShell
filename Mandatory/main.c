@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/08 00:38:11 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/08 02:39:07 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*ft_unclosed_quote(char *line)
 		o_quote = 0;
 		if (line[i] == 39 || line[i] == 34)
 			o_quote = line[i];
-		while (o_quote && line[i++] && !c_quote)
+		while ((o_quote && line[i++] && !c_quote) || ft_last_pipe(line))
 		{
 			if (!line[i] && !c_quote)
 			{
@@ -42,6 +42,16 @@ char	*ft_unclosed_quote(char *line)
 		++i;
 	}
 	return (line);
+}
+
+int	ft_last_pipe(char *line)
+{
+	size_t	i;
+
+	i = ft_strlen(line);
+	while (ft_isspace(line[i]) && i != 0)
+		--i;
+	
 }
 
 //   export LDFLAGS="-L/Users/ael-khel/homebrew/opt/readline/lib"

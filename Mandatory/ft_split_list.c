@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 15:53:59 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/07 23:20:15 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/08 02:14:50 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_list	*ft_split_list(const char *s)
 	head = NULL;
 	while (*s)
 	{
-		while (*s && *s == ' ')
+		while (*s && ft_isspace(*s))
 			++s;
 		i = 0;
 		if (ft_strchr("(<|>)&;", *s) && *s)
@@ -39,6 +39,45 @@ t_list	*ft_split_list(const char *s)
 		s += i;
 	}
 	return (head);
+}
+
+int	ft_not_token(char *s)
+{
+	int	quote;
+	int	i;
+
+	i = 0;
+	while (!ft_strchr("(<|>)&;", s[i]) && !ft_isspace(s[i]) && s[i])
+	{
+		quote = 0;
+		if (s[i] == 39 || s[i] == 34)
+			quote = s[i++];
+		while (quote && s[i] != quote)
+			++i;
+		++i;
+	}
+	return (i);
+}
+
+int	ft_quotes_number(char *s)
+{
+	int	n_quote;
+	int	quote;
+
+	n_quote = 0;
+	while (*s)
+	{
+		quote = 0;
+		if (*s == 39 || *s == 34)
+		{
+			quote = *s++;
+			n_quote += 2;
+		}
+		while (quote && *s != quote)
+			++s;
+		++s;
+	}
+	return (n_quote);
 }
 
 char	*ft_remove_quotes(char *s)
@@ -68,43 +107,4 @@ char	*ft_remove_quotes(char *s)
 	}
 	free(s);
 	return (str);
-}
-
-int	ft_quotes_number(char *s)
-{
-	int	n_quote;
-	int	quote;
-
-	n_quote = 0;
-	while (*s)
-	{
-		quote = 0;
-		if (*s == 39 || *s == 34)
-		{
-			quote = *s++;
-			n_quote += 2;
-		}
-		while (quote && *s != quote)
-			++s;
-		++s;
-	}
-	return (n_quote);
-}
-
-int	ft_not_token(char *s)
-{
-	int	quote;
-	int	i;
-
-	i = 0;
-	while (!ft_strchr("(<|>)&; ", s[i]) && s[i])
-	{
-		quote = 0;
-		if (s[i] == 39 || s[i] == 34)
-			quote = s[i++];
-		while (quote && s[i] != quote)
-			++i;
-		++i;
-	}
-	return (i);
 }
