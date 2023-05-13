@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 19:37:33 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/08 02:03:34 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/13 15:34:59 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 
 int	ft_lexer(t_shell *shell)
 {
-	t_list	*list;
-
-	list = shell->list;
-	while (list && !shell->exit_status)
+	while (shell->list && !shell->exit_status)
 	{
 		ft_newnode(shell, &shell->lexer);
 		if (*list->content == '>')
@@ -30,9 +27,37 @@ int	ft_lexer(t_shell *shell)
 		else
 			ft_lexer_cmd(shell);
 	}
+	if (shell->lexer_status)
+		ft_lstclear(shell->lexer);
 	free(shell->line);
-	ft_lstclear(shell->lexer);
 	return (shell->lexer_status);
+}
+
+void	ft_lexer_cmd(t_shell *shell)
+{
+	
+}
+
+void	ft_lexer_pipe(t_shell *shell)
+{
+	t_list	*tmp;
+	char	*syntax_err;
+
+	syntax_err = ft_syntax_err(shell->list, 1);
+	if (syntax_err)
+	{
+		shell->lexer_status = 2;
+		shell->exit_status = shell->lexer_status;
+		ft_lstclear(shell->list);
+		ft_dprintf(2, "MiniShell: syntax error near unexpected token `%s'\n",
+			syntax_err);
+		free(syntax_err);
+		return ;
+	}
+	shell->lexer->type = PIPE;
+	tmp = shell->list->next;
+	ft_lstdelone(shell->list);
+	shell->list = tmp;
 }
 
 void	ft_read_redi(t_shell *shell)
@@ -40,7 +65,7 @@ void	ft_read_redi(t_shell *shell)
 	t_list	*tmp;
 	char	*syntax_err;
 
-	syntax_err = ft_syntax_err(shell->list);
+	syntax_err = ft_syntax_err(shell->list, 0);
 	if (syntax_err)
 	{
 		shell->lexer_status = 2;
@@ -67,7 +92,7 @@ void	ft_write_redi(t_shell *shell)
 	t_list	*tmp;
 	char	*syntax_err;
 
-	syntax_err = ft_syntax_err(shell->list);
+	syntax_err = ft_syntax_err(shell->list, 0);
 	if (syntax_err)
 	{
 		shell->lexer_status = 2;
@@ -89,11 +114,11 @@ void	ft_write_redi(t_shell *shell)
 	shell->list = tmp;
 }
 
-char	*ft_syntax_err(t_list *list)
+char	*ft_syntax_err(t_list *list, int pipe)
 {
-	if (ft_strlen(list->content) == 3)
+	if (ft_strlen(list->content) == 3 && !pipe)
 		return (ft_substr(list->content, 0, 1));
-	else if (ft_strlen(list->content) > 3)
+	else if (ft_strlen(list->content) > 3 || (ft_strlen(list->content) > 1 && pipe))
 		return (ft_substr(list->content, 0, 2));
 	else if (!list->next)
 		return (ft_strdup("newline"));
@@ -146,6 +171,8 @@ void	ft_newnode(t_shell *shell, t_lexer **node)
 	{
 		exit(0);
 	}
+	new->word = NULL;
+	new->next = NULL;
 	if (!*node)
 	{
 		*node = new;
@@ -156,5 +183,4 @@ void	ft_newnode(t_shell *shell, t_lexer **node)
 		(*node)->next = new;
 		new->prev = *node;
 	}
-		new->next = NULL;
 }

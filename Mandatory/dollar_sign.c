@@ -1,33 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   dollar_sign.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/27 18:56:08 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/12 13:23:23 by ael-khel         ###   ########.fr       */
+/*   Created: 2023/05/13 18:03:05 by ael-khel          #+#    #+#             */
+/*   Updated: 2023/05/13 18:11:46 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include "../LibFT/include/libft.h"
-# include "lexer.h"
-# include <stdio.h>
-# include <fcntl.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-
-typedef struct s_shell
+char	*ft_expander(char *str)
 {
-	t_lexer	*lexer;
-	t_list	*list;
-	char	**env;
-	char	*line;
-	int		lexer_status;
-	int		exit_status;
-}	t_shell;
-
-#endif
+	char *s;
+	
+	return (0);
+}

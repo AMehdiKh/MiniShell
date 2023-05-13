@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 07:54:13 by Ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/04 01:18:59 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/12 10:55:54 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int			ft_strncmp(const char *s1, const char *s2, size_t n);
 int			ft_memcmp(const void *s1, const void *s2, size_t n);
 int			ft_atoi(const char *s);
 int			ft_isalpha(int c);
+int			ft_isspace(int c);
 int			ft_isdigit(int c);
 int			ft_isalnum(int c);
 int			ft_isascii(int c);
