@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 13:24:31 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/12 20:39:34 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/13 18:25:45 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct s_lexer
 {
 	t_token			type;
 	char			*word;
+	int				option;
 	struct s_lexer	*prev;
 	struct s_lexer	*next;
 }	t_lexer;
