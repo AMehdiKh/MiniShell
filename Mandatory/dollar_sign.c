@@ -6,7 +6,7 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/13 18:03:05 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/13 20:22:33 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:37:30 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ char	*ft_expander(t_shell *shell, char *s)
 			;
 		if (s[i] == '$')
 		{
-			str = ft_substr(s, j, i);
+			str = ft_strjoin(str, ft_substr(s, j, i), 4);
 			j = i;
 			str = ft_strjoin(str, ft_dollar_expansion(s + i, i), 4);
 		}
@@ -65,5 +65,4 @@ char	*ft_dollar_expansion(t_shell *shell, char *s, int *i, int quote)
 		return (ft_itoa(shell->exit_status));
 	if (!ft_isalpha(*(s + 1)))
 		return (ft_strdup(s));
-	
 }

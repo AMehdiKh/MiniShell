@@ -6,13 +6,14 @@
 /*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/13 18:09:51 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/15 15:36:15 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <stddef.h>
 #include <stdint.h>
+#include <string.h>
 #include <unistd.h>
 
 int	ft_last_pipe(char *line)
@@ -66,6 +67,28 @@ char	*ft_unclosed_quote(char *line, size_t i, int pipe)
 	return (line);
 }
 
+char	**ft_dup_env(char **main_env)
+{
+	char	**env;
+	size_t	i;
+
+	i = 0;
+	while (main_env[i])
+		++i;
+	env = ft_calloc(i + 1, sizeof(char *));
+	if (!env)
+	{
+		exit(0);		
+	}
+	i = 0;
+	while (main_env[i])
+	{
+		env[i] = ft_strdup(main_env[i]);
+		++i;
+	}
+	return (env);
+}
+
 //   export LDFLAGS="-L/Users/ael-khel/homebrew/opt/readline/lib"
 //   export CPPFLAGS="-I/Users/ael-khel/homebrew/opt/readline/include/readline"
 int	main(int ac, char **av, char **env)
@@ -74,7 +97,7 @@ int	main(int ac, char **av, char **env)
 	char	*line;
 
 	ft_bzero(shell, sizeof(shell));
-	shell->env = env;
+	shell->env = ft_dup_env(env);
 	while (ac || av[0])
 	{
 		shell->lexer_status = 0;
