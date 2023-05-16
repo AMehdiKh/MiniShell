@@ -3,18 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/15 15:36:15 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/16 22:26:31 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stddef.h>
-#include <stdint.h>
-#include <string.h>
-#include <unistd.h>
 
 int	ft_last_pipe(char *line)
 {
@@ -40,7 +36,7 @@ int	ft_last_pipe(char *line)
 	return (0);
 }
 
-char	*ft_unclosed_quote(char *line, size_t i, int pipe)
+static	char	*ft_unclosed_quote(char *line, size_t i, int pipe)
 {
 	int		quote;
 
@@ -67,30 +63,9 @@ char	*ft_unclosed_quote(char *line, size_t i, int pipe)
 	return (line);
 }
 
-char	**ft_dup_env(char **main_env)
-{
-	char	**env;
-	size_t	i;
-
-	i = 0;
-	while (main_env[i])
-		++i;
-	env = ft_calloc(i + 1, sizeof(char *));
-	if (!env)
-	{
-		exit(0);		
-	}
-	i = 0;
-	while (main_env[i])
-	{
-		env[i] = ft_strdup(main_env[i]);
-		++i;
-	}
-	return (env);
-}
-
 //   export LDFLAGS="-L/Users/ael-khel/homebrew/opt/readline/lib"
 //   export CPPFLAGS="-I/Users/ael-khel/homebrew/opt/readline/include/readline"
+
 int	main(int ac, char **av, char **env)
 {
 	t_shell	shell[1];
@@ -101,18 +76,19 @@ int	main(int ac, char **av, char **env)
 	while (ac || av[0])
 	{
 		shell->lexer_status = 0;
-		line = readline("MiniShell: $|");
+		line = readline("\033[1;33m♛\033[0m\033[1;32mminishell-0.1$\033[0m\033[1;33m⚡\033[0m ");
 		line = ft_unclosed_quote(line, 0, 0);
 		shell->line = ft_strtrim(line, " ");
+		add_history(shell->line);
 		free(line);
-		printf("%s\n", shell->line);
 		if (shell->line && !*shell->line)
 			continue ;
-		add_history(shell->line);
-		if (ft_check_meta(shell))
-			continue ;
-		if (ft_lexer(shell))
-			continue ;
+		// if (ft_check_meta(shell))
+		//  	continue ;
+		// if (ft_lexer(shell))
+		//  	continue ;
+		shell->line = expander(shell->line, shell);
+		printf("%s\n", shell->line);
 		free(shell->line);
 	}
 	return (0);

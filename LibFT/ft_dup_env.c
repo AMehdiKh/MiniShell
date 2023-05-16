@@ -1,26 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_dup_env.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/15 11:03:19 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/15 17:17:50 by hahadiou         ###   ########.fr       */
+/*   Created: 2023/05/15 19:31:34 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/05/15 19:31:49 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+# include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+char	**ft_dup_env(char **main_env)
 {
-	while (*s)
+	char	**env;
+	size_t	i;
+
+	i = 0;
+	while (main_env[i])
+		++i;
+	env = ft_calloc(i + 1, sizeof(char *));
+	if (!env)
 	{
-		if (*s == (char)c)
-			return ((char *)s);
-		++s;
+		exit(0);		
 	}
-	if (!((char)c))
-		return ((char *)s);
-	return (NULL);
+	i = 0;
+	while (main_env[i])
+	{
+		env[i] = ft_strdup(main_env[i]);
+		++i;
+	}
+	return (env);
 }

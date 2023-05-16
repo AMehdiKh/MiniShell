@@ -1,26 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_realloc.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/15 11:03:19 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/15 17:17:50 by hahadiou         ###   ########.fr       */
+/*   Created: 2023/05/15 17:39:55 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/05/15 17:40:08 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+# include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+void    *ft_realloc(void* ptr, size_t size)
 {
-	while (*s)
+	void* new_data;
+    
+    new_data = NULL;
+	if(size)
 	{
-		if (*s == (char)c)
-			return ((char *)s);
-		++s;
+		if(!ptr)
+		{
+			return (malloc(size));
+		}
+		new_data = malloc(size);
+		if(new_data)
+		{
+			ft_memcpy(new_data, ptr, size);
+			free(ptr);
+		}
 	}
-	if (!((char)c))
-		return ((char *)s);
-	return (NULL);
+	return (new_data);
 }

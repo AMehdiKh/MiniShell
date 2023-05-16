@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstdelone.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 20:37:59 by Ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/07 21:33:09 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/15 20:18:19 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_lstdelone(t_list *lst)
 {
-	if (lst && del)
+	if (lst)
 	{
 		free(lst->content);
 		free(lst);

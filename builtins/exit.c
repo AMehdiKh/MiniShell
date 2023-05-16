@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:26:41 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/25 06:27:31 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/15 21:57:32 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@ void	ft_exit(char *status, char *av, int ac)
 	if (*s)
 	{
 		free(status);
-		ft_dprintf(2, "MiniShell: exit: %s: numeric argument required\n", av);
+		ft_dprintf(2, "minishell: exit: %s: numeric argument required\n", av);
 		exit(2);
 	}
 	free (status);
 	if (ac > 2)
 	{
-		ft_dprintf(2, "MiniShell: exit: too many arguments\n");
+		ft_dprintf(2, "minishell: exit: too many arguments\n");
 		exit(1);
 	}
 	exit ((unsigned char)(result * sign));

@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_stchr_index.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/15 11:03:19 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/15 17:17:50 by hahadiou         ###   ########.fr       */
+/*   Created: 2023/05/15 17:18:01 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/05/15 17:18:16 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+# include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+int find_set_char_index(const char *s, char *set)
 {
-	while (*s)
-	{
-		if (*s == (char)c)
-			return ((char *)s);
-		++s;
-	}
-	if (!((char)c))
-		return ((char *)s);
-	return (NULL);
+    const char  *p;
+    
+    if (!s)
+    {
+        return -1;
+    }
+    p = s;
+    while (*p)
+    {
+        if (ft_strchr(set, *p))
+            return (p - s);
+        p++;
+    }
+    return (-1);
 }

@@ -1,26 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_clear_split.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/15 11:03:19 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/15 17:17:50 by hahadiou         ###   ########.fr       */
+/*   Created: 2023/05/15 22:44:01 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/05/15 22:44:10 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+# include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+void	*ft_clear_split(char **ptr, size_t x)
 {
-	while (*s)
-	{
-		if (*s == (char)c)
-			return ((char *)s);
-		++s;
-	}
-	if (!((char)c))
-		return ((char *)s);
+	while (x--)
+		free(ptr[x]);
+	free(ptr);
 	return (NULL);
 }
