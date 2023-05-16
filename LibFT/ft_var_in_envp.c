@@ -1,25 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_var_in_envp.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/06 18:07:10 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/04/10 16:04:22 by hahadiou         ###   ########.fr       */
+/*   Created: 2023/05/15 23:06:51 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/05/15 23:07:01 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "builtins.h"
+# include "libft.h"
 
-int main(int ac, char **av, char **envp) 
+int find_var_in_envp(const char* var, char** env)
 {
-    (void)ac;
-    (void)av;
-    while (*envp) 
+    int     found;
+    size_t  var_len;
+    size_t  i;
+
+    found = -1;
+    var_len = ft_strlen(var);
+    i = 0;
+    while (env[i])
     {
-        printf("%s\n", *envp);
-        envp++;
+        if (ft_strncmp(var, env[i], var_len) == 0 && env[i][var_len] == '=')
+        {
+            found = 1;
+            break ;
+        }
+        i++;
     }
-    return (0);
+    return (found);
 }

@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:46:12 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/04/11 20:20:56 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/15 19:43:17 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,52 +18,26 @@
 # include <stdio.h>
 # include <stdbool.h>
 
-# define BONUS 0
+typedef enum 	e_token t_token;
+typedef struct 	s_lexer t_lexer;
 
-enum	
+enum e_token
 {
-	GENERAL		= -1,
-	PIPE		= '|',
-	AMPERSAND	= '&',
-	QUOTE		= 39,
-	DQUOTE		= 34,
-	SEMICOLON	= ';',
-	SPACE		= ' ',
-	BACK_SLASH	= '\\',
-	TAB			= '\t',
-	NEW_LINE	= '\n',
-	REDIRECT_TO	= '>',
-	REDIRECT_IN	= '<',
-	MY_NULL		= '0',
-	TOKEN		= -1,
+	BUILT,
+	CMD,
+	PIPE,
+	W_A_FILE,
+	W_T_FILE,
+	R_FILE,
+	HEREDOC
 };
 
-enum
+struct s_lexer
 {
-	DQUOTE_STATE,
-	QUOTE_STATE,
-	
-	BACKSLASH_STATE,
-	GENERAL_STATE,
+	t_token			type;
+	char			*word;
+	struct s_lexer	*prev;
+	struct s_lexer	*next;
 };
-
-typedef struct	s_token	t_token;
-typedef struct	s_lexer	t_lexer;
-
-struct	s_token
-{
-	char	*data;
-	int		type;
-	t_token	*next;
-};
-
-struct	s_lexer
-{
-	t_token	*token;
-	int	tokens_nb;
-};
-
-
-int	lexer(char *input, int size, t_lexer *lexer, bool bonus);
 
 #endif

@@ -1,26 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   ft_lexerclear.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/15 11:03:19 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/15 17:17:50 by hahadiou         ###   ########.fr       */
+/*   Created: 2023/05/15 21:27:43 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/05/15 21:41:12 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+# include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+void	ft_lexer_clear(t_lexer **lexer)
 {
-	while (*s)
+	t_lexer *current;
+	t_lexer *next;
+
+	if (!lexer || !(*lexer))
+		return ;
+	current = *lexer;
+	while (current)
 	{
-		if (*s == (char)c)
-			return ((char *)s);
-		++s;
+		next = current->next;
+		if (current->word)
+			free(current->word);
+		free(current);
+		current = next;
 	}
-	if (!((char)c))
-		return ((char *)s);
-	return (NULL);
+	*lexer = NULL;
 }

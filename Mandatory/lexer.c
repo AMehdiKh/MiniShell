@@ -3,40 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 19:37:33 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/13 15:34:59 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/15 22:11:39 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
 #include "minishell.h"
 
 int	ft_lexer(t_shell *shell)
 {
 	while (shell->list && !shell->exit_status)
 	{
-		ft_newnode(shell, &shell->lexer);
-		if (*list->content == '>')
+		ft_newnode(&(shell->lexer));
+		if (*(shell->list->content) == '>')
 			ft_write_redi(shell);
-		else if (*list->content == '<')
-			ft_read_redi(shell);
-		else if (*list->content == '|')
-			ft_lexer_pipe(shell);
-		else
-			ft_lexer_cmd(shell);
+		else if (*(shell->list->content) == '<')
+		 	ft_read_redi(shell);
+		else if (*(shell->list->content) == '|')
+		 	ft_lexer_pipe(shell);
+		// else
+		// 	ft_lexer_cmd(shell);
 	}
 	if (shell->lexer_status)
-		ft_lstclear(shell->lexer);
-	free(shell->line);
+		ft_lexer_clear(&(shell->lexer));
+	//free(shell->line);
 	return (shell->lexer_status);
 }
 
-void	ft_lexer_cmd(t_shell *shell)
-{
+// void	ft_lexer_cmd(t_shell *shell)
+// {
 	
-}
+// }
 
 void	ft_lexer_pipe(t_shell *shell)
 {
@@ -48,8 +47,8 @@ void	ft_lexer_pipe(t_shell *shell)
 	{
 		shell->lexer_status = 2;
 		shell->exit_status = shell->lexer_status;
-		ft_lstclear(shell->list);
-		ft_dprintf(2, "MiniShell: syntax error near unexpected token `%s'\n",
+		ft_lstclear(&(shell->list));
+		ft_dprintf(2, "minishell: syntax error near unexpected token `%s'\n",
 			syntax_err);
 		free(syntax_err);
 		return ;
@@ -70,8 +69,8 @@ void	ft_read_redi(t_shell *shell)
 	{
 		shell->lexer_status = 2;
 		shell->exit_status = shell->lexer_status;
-		ft_lstclear(shell->list);
-		ft_dprintf(2, "MiniShell: syntax error near unexpected token `%s'\n",
+		ft_lstclear(&(shell->list));
+		ft_dprintf(2, "minishell: syntax error near unexpected token `%s'\n",
 			syntax_err);
 		free(syntax_err);
 		return ;
@@ -97,8 +96,8 @@ void	ft_write_redi(t_shell *shell)
 	{
 		shell->lexer_status = 2;
 		shell->exit_status = shell->lexer_status;
-		ft_lstclear(shell->list);
-		ft_dprintf(2, "MiniShell: syntax error near unexpected token `%s'\n",
+		ft_lstclear(&(shell->list));
+		ft_dprintf(2, "minishell: syntax error near unexpected token `%s'\n",
 			syntax_err);
 		free(syntax_err);
 		return ;
@@ -124,7 +123,7 @@ char	*ft_syntax_err(t_list *list, int pipe)
 		return (ft_strdup("newline"));
 	else if (ft_strchr("<|>", *(list->next->content)))
 	{
-		if (ft_strlen(*list->next->content) == 1)
+		if (ft_strlen(list->next->content) == 1)
 			return (ft_substr(list->next->content, 0, 1));
 		else
 			return (ft_substr(list->next->content, 0, 2));
@@ -141,46 +140,21 @@ int	ft_check_meta(t_shell *shell)
 	tmp = shell->list;
 	while (tmp)
 	{
-		if (ft_strchr("(&);", *tmp->content))
+		if (ft_strchr("(&);", tmp->content[0]) && tmp->content[0])
 		{
-			if (ft_strlen(list->content) == 1
-				|| ft_strchr("()", *tmp->content))
+			if (ft_strlen(shell->list->content) == 1 || ft_strchr("()", *(tmp->content)))
 				syntax_err = ft_substr(tmp->content, 0, 1);
 			else
 				syntax_err = ft_substr(tmp->content, 0, 2);
 			shell->exit_status = 2;
-			ft_dprintf(2, "MiniShell: syntax error near unexpected token `%s'\n",
+			ft_dprintf(2, "minishell: syntax error near unexpected token `%s'\n",
 				syntax_err);
 			free(syntax_err);
 			free(shell->line);
-			ft_lstclear(shell->list);
+			ft_lstclear(&(shell->list));
 			return (2);
 		}
 		tmp = tmp->next;
 	}
 	return (0);
-}			shell->exit_status = 2;
-
-
-void	ft_newnode(t_shell *shell, t_lexer **node)
-{
-	t_lexer	*new;
-
-	new = malloc(sizeof(t_lexer));
-	if (!new)
-	{
-		exit(0);
-	}
-	new->word = NULL;
-	new->next = NULL;
-	if (!*node)
-	{
-		*node = new;
-		new->prev = NULL;
-	}
-	else
-	{
-		(*node)->next = new;
-		new->prev = *node;
-	}
 }

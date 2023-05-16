@@ -3,17 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 15:53:59 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/08 02:14:50 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/15 21:57:32 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <stddef.h>
-#include <stdint.h>
-#include <unistd.h>
 
 t_list	*ft_split_list(const char *s)
 {
@@ -41,7 +38,7 @@ t_list	*ft_split_list(const char *s)
 	return (head);
 }
 
-int	ft_not_token(char *s)
+int	ft_not_token(const char *s)
 {
 	int	quote;
 	int	i;

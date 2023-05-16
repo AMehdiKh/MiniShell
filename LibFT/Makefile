@@ -1,35 +1,54 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2023/05/15 21:16:26 by hahadiou          #+#    #+#              #
+#    Updated: 2023/05/16 20:22:50 by hahadiou         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c ft_isspace.c \
+		ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c \
+		ft_strlcpy.c ft_strlcat.c ft_toupper.c ft_tolower.c ft_strchr.c \
+		ft_strrchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c ft_strnstr.c ft_atoi.c \
+		ft_calloc.c ft_strdup.c ft_substr.c ft_strjoin.c ft_strtrim.c ft_split.c ft_realloc.c \
+		ft_itoa.c ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c ft_strchr_index.c \
+		ft_putendl_fd.c ft_putnbr_fd.c ft_litoa.c \
+		ft_dprintf.c ft_dprintf_utils.c \
+		get_next_line.c get_next_line_utils.c ft_dup_env.c ft_count_strings.c ft_clear_split.c \
+		ft_lstadd_back.c ft_lstclear.c ft_lstdelone.c ft_lstnew.c ft_lstlast.c ft_lexerclear.c ft_extend_env.c \
+		ft_var_in_envp.c ft_get_env.c
+
+
+OBJS = ${addprefix obj/, ${SRCS:.c=.o}}
+OBJ_PATH = obj
+
 NAME = libft.a
 
-CC = gcc
+CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -I../inc/
 
-SRCS = \
-	ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c ft_isspace.c \
-	ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c \
-	ft_strlcpy.c ft_strlcat.c ft_toupper.c ft_tolower.c ft_strchr.c \
-	ft_strrchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c ft_strnstr.c ft_atoi.c \
-	ft_calloc.c ft_strdup.c ft_substr.c ft_strjoin.c ft_strtrim.c ft_split.c \
-	ft_itoa.c ft_strmapi.c ft_striteri.c ft_putchar_fd.c ft_putstr_fd.c \
-	ft_putendl_fd.c ft_putnbr_fd.c \
-	ft_dprintf.c ft_dprintf_utils.c \
-	get_next_line.c get_next_line_utils.c
+RM = rm -f
 
-OBJS = ${SRCS:.c=.o}
+all: ${NAME}
 
-.PHONY: clean
-all: $(NAME)
-
-%.o: %.c include/libft.h
-	$(CC) $(CFLAGS) -Iinclude -c $<
+obj/%.o: %.c
+		@mkdir -p $(OBJ_PATH)
+		@${CC} ${CFLAGS} -c $< -o $@
 
 $(NAME): $(OBJS)
-	$(AR) rcs $@ $?
+		@ar -rc $(NAME) $(OBJS)
 
 clean:
-	rm -f $(OBJS)
+	@rm -rf $(OBJ_PATH)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
+
+.PHONY:	all clean fclean re
