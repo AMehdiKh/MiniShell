@@ -32,6 +32,51 @@ int	ft_lexer(t_shell *shell)
 	return (shell->lexer_status);
 }
 
+void	ft_lexer_cmd(t_shell *shell)
+{
+	if (ft_builtin_check(shell->list->content))
+		shell->lexer->type = BUILTIN;
+	else
+		shell->lexer->type = CMD;
+	shell->lexer->word = ft_arg_join(shell);
+}
+
+int	ft_builtin_check(char *s)
+{
+	char	*tmp;
+
+	tmp = ft_remove_quotes(ft_expander(s));
+	if (!ft_strncmp(tmp, "exit", ft_strlen("exit") + 1)
+		|| !ft_strncmp(tmp, "echo", ft_strlen("echo") + 1)
+		|| !ft_strncmp(tmp, "cd", ft_strlen("cd") + 1)
+		|| !ft_strncmp(tmp, "pwd", ft_strlen("pwd") + 1)
+		|| !ft_strncmp(tmp, "export", ft_strlen("export") + 1)
+		|| !ft_strncmp(tmp, "unset", ft_strlen("unset") + 1)
+		|| !ft_strncmp(tmp, "env", ft_strlen("env") + 1))
+	{
+		free(tmp);
+		return (1);
+	}
+	free(tmp);
+	return (0);
+}
+
+char	*ft_arg_join(t_shell *shell)
+{
+	t_list	*tmp;
+	char	*cmd;
+
+	cmd = ft_strdup("");
+	while (shell->list && !ft_strchr("<|>", *(shell->list->content)))
+	{
+		tmp = shell->list;
+		cmd = ft_strjoin(cmd, ft_strjoin(ft_remove_quotes(ft_expander(shell->list->content)), " ", 1), 4);
+		shell->list = shell->list->next;
+		ft_lstdelone(tmp);
+	}
+	return (cmd);
+}
+
 // void	ft_lexer_cmd(t_shell *shell)
 // {
 	
