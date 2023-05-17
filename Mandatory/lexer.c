@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 19:37:33 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/15 22:11:39 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/17 16:27:00 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,16 @@ int	ft_lexer(t_shell *shell)
 		ft_newnode(&(shell->lexer));
 		if (*(shell->list->content) == '>')
 			ft_write_redi(shell);
-		else if (*(shell->list->content) == '<')
-		 	ft_read_redi(shell);
-		else if (*(shell->list->content) == '|')
-		 	ft_lexer_pipe(shell);
+		// else if (*(shell->list->content) == '<')
+		 	// ft_read_redi(shell);
+		// else if (*(shell->list->content) == '|')
+		//  	ft_lexer_pipe(shell);
 		// else
 		// 	ft_lexer_cmd(shell);
 	}
 	if (shell->lexer_status)
 		ft_lexer_clear(&(shell->lexer));
-	//free(shell->line);
+	free(shell->line);
 	return (shell->lexer_status);
 }
 

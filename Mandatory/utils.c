@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 19:32:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/15 21:57:32 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/17 14:27:32 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,26 @@ void	ft_newnode(t_lexer **node)
 		(*node)->next = new;
 		new->prev = *node;
 	}
+}
+
+void printLexer(t_lexer* lexer)
+{
+    while (lexer != NULL)
+    {
+        printf("Type: %d\n", lexer->type);
+        printf("Word: %s\n", lexer->word);
+        //printf("Previous: %p\n", (void*)lexer->prev);
+        // printf("Next: %p\n\n", (void*)lexer->next);
+        lexer = lexer->next;
+    }
+}
+
+void printList(t_list* list)
+{
+    while (list != NULL)
+    {
+        printf("Content: %s\n", list->content);
+        // printf("Next: %p\n\n", (void*)list->next);
+        list = list->next;
+    }
 }

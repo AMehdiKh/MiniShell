@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 22:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/15 22:39:06 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/17 16:42:52 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,28 +33,6 @@ int ft_unset(char *var, char **envp)
 		envp++;
 	}
 	return (0);
-}
-
-char	**ft_dup_env(char **main_env)
-{
-	char	**env;
-	size_t	i;
-
-	i = 0;
-	while (main_env[i])
-		++i;
-	env = ft_calloc(i + 1, sizeof(char *));
-	if (!env)
-	{
-		exit(0);
-	}
-	i = 0;
-	while (main_env[i])
-	{
-		env[i] = ft_strdup(main_env[i]);
-		++i;
-	}
-	return (env);
 }
 
 int main(int ac, char **av, char **envp)

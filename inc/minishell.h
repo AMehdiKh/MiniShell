@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 19:44:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/16 21:20:52 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/17 14:23:25 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@
 #include <readline/history.h>
 #include "lexer.h"
 #include "libft.h"
-
-# define SPECIFIER "|\"\'$?>< "
 
 typedef	struct s_shell	t_shell;
 
@@ -61,20 +59,21 @@ int		ft_quotes_number(char *s);
 
 char	**ft_split(char const *s, char c, int option);
 
+void printLexer(t_lexer* lexer);
+void printList(t_list* list);
+
 /*
     EXPANSION
 */
-
-void    ft_setenv(char *var, char *value, t_shell *);
 char    *ft_getenv(char *var, char **envp, int n);
-int     find_var_in_envp(const char* var, char** env);
 char	*expander(char *input, t_shell *shell);
 
-char	*expand_path(char *str, int i, int quotes[2], char *var);
 
+/*
+	BUILTIN
+*/
 int		ft_env(char **av, t_shell *shell);
 
-char	*expand_env(char *line, char **env);
 
 /*
     PARSER

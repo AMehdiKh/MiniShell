@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/16 22:26:31 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/17 17:47:15 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,20 +76,22 @@ int	main(int ac, char **av, char **env)
 	while (ac || av[0])
 	{
 		shell->lexer_status = 0;
-		line = readline("\033[1;33m♛\033[0m\033[1;32mminishell-0.1$\033[0m\033[1;33m⚡\033[0m ");
+		line = readline("minishell$ ");
 		line = ft_unclosed_quote(line, 0, 0);
 		shell->line = ft_strtrim(line, " ");
 		add_history(shell->line);
 		free(line);
 		if (shell->line && !*shell->line)
 			continue ;
-		// if (ft_check_meta(shell))
+		if(ft_check_meta(shell))
+		  	continue ;
+		// if(ft_lexer(shell))
 		//  	continue ;
-		// if (ft_lexer(shell))
-		//  	continue ;
+		// printList(shell->list);
+		// printLexer(shell->lexer);
 		shell->line = expander(shell->line, shell);
 		printf("%s\n", shell->line);
-		free(shell->line);
+		//free(shell->line);
 	}
 	return (0);
 }

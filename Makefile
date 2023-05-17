@@ -6,12 +6,12 @@
 #    By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/27 12:41:59 by ael-khel          #+#    #+#              #
-#    Updated: 2023/05/15 23:27:49 by hahadiou         ###   ########.fr        #
+#    Updated: 2023/05/17 15:09:21 by hahadiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		= cc
-FLAGS	= -Wall -Wextra -Werror -IINC
+FLAGS	= -Wall -Wextra -Werror -IINC -fsanitize=address
 RLFLGS	= -L/Users/hahadiou/goinfre/homebrew/opt/readline/lib -lreadline
 RLOFLGS	= -I/Users/hahadiou/goinfre/homebrew/opt/readline/include
 
@@ -26,7 +26,7 @@ SRCS = main.c \
 		lexer.c \
 		ft_split_list.c \
 		utils.c \
-		expander.c env.c
+		expander.c
 
 SRC		= $(addprefix $(MANDATORY_PATH)/,$(SRCS))
 OBJ		= $(addprefix $(OBJ_PATH)/,$(SRCS:.c=.o))

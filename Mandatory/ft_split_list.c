@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 15:53:59 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/15 21:57:32 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/17 16:22:50 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,5 @@ char	*ft_remove_quotes(char *s)
 			++i;
 		str[j++] = s[i++];
 	}
-	free(s);
 	return (str);
 }

@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/16 22:26:47 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/17 16:32:50 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ static size_t	expand_size(char *input, size_t *i, t_shell *shell)
 	var_value = ft_getenv(var_name, shell->env, -1);
 	free(var_name);
 	*i += var_size;
-	if (!var_value)
-		return (0);
-	return (ft_strlen(var_value));
+	if (var_value)
+		return (ft_strlen(var_value));
+	return (var_size);
 }
 
 static int	expanded_size(char *input, t_shell *shell)
@@ -72,29 +72,40 @@ static int	expanded_size(char *input, t_shell *shell)
 	return (n[1]);
 }
 
-static size_t	expand_vars(char *expanded, char *input, size_t *i, t_shell *shell)
+static size_t expand_vars(char *expanded, char *input, size_t *i, t_shell *shell)
 {
-	char	*val;
-	size_t	n[3];
+    char *val;
+    size_t n[3];
 
-	n[0] = 0; // this is the variable of i to loop through input
-	n[1] = 0; // this is a variable to be used for copy value from val to expanded
-	n[2] = 0; // this is the size of expanded variable to more to next variable
-	*i += 1;
-	if (!input[*i])
-	{
-		expanded[0] = '$';
-		return (1);
-	}
-	while (input[*i + n[2]] == '_' || ft_isalnum(input[*i + n[2]]))
-		n[2]++;
-	val = ft_getenv(ft_substr(input, *i, n[2]), shell->env, -1);
-	*i += n[2];
-	if (!val)
-		return (0);
-	while (val[n[0]])
-		expanded[n[1]++] = val[n[0]++];
-	return (n[1]);
+    n[0] = 0; // Variable to loop through input
+    n[1] = 0; // Variable to copy value from val to expanded
+    n[2] = 0; // Size of expanded variable to move to the next variable
+    *i += 1;
+    if (!input[*i])
+    {
+        expanded[0] = '$';
+        return (1);
+    }
+    while (input[*i + n[2]] == '_' || ft_isalnum(input[*i + n[2]]))
+        n[2]++;
+    if (ft_isdigit(input[*i]))
+    {
+        // Handle number after '$'
+        *i += 1;
+        while (input[*i] && !ft_isdigit(input[*i]))
+            *i += 1;
+        // Copy all characters after the first number to expanded
+        while (input[*i])
+            expanded[n[1]++] = input[(*i)++];
+        return (n[1]);
+    }
+    val = ft_getenv(ft_substr(input, *i, n[2]), shell->env, -1);
+    *i += n[2];
+    if (!val)
+        return (0);
+    while (val[n[0]])
+        expanded[n[1]++] = val[n[0]++];
+    return (n[1]);
 }
 
 static size_t	expand_exit_status(char *expanded, size_t *i, t_shell *shell)
@@ -154,4 +165,3 @@ char	*expander(char *input, t_shell *shell)
 //     return 0;
 // }
 
- 
