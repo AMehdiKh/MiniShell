@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 15:53:59 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/17 16:22:50 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/21 15:55:20 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,15 +77,13 @@ int	ft_quotes_number(char *s)
 	return (n_quote);
 }
 
-char	*ft_remove_quotes(char *s)
+char	*ft_remove_quotes(char *s, int option)
 {
 	char	*str;
 	int		quote;
 	int		i;
 	int		j;
 
-	if (ft_strchr("(<|>)&;", *s))
-		return (s);
 	str = ft_calloc((ft_strlen(s) - ft_quotes_number(s)) + 1, sizeof(char));
 	if (!str)
 		return (NULL);
@@ -102,5 +100,7 @@ char	*ft_remove_quotes(char *s)
 			++i;
 		str[j++] = s[i++];
 	}
+	if (option)
+		free(s);
 	return (str);
 }

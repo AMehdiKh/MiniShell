@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/17 16:32:50 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/18 16:26:01 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,33 @@ static size_t	exit_status_size(t_shell *shell)
 	return (size);
 }
 
-static size_t	expand_size(char *input, size_t *i, t_shell *shell)
+size_t expand_size(char *input, size_t *i, t_shell *shell)
 {
-	size_t	var_size;
-	char	*var_name;
-	char	*var_value;
+    size_t	var_size;
+	size_t	expanded_size;
+    char	*var_name;
+    char	*var_value;
 
-	*i += 1;
-	if (!input[1])
-		return (1);
-	var_size = 0;
-	while (input[var_size + 1] && ft_isalnum(input[var_size + 1]))
-		var_size++;
-	if (var_size == 0)
-		return (0);
-	var_name = ft_substr(input, 1, var_size);
-	var_value = ft_getenv(var_name, shell->env, -1);
-	free(var_name);
-	*i += var_size;
-	if (var_value)
-		return (ft_strlen(var_value));
-	return (var_size);
+    (*i)++;
+    if (!input[1])
+        return 1;
+    var_size = 0;
+    while (input[var_size + 1] && ft_isalnum(input[var_size + 1]))
+        var_size++;
+    if (var_size == 0)
+        return 0;
+    var_name = ft_substr(input, 1, var_size);
+    var_value = ft_getenv(var_name, shell->env, -1);
+    free(var_name);
+    (*i) += var_size;
+    if (var_value)
+	{
+        expanded_size = ft_strlen(var_value);
+        if (input[var_size + 1] == '\"')
+            expanded_size += 2;
+        return (expanded_size);
+    }
+    return (var_size);
 }
 
 static int	expanded_size(char *input, t_shell *shell)
@@ -134,7 +140,7 @@ char	*expander(char *input, t_shell *shell)
 	n[0] = 0;
 	n[1] = 0;
 	quotes = false;
-	expanded = (char *)ft_calloc((expanded_size(input, shell) + 1) , sizeof(char));
+	expanded = (char *)ft_calloc((expanded_size(input, shell) + 2) , sizeof(char));
 	while (input[n[0]])
 	{
 		if (input[n[0]] == 39)
@@ -146,7 +152,7 @@ char	*expander(char *input, t_shell *shell)
 		else
 			expanded[n[1]++] = input[n[0]++];
 	}
-	free(input);
+	//free(input);
 	return (expanded);
 }
 

@@ -6,7 +6,7 @@
 #    By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/05/15 21:16:26 by hahadiou          #+#    #+#              #
-#    Updated: 2023/05/16 22:39:15 by hahadiou         ###   ########.fr        #
+#    Updated: 2023/05/19 18:52:09 by hahadiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c ft_isspa
 		ft_dprintf.c ft_dprintf_utils.c \
 		get_next_line.c get_next_line_utils.c ft_dup_env.c ft_count_strings.c ft_clear_split.c \
 		ft_lstadd_back.c ft_lstclear.c ft_lstdelone.c ft_lstnew.c ft_lstlast.c ft_lexerclear.c ft_extend_env.c \
-		ft_var_in_envp.c ft_get_env.c
+		ft_var_in_envp.c ft_get_env.c ft_set_env.c
 
 
 OBJS = ${addprefix obj/, ${SRCS:.c=.o}}

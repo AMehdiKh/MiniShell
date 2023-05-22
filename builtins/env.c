@@ -6,13 +6,13 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 19:33:10 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/15 23:27:24 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/19 19:48:09 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_env(char **av, t_shell *shell)
+int ft_env_builtin(char **av, t_shell *shell)
 {
     int i;
 

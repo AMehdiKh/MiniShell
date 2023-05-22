@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 19:37:33 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/17 16:27:00 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/22 18:36:24 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,15 @@ int	ft_lexer(t_shell *shell)
 {
 	while (shell->list && !shell->exit_status)
 	{
-		ft_newnode(&(shell->lexer));
+		ft_newnode(shell);
 		if (*(shell->list->content) == '>')
-			ft_write_redi(shell);
-		// else if (*(shell->list->content) == '<')
-		 	// ft_read_redi(shell);
-		// else if (*(shell->list->content) == '|')
-		//  	ft_lexer_pipe(shell);
-		// else
-		// 	ft_lexer_cmd(shell);
+			ft_write_redi(shell, ft_lexer_last(shell->lexer));
+		else if (*(shell->list->content) == '<')
+		 	ft_read_redi(shell, ft_lexer_last(shell->lexer));
+		else if (*(shell->list->content) == '|')
+		 	ft_lexer_pipe(shell, ft_lexer_last(shell->lexer));
+		else
+			ft_lexer_cmd(shell, ft_lexer_last(shell->lexer));
 	}
 	if (shell->lexer_status)
 		ft_lexer_clear(&(shell->lexer));
@@ -32,20 +32,26 @@ int	ft_lexer(t_shell *shell)
 	return (shell->lexer_status);
 }
 
-void	ft_lexer_cmd(t_shell *shell)
+char	*ft_arg_join(t_shell *shell)
 {
-	if (ft_builtin_check(shell->list->content))
-		shell->lexer->type = BUILTIN;
-	else
-		shell->lexer->type = CMD;
-	shell->lexer->word = ft_arg_join(shell);
+	t_list	*tmp;
+	char	*cmd;
+
+	cmd = ft_strdup("");
+	while (shell->list && !ft_strchr("<|>", *(shell->list->content)))
+	{
+		tmp = shell->list;
+		cmd = ft_strjoin(cmd, ft_strjoin(ft_remove_quotes(expander(shell->list->content, shell), 1), " ", 1), 4);
+		shell->list = shell->list->next;
+		ft_lstdelone(tmp);
+	}
+	return (cmd);
 }
 
-int	ft_builtin_check(char *s)
+int	ft_builtin_check(char *s, t_shell *shell)
 {
 	char	*tmp;
-
-	tmp = ft_remove_quotes(ft_expander(s));
+	tmp = ft_remove_quotes(expander(s, shell), 1);
 	if (!ft_strncmp(tmp, "exit", ft_strlen("exit") + 1)
 		|| !ft_strncmp(tmp, "echo", ft_strlen("echo") + 1)
 		|| !ft_strncmp(tmp, "cd", ft_strlen("cd") + 1)
@@ -61,28 +67,16 @@ int	ft_builtin_check(char *s)
 	return (0);
 }
 
-char	*ft_arg_join(t_shell *shell)
+void	ft_lexer_cmd(t_shell *shell, t_lexer *node)
 {
-	t_list	*tmp;
-	char	*cmd;
-
-	cmd = ft_strdup("");
-	while (shell->list && !ft_strchr("<|>", *(shell->list->content)))
-	{
-		tmp = shell->list;
-		cmd = ft_strjoin(cmd, ft_strjoin(ft_remove_quotes(ft_expander(shell->list->content)), " ", 1), 4);
-		shell->list = shell->list->next;
-		ft_lstdelone(tmp);
-	}
-	return (cmd);
+	if (ft_builtin_check(shell->list->content, shell))
+		node->type = BUILTIN;
+	else
+		node->type = CMD;
+	node->word = ft_arg_join(shell);
 }
 
-// void	ft_lexer_cmd(t_shell *shell)
-// {
-	
-// }
-
-void	ft_lexer_pipe(t_shell *shell)
+void	ft_lexer_pipe(t_shell *shell, t_lexer *node)
 {
 	t_list	*tmp;
 	char	*syntax_err;
@@ -98,17 +92,66 @@ void	ft_lexer_pipe(t_shell *shell)
 		free(syntax_err);
 		return ;
 	}
-	shell->lexer->type = PIPE;
+	node->type = PIPE;
 	tmp = shell->list->next;
 	ft_lstdelone(shell->list);
 	shell->list = tmp;
 }
 
-void	ft_read_redi(t_shell *shell)
+// void	setup_red(t_shell *shell, char *filename, t_token type, bool expand)
+// {
+// 	int	fd;
+	
+// 	if (type == W_T_FILE)
+// 	{
+// 		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+// 		if (fd < 0)
+// 		{
+// 			ft_dprintf(2, "Erooooor while opening the file\n"); // to check the type of error
+// 		}
+// 	}
+// 	else if (type == W_A_FILE)
+// 	{
+// 		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
+// 		if (fd < 0)
+// 		{
+// 			ft_dprintf(2, "Erooooor while opening the file\n"); // to check the type of error
+// 		}
+// 	}
+// 	else if (type == R_FILE)
+// 	{
+// 		fd = open(filename, O_RDONLY);
+// 		if (fd < 0)
+// 		{
+// 			ft_dprintf(2, "minishell: %s: No such file or directory\n", filename);
+// 		}
+// 	}
+// 	else if (type == HEREDOC)
+// 	{
+// 		heredoc(shell, filename, expand);
+// 	}
+// }
+
+// int	search_quotes(const char* str)
+// {
+//     while (*str)
+// 	{
+//         if (*str == 39 || *str == 34)
+// 		{
+//             return (1);
+//         }
+//         str++;
+//     }
+//     return (0);
+// }
+
+void	ft_read_redi(t_shell *shell, t_lexer *node)
 {
 	t_list	*tmp;
 	char	*syntax_err;
-
+	// bool	expand;
+	
+	// expand = true;
 	syntax_err = ft_syntax_err(shell->list, 0);
 	if (syntax_err)
 	{
@@ -121,17 +164,20 @@ void	ft_read_redi(t_shell *shell)
 		return ;
 	}
 	if (ft_strlen(shell->list->content) == 1)
-		shell->lexer->type = R_FILE;
+		node->type = R_FILE;
 	else
-		shell->lexer->type = HEREDOC;
-	shell->lexer->word = ft_remove_quotes(shell->list->next->content);
+		node->type = HEREDOC;
+	// if (search_quotes(shell->list->next->content))
+	// 	expand = false;
+	node->word = ft_remove_quotes(shell->list->next->content, 0);
+	// setup_red(shell, node->word, node->type, expand);
 	tmp = shell->list->next->next;
 	ft_lstdelone(shell->list->next);
 	ft_lstdelone(shell->list);
 	shell->list = tmp;
 }
 
-void	ft_write_redi(t_shell *shell)
+void	ft_write_redi(t_shell *shell, t_lexer *node)
 {
 	t_list	*tmp;
 	char	*syntax_err;
@@ -148,10 +194,11 @@ void	ft_write_redi(t_shell *shell)
 		return ;
 	}
 	if (ft_strlen(shell->list->content) == 1)
-		shell->lexer->type = W_T_FILE;
+		node->type = W_T_FILE;
 	else
-		shell->lexer->type = W_A_FILE;
-	shell->lexer->word = ft_remove_quotes(shell->list->next->content);
+		node->type = W_A_FILE;
+	node->word = ft_remove_quotes(shell->list->next->content, 0);
+	// setup_red(shell, node->word, node->type, true);
 	tmp = shell->list->next->next;
 	ft_lstdelone(shell->list->next);
 	ft_lstdelone(shell->list);

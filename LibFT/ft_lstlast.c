@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/05 15:12:51 by Ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/17 17:43:07 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/17 20:25:31 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,5 @@ t_lexer	*ft_lexer_last(t_lexer *lst)
 		return NULL;
 	while (lst->next)
 		lst = lst->next;
-	return lst;
+	return (lst);
 }

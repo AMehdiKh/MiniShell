@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:46:12 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/15 19:43:17 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/22 21:48:27 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ typedef struct 	s_lexer t_lexer;
 
 enum e_token
 {
-	BUILT,
+	STDIN,
+	STDOUT,
+	NONE,
+	BUILTIN,
 	CMD,
 	PIPE,
 	W_A_FILE,
