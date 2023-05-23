@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/18 16:26:01 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/23 17:31:40 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ char	*expander(char *input, t_shell *shell)
 	n[0] = 0;
 	n[1] = 0;
 	quotes = false;
-	expanded = (char *)ft_calloc((expanded_size(input, shell) + 2) , sizeof(char));
+	expanded = (char *)ft_calloc((expanded_size(input, shell) + 100) , sizeof(char));
 	while (input[n[0]])
 	{
 		if (input[n[0]] == 39)

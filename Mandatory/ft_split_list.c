@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 15:53:59 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/21 15:55:20 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/23 17:32:51 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ char	*ft_remove_quotes(char *s, int option)
 	int		i;
 	int		j;
 
-	str = ft_calloc((ft_strlen(s) - ft_quotes_number(s)) + 1, sizeof(char));
+	str = ft_calloc((ft_strlen(s) - ft_quotes_number(s)) + 100, sizeof(char));
 	if (!str)
 		return (NULL);
 	i = 0;

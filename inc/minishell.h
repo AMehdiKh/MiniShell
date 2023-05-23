@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 19:44:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/22 23:19:24 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:00:12 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ typedef struct s_data	t_data;
 
 struct	s_data
 {
+	char	*abs_cmd;
+	char	**cmd_path;
+	char	**argv;
 	t_token	lr_op;
 	t_token	rr_op;
 	char	*lr;
@@ -119,13 +122,14 @@ char	*expander(char *input, t_shell *shell);
     PARSER
 */
 void	parser(t_shell *shell);
-t_cmd	*ft_newnode_cmd(char *cmd, char **args, t_token , t_data *);
+t_cmd	*ft_newnode_cmd(t_token , t_data *);
 t_cmd	*ft_newnode_pipe(t_token type);
 
 /*
 	EXECUTION
 */
 void	executer(t_shell *shell, int io[2]);
-void print_token(t_token token);
-void mini_print_token(t_token token);
+void 	print_token(t_token token);
+void 	mini_print_token(t_token token);
+
 #endif

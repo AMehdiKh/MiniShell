@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 19:32:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/22 23:18:40 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/23 22:19:00 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,15 @@ void	ft_newnode(t_shell *shell)
 	}
 }
 
-t_cmd	*ft_newnode_cmd(char *cmd, char **args, t_token type, t_data *data)
+t_cmd	*ft_newnode_cmd(t_token type, t_data *data)
 {
 	t_cmd	*new;
 
 	new = (t_cmd *)malloc(sizeof(t_cmd));
 	if (!new)
 		return (NULL);
-	new->cmd = cmd;
-    new->argv = args;
+	new->cmd = data->abs_cmd;
+    new->argv = data->argv;
     new->type = type;
     new->lr_op = data->lr_op;
     new->rr_op = data->rr_op;
@@ -93,8 +93,6 @@ void print_token(t_token token)
 {
     switch (token)
 	{
-        case NONE:
-            break;
         case BUILTIN:
 			printf("BUILTIN\t|\t");
             break;
@@ -182,24 +180,22 @@ void print_cmd_node(t_cmd *head)
             printf("\n");
         }
         printf("Type: ");
-        mini_print_token(current->type);
-        printf("\n");
-        if (current->lr)
-            printf("lr: %s\n", current->lr);
-        if (current->rr)
-            printf("rr: %s\n", current->rr);
-       if (current->lr_op)
+        if (current->type)
         {
-            printf("lr_op: ");
+            mini_print_token(current->type);
+            printf("\n");
+        }
+        printf("lr: %s\n", current->lr);
+        printf("rr: %s\n", current->rr);
+        printf("lr_op: ");
+        if (current->lr_op == STDIN)
+            printf("STDIN");
+        else
             print_token(current->lr_op);
-            printf("\n");
-        }
-        if (current->rr_op)
-        {
-            printf("rr_op: ");
-            print_token(current->rr_op);
-            printf("\n");
-        }
+        printf("\n");
+        printf("rr_op: ");
+        print_token(current->rr_op);
+        printf("\n");
         printf("\n");
         current = current->next;
     }
@@ -249,7 +245,7 @@ char    *get_last_file_word(t_lexer *head, t_token type[2])
     return (last_word);
 }
 
-void	heredoc(t_shell *shell, char *delimiter, bool expand)
+void    heredoc(t_shell *shell, char *delimiter, bool expand)
 {
 	char	*line[2];
     int     fd;
@@ -263,9 +259,9 @@ void	heredoc(t_shell *shell, char *delimiter, bool expand)
             break ;
         line[1] = expander(line[0], shell);
         if (line[1] && expand)
-            ft_dprintf(fd, line[1], ft_strlen(line[1]));
+            ft_dprintf(fd, "%s", line[1]);
         else
-            ft_dprintf(fd, line[0], ft_strlen(line[0]));
+            ft_dprintf(fd, "%s", line[0]);
     }
-	close(fd);
+    close(fd);
 }

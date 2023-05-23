@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/22 22:47:38 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/23 21:31:51 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int ac, char **av, char **env)
 		if(ft_lexer(shell))
 		 	continue ;
 		// printList(shell->list);
-		printLexer(shell->lexer);
+		// printLexer(shell->lexer);
 		parser(shell);
 		// executer(shell, io);
 		ft_lexer_clear(&(shell->lexer));
