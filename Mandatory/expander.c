@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/23 17:31:40 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:35:47 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ char	*expander(char *input, t_shell *shell)
 //     t_shell shell[1];
 
 // 	shell->env = ft_dup_env(envp);
-//     char input[] = "$HOME";
+//     char input[] = "$a";
 // 	char *expanded = expander(input, shell);
 // 	size_t	i = 0;
 // 	//expand_vars(expanded, input, &i, shell);

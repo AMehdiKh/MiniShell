@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer.c                                            :+:      :+:    :+:   */
+/*   preprocessor.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 19:37:33 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/22 18:36:24 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:54:18 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	ft_lexer(t_shell *shell)
 	return (shell->lexer_status);
 }
 
-char	*ft_arg_join(t_shell *shell)
+char	*ft_arg_join(t_shell *shell, t_token type)
 {
 	t_list	*tmp;
 	char	*cmd;
@@ -41,7 +41,10 @@ char	*ft_arg_join(t_shell *shell)
 	while (shell->list && !ft_strchr("<|>", *(shell->list->content)))
 	{
 		tmp = shell->list;
-		cmd = ft_strjoin(cmd, ft_strjoin(ft_remove_quotes(expander(shell->list->content, shell), 1), " ", 1), 4);
+		if (type == BUILTIN)
+			cmd = ft_strjoin(cmd, ft_strjoin(expander(shell->list->content, shell), " ", 1), 4);
+		else
+			cmd = ft_strjoin(cmd, ft_strjoin(ft_remove_quotes(expander(shell->list->content, shell), 1), " ", 1), 4);
 		shell->list = shell->list->next;
 		ft_lstdelone(tmp);
 	}
@@ -73,7 +76,7 @@ void	ft_lexer_cmd(t_shell *shell, t_lexer *node)
 		node->type = BUILTIN;
 	else
 		node->type = CMD;
-	node->word = ft_arg_join(shell);
+	node->word = ft_arg_join(shell, BUILTIN);
 }
 
 void	ft_lexer_pipe(t_shell *shell, t_lexer *node)

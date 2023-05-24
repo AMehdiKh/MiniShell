@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/23 21:31:51 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:53:45 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	main(int ac, char **av, char **env)
 		parser(shell);
 		// executer(shell, io);
 		ft_lexer_clear(&(shell->lexer));
-		// ft_cmd_clear(&(shell->cmd));
+		ft_cmd_clear(&(shell->cmd));
 		// free(shell->line);
 	}
 	return (0);

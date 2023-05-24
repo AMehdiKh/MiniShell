@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 19:32:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/23 22:19:00 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/24 19:40:35 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,10 +181,8 @@ void print_cmd_node(t_cmd *head)
         }
         printf("Type: ");
         if (current->type)
-        {
-            mini_print_token(current->type);
-            printf("\n");
-        }
+        mini_print_token(current->type);
+        printf("\n");
         printf("lr: %s\n", current->lr);
         printf("rr: %s\n", current->rr);
         printf("lr_op: ");
@@ -245,23 +243,20 @@ char    *get_last_file_word(t_lexer *head, t_token type[2])
     return (last_word);
 }
 
-void    heredoc(t_shell *shell, char *delimiter, bool expand)
+void    heredoc(t_shell *shell, char *delimiter, bool expand, int pipe)
 {
 	char	*line[2];
-    int     fd;
-	
-    fd = open(delimiter, O_RDWR | O_CREAT | O_APPEND, 0644);
+    
     while (1)
     {
         ft_dprintf(0, "> ");
         line[0] = get_next_line(0);
         if (!line[0] || ft_strnstr(line[0], delimiter, ft_strlen(delimiter)))
-            break ;
+           break ;
         line[1] = expander(line[0], shell);
         if (line[1] && expand)
-            ft_dprintf(fd, "%s", line[1]);
+            ft_dprintf(pipe, "%s", line[1]);
         else
-            ft_dprintf(fd, "%s", line[0]);
+            ft_dprintf(pipe, "%s", line[0]);
     }
-    close(fd);
 }
