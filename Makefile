@@ -6,7 +6,7 @@
 #    By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/27 12:41:59 by ael-khel          #+#    #+#              #
-#    Updated: 2023/05/24 20:26:28 by hahadiou         ###   ########.fr        #
+#    Updated: 2023/05/25 21:09:28 by hahadiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ SRCS = main.c \
 		cd.c \
 		pwd.c \
 		env.c \
-		export.c
+		export.c \
+		unset.c
 
 SRC		= $(addprefix $(MANDATORY_PATH)/,$(SRCS))
 OBJ		= $(addprefix $(OBJ_PATH)/,$(SRCS:.c=.o))
@@ -56,7 +57,7 @@ $(NAME): $(OBJ)
 
 $(OBJ_PATH)/%.o: $(MANDATORY_PATH)/%.c $(INC)/minishell.h $(INC)/lexer.h $(INC)/libft.h 
 	@mkdir -p obj
-	@$(CC) $(FLAGS) $(RLOFLGS) -I$(INC)  -c -o $@ $<
+	@$(CC) $(FLAGS) $(RLOFLGS) -I$(INC) -c -o $@ $<
 
 clean:
 	@echo "$(RED)Deleting OBJS ✔️ $(NOC)"

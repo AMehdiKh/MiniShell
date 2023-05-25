@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 19:32:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/24 19:40:35 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/25 19:59:39 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,13 +210,13 @@ void	ft_cmd_clear(t_cmd **lst)
 	while (current)
 	{
 		next = current->next;
-		if (current->cmd)
-			free(current->cmd);
+		// if (current->cmd)
+		// 	free(current->cmd);
         // if (current->argv)
         // {
-            // for (int i = 0; current->argv[i]; i++)
-            //     free (current->argv[i]);
-            // free(current->argv);
+        //     for (int i = 0; current->argv[i]; i++)
+        //         free (current->argv[i]);
+        //     free(current->argv);
         // }
 		free(current);
 		current = next;

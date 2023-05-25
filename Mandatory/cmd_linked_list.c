@@ -139,3 +139,42 @@ t_cmd* create_cmd_list(t_lexer* lexer)
 
 	return head;
 }
+
+char** get_environment_variables(char** envp)
+{
+    if (envp == NULL)
+	{
+        // Create a new environment variable array
+        char** new_envp = (char**)malloc(sizeof(char*) * 3);
+        
+        // Set necessary variables similar to Bash
+        new_envp[0] = strdup("PATH=/usr/bin:/bin");
+        new_envp[1] = strdup("HOME=/home/user");
+        new_envp[2] = NULL; // Last element must be NULL to indicate the end
+        
+        return new_envp;
+    }
+    
+    // If envp is not NULL, return it as is
+    return envp;
+}
+
+int main(int argc, char** argv, char** envp)
+{
+    char** new_envp = get_environment_variables(envp);
+
+    // Print the environment variables for demonstration
+    for (int i = 0; new_envp[i] != NULL; i++)
+	{
+        printf("%s\n", new_envp[i]);
+    }
+
+    // Free the memory allocated for the environment variables
+    for (int i = 0; new_envp[i] != NULL; i++)
+	{
+        free(new_envp[i]);
+    }
+    free(new_envp);
+
+    return 0;
+}

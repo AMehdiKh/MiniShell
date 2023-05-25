@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/24 15:35:47 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/25 20:06:26 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,11 @@ static size_t expand_vars(char *expanded, char *input, size_t *i, t_shell *shell
     n[1] = 0; // Variable to copy value from val to expanded
     n[2] = 0; // Size of expanded variable to move to the next variable
     *i += 1;
-    if (!input[*i])
-    {
-        expanded[0] = '$';
-        return (1);
-    }
+    // if (!input[*i] || input[*i] == '$')
+    // {
+    //     expanded[0] = '$';
+    //     return (1);
+    // }
     while (input[*i + n[2]] == '_' || ft_isalnum(input[*i + n[2]]))
         n[2]++;
     if (ft_isdigit(input[*i]))
@@ -131,29 +131,37 @@ static size_t	expand_exit_status(char *expanded, size_t *i, t_shell *shell)
 	return (j);
 }
 
-char	*expander(char *input, t_shell *shell)
+char	*expander(char* input, t_shell* shell)
 {
-	size_t	n[2];
-	char	*expanded;
-	bool	quotes;
+    size_t n[2];
+    char* expanded;
+    bool quotes;
 
-	n[0] = 0;
-	n[1] = 0;
-	quotes = false;
-	expanded = (char *)ft_calloc((expanded_size(input, shell) + 100) , sizeof(char));
-	while (input[n[0]])
+    n[0] = 0;
+    n[1] = 0;
+    quotes = false;
+    expanded = (char*)ft_calloc((expanded_size(input, shell) + 100), sizeof(char));
+
+    // Check if the input is only "$"
+    if ((ft_strlen(input) == 1 && input[0] == '$' )|| (ft_strlen(input) == 3 && input[1] == '$'))
 	{
-		if (input[n[0]] == 39)
-			quotes = true;
-		if (input[n[0]] == '$' && input[n[0] + 1] == '?' && !quotes)
-			n[1] += expand_exit_status(&(expanded[n[1]]), &n[0], shell);
-		else if (input[n[0]] == '$' && !quotes)
-			n[1] += expand_vars(&(expanded[n[1]]), input, &n[0], shell);
-		else
-			expanded[n[1]++] = input[n[0]++];
-	}
-	//free(input);
-	return (expanded);
+		if (input[0] == '$' || input[1] == '$')
+			expanded[0] = '$';
+		return (expanded);
+    }
+
+    while (input[n[0]])
+	{
+        if (input[n[0]] == 39)
+            quotes = true;
+        if (input[n[0]] == '$' && input[n[0] + 1] == '?' && !quotes)
+            n[1] += expand_exit_status(&(expanded[n[1]]), &n[0], shell);
+        else if (input[n[0]] == '$' && !quotes)
+            n[1] += expand_vars(&(expanded[n[1]]), input, &n[0], shell);
+        else
+            expanded[n[1]++] = input[n[0]++];
+    }
+    return (expanded);
 }
 
 // int main(int ac, char **av, char **envp)

@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 19:44:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/24 20:25:35 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/25 17:30:07 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int		ft_echo_builtin(size_t , char **, t_cmd *);
 int		ft_env_builtin(char **, t_shell *);
 void	ft_exit_builtin(char *, char *, int );
 int		ft_export_builtin(t_shell *, char **);
-int		ft_pwd_builtin(t_shell *);
+int		ft_pwd_builtin();
 int		ft_unset_builtin(char *, char **);
 
 /*
@@ -129,5 +129,6 @@ t_cmd	*ft_newnode_pipe(t_token);
 void	executer(t_shell *, int io[2]);
 void 	print_token(t_token);
 void 	mini_print_token(t_token);
-void	execute_commands(t_shell *shell, t_cmd* cmd_list);
+void	execute_commands(t_shell *, t_cmd*);
+
 #endif

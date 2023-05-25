@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:26:41 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/24 18:30:48 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/25 21:10:31 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	update_wd(t_shell *shell)
 	char	cwd[PATH_MAX];
 
 	getcwd(cwd, PATH_MAX);
-	printf("cwd: [%s]\n", cwd);
+	// printf("cwd: [%s]\n", cwd);
 	ft_setenv(shell, "PWD", cwd);
 }
 
@@ -25,23 +25,21 @@ static int	cd_oldpwd(char *cwd, t_shell *shell)
 {
 	char	*owd;
 
-	// oldpwd = get_fromvlst("OLDPWD", &data->envp_lst);
 	owd = ft_getenv("OLDPWD", shell->env, -1);
 	if (!owd)
 	{	
-		ft_dprintf(2, "minishell: %s: No such file or directory\n", cwd);
+		ft_dprintf(2, "minishell: cd: OLDPWD not set\n");
 		return (EXIT_FAILURE);
 	}
 	if (chdir(owd) == 0)
 	{
-		ft_dprintf(1, "%s\n", owd);
+		// ft_dprintf(1, "%s\n", owd);
 		ft_setenv(shell, "OLDPWD", cwd);
 		update_wd(shell);
 		return (EXIT_SUCCESS);
 	}
 	return (EXIT_FAILURE);
 }
-
 
 int	ft_cd_builtin(char	*path, t_shell *shell)
 {
@@ -50,7 +48,7 @@ int	ft_cd_builtin(char	*path, t_shell *shell)
 	getcwd(cwd, PATH_MAX);
 	if (!path || ft_strchr(path, '~'))
 	{
-		printf("owd: [%s]\n", cwd);
+		// printf("owd: [%s]\n", cwd);
 		ft_setenv(shell, "OLDPWD", cwd);
 		chdir(ft_getenv("HOME", shell->env, -1));
 		update_wd(shell);
@@ -60,12 +58,12 @@ int	ft_cd_builtin(char	*path, t_shell *shell)
 		return (cd_oldpwd(cwd, shell));
 	if (chdir(path) == 0)
 	{
-		printf("owd: [%s]\n", cwd);
+		// printf("owd: [%s]\n", cwd);
 		ft_setenv(shell, "OLDPWD", cwd);
 		update_wd(shell);
 		return (EXIT_SUCCESS);
 	}
-	ft_dprintf(2, "minishell: cd: %s: No such file or directory", path);
+	ft_dprintf(2, "minishell: cd: %s: No such file or directory\n", path);
 	return (EXIT_FAILURE);
 }
 

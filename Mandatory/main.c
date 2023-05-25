@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/24 16:53:45 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/25 17:30:18 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	main(int ac, char **av, char **env)
 		// printList(shell->list);
 		// printLexer(shell->lexer);
 		parser(shell);
+		execute_commands(shell, shell->cmd);
 		// executer(shell, io);
 		ft_lexer_clear(&(shell->lexer));
 		ft_cmd_clear(&(shell->cmd));

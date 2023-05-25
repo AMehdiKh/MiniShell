@@ -6,39 +6,58 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 19:37:33 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/24 20:25:56 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/25 19:56:24 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 
-void exec_builtin(t_shell *shell, t_cmd *cn)
+void    exec_builtin_parent(t_shell *shell, t_cmd *cn)
 {
-    if (!ft_strncmp(cn->cmd, "echo", 4))
-    {
-        if (ft_echo_builtin(ft_count_strings(cn->argv), cn->argv, cn) < 0)
-            return;
-    }
-    else if (!ft_strncmp(cn->cmd, "pwd", 3))
-    {
-        ft_pwd_builtin(shell);
-    }
-    else if (!ft_strncmp(cn->cmd, "cd", 2))
+    if (!ft_strncmp(cn->cmd, "cd", 2))
     {
         ft_cd_builtin(*(cn->argv + 1), shell);
-    }
-    else if (!ft_strncmp(cn->cmd, "env", 3))
-    {
-        ft_env_builtin(cn->argv, shell);
     }
     else if (!ft_strncmp(cn->cmd, "export", 6))
     {
         ft_export_builtin(shell, cn->argv);
     }
+    else if (!ft_strncmp(cn->cmd, "unset", 5))
+    {
+        ft_unset_builtin((cn->argv[1]), shell->env);
+    }
 }
 
-void execute_commands(t_shell *shell, t_cmd* cmd_list)
+void exec_builtin_child(t_shell *shell, t_cmd *cn)
+{
+    if (!ft_strncmp(cn->cmd, "echo", 4))
+    {
+        ft_echo_builtin(ft_count_strings(cn->argv), cn->argv, cn);
+    }
+    else if (!ft_strncmp(cn->cmd, "pwd", 3))
+    {
+        ft_pwd_builtin(shell);
+    }
+    // else if (!ft_strncmp(cn->cmd, "cd", 2))
+    // {
+    //     ft_cd_builtin(*(cn->argv + 1), shell);
+    // }
+    else if (!ft_strncmp(cn->cmd, "env", 3))
+    {
+        ft_env_builtin(cn->argv, shell);
+    }
+    // else if (!ft_strncmp(cn->cmd, "export", 6))
+    // {
+    //     ft_export_builtin(shell, cn->argv);
+    // }
+    // else if (!ft_strncmp(cn->cmd, "unset", 5))
+    // {
+    //     ft_unset_builtin((cn->argv[1]), shell->env);
+    // }
+}
+
+void    execute_commands(t_shell *shell, t_cmd* cmd_list)
 {
     t_cmd* current = cmd_list;
     int prev_pipe[2] = { -1, -1 };
@@ -57,7 +76,6 @@ void execute_commands(t_shell *shell, t_cmd* cmd_list)
                 return ;
             }
         }
-
         pid_t pid = fork();
         if (pid == -1)
         {
@@ -91,7 +109,7 @@ void execute_commands(t_shell *shell, t_cmd* cmd_list)
                 {
                     // Handle pipe creation failure
                     // Cleanup any previously allocated resources if necessary
-                    return;
+                    return ;
                 }
                 pid_t heredoc_pid = fork();
                 if (heredoc_pid == -1)
@@ -180,9 +198,11 @@ void execute_commands(t_shell *shell, t_cmd* cmd_list)
                 close(curr_pipe[1]);
 
             // Execute the command
-            if (current->type == BUILTIN)
+            if (current->type == BUILTIN && (!ft_strncmp(current->cmd, "echo", 4) \
+                || !ft_strncmp(current->cmd, "pwd", 3) \
+                || !ft_strncmp(current->cmd, "env", 3)))
             {
-                exec_builtin(shell, current);
+                exec_builtin_child(shell, current);
             }
             else
             {
@@ -195,7 +215,8 @@ void execute_commands(t_shell *shell, t_cmd* cmd_list)
         else
         {
             // Parent process
-
+            if (current->type == BUILTIN)
+                exec_builtin_parent(shell, current);
             // Close pipe file descriptors that are not needed anymore
             if (prev_pipe[0] != -1)
                 close(prev_pipe[0]);

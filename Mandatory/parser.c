@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/24 20:28:15 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/25 20:06:43 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,12 +132,28 @@ void setup_command(t_shell *shell, t_lexer *lexer, t_token type)
 		data->cmd_path = ft_split(ft_getenv("PATH", shell->env, -1), ':', 0);
 		data->argv = ft_split(lexer->word, ' ', 0);
 		data->abs_cmd = get_cmd(data->cmd_path, data->argv[0]);
+		if (!data->abs_cmd)
+		{
+			ft_dprintf(2, "minishell: %s: command not found\n", lexer->word);
+		}
+		for (int i = 0; data->argv[i]; i++)
+			data->argv[i] = ft_remove_quotes(data->argv[i], 1);
+		// if (data->abs_cmd == NULL) // to be handled in execution part
+		// {
+		// 	ft_dprintf(2, "minishell: %s: command not found\n", lexer->word);
+		// 	shell->exit_status = 127;
+		// 	return ;
+		// }
 		data->argv[0] = data->abs_cmd;
 		ft_cmdadd_back(&(shell->cmd), ft_newnode_cmd(type, data));
 	}
 	else if (type == BUILTIN)
 	{
-		data->argv = ft_split(lexer->word, ' ', 0);
+		data->argv = ft_split(lexer->word, ' ', 1);
+		for (int i = 0; data->argv[i]; i++)
+			data->argv[i] = ft_remove_quotes(data->argv[i], 1);
+		// for (int i = 0; data->argv[i]; i++)
+		// 	printf("argv : %s\n", data->argv[i]);
 		data->abs_cmd = ft_strdup(data->argv[0]);
 		ft_cmdadd_back(&(shell->cmd), ft_newnode_cmd(BUILTIN, data));
 	}
@@ -162,7 +178,6 @@ void    parser(t_shell *shell)
 	}
     head_cmd = shell->cmd;
     // print_cmd_node(head_cmd);
-	execute_commands(shell, shell->cmd);
 	// print_cmd_node(shell->cmd);
 	// ft_cmd_clear(&(shell->cmd));
 }
