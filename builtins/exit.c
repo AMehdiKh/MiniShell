@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:26:41 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/15 21:57:32 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/19 19:48:05 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@
 * !	exit [n] many args = the exit status is 1 to indicate many aguments.
 **/
 
-#include "builtin.h"
+#include "minishell.h"
 
-void	ft_exit(char *status, char *av, int ac)
+void	ft_exit_builtin(char *status, char *av, int ac)
 {
 	char		*s;
 	int			result;

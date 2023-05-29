@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 07:54:13 by Ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/16 20:21:52 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/24 16:29:09 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ char		*ft_strtrim(char const *s1, char const *set);
 char		*ft_strjoin(char const *s1, char const *s2, int option);
 char		*ft_strrchr(const char *s, int c);
 char		*ft_strchr(const char *s, int c);
-int			find_set_char_index(const char *s, char *set);
 char		*ft_strdup(const char *s);
 char		*ft_itoa(int n);
 char		*ft_litoa(int n);
@@ -77,6 +76,7 @@ int			ft_tolower(int c);
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 t_list		*ft_lstnew(void *content);
 t_list		*ft_lstlast(t_list *lst);
+t_lexer		*ft_lexer_last(t_lexer *lst);
 
 void		ft_lstdelone(t_list *lst);
 void		ft_lstclear(t_list **lst);

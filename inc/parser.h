@@ -1,31 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_stchr_index.c                                   :+:      :+:    :+:   */
+/*   parser.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/15 17:18:01 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/15 17:18:16 by hahadiou         ###   ########.fr       */
+/*   Created: 2023/04/08 20:46:12 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/05/20 22:03:10 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "libft.h"
+#ifndef PARSER_H
+# define PARSER_H
 
-int find_set_char_index(const char *s, char *set)
-{
-    const char  *p;
-    
-    if (!s)
-    {
-        return -1;
-    }
-    p = s;
-    while (*p)
-    {
-        if (ft_strchr(set, *p))
-            return (p - s);
-        p++;
-    }
-    return (-1);
-}
+# include <stdlib.h>
+# include <string.h>
+# include <stdio.h>
+# include <stdbool.h>
+
+
+
+#endif

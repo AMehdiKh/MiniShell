@@ -6,13 +6,13 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 19:33:10 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/15 23:27:24 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/23 23:43:26 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_env(char **av, t_shell *shell)
+int ft_env_builtin(char **av, t_shell *shell)
 {
     int i;
 
@@ -26,7 +26,7 @@ int ft_env(char **av, t_shell *shell)
     while (shell->env[i])
     {
         if (strchr(shell->env[i], '='))
-            printf("%s\n", shell->env[i]);
+            ft_dprintf(1, "%s\n", shell->env[i]);
         i++;
     }
     return (EXIT_SUCCESS);

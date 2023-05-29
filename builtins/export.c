@@ -6,17 +6,19 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 22:42:06 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/15 23:06:21 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/24 15:37:14 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
 
-int	ft_export(t_shell *shell, char **av)
+int	ft_export_builtin(t_shell *shell, char **av)
 {
 	size_t  arg_count;
     size_t  i;
-    
+	
+	for (int i = 0; av[i]; i++)
+		printf("av[i]: [%s]\n", av[i]);
     arg_count = ft_count_strings(av);
     i = 0;
 	if (arg_count >= 2)

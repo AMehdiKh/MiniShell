@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/16 22:26:47 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/25 20:06:26 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,27 +23,33 @@ static size_t	exit_status_size(t_shell *shell)
 	return (size);
 }
 
-static size_t	expand_size(char *input, size_t *i, t_shell *shell)
+size_t expand_size(char *input, size_t *i, t_shell *shell)
 {
-	size_t	var_size;
-	char	*var_name;
-	char	*var_value;
+    size_t	var_size;
+	size_t	expanded_size;
+    char	*var_name;
+    char	*var_value;
 
-	*i += 1;
-	if (!input[1])
-		return (1);
-	var_size = 0;
-	while (input[var_size + 1] && ft_isalnum(input[var_size + 1]))
-		var_size++;
-	if (var_size == 0)
-		return (0);
-	var_name = ft_substr(input, 1, var_size);
-	var_value = ft_getenv(var_name, shell->env, -1);
-	free(var_name);
-	*i += var_size;
-	if (!var_value)
-		return (0);
-	return (ft_strlen(var_value));
+    (*i)++;
+    if (!input[1])
+        return 1;
+    var_size = 0;
+    while (input[var_size + 1] && ft_isalnum(input[var_size + 1]))
+        var_size++;
+    if (var_size == 0)
+        return 0;
+    var_name = ft_substr(input, 1, var_size);
+    var_value = ft_getenv(var_name, shell->env, -1);
+    free(var_name);
+    (*i) += var_size;
+    if (var_value)
+	{
+        expanded_size = ft_strlen(var_value);
+        if (input[var_size + 1] == '\"')
+            expanded_size += 2;
+        return (expanded_size);
+    }
+    return (var_size);
 }
 
 static int	expanded_size(char *input, t_shell *shell)
@@ -72,29 +78,40 @@ static int	expanded_size(char *input, t_shell *shell)
 	return (n[1]);
 }
 
-static size_t	expand_vars(char *expanded, char *input, size_t *i, t_shell *shell)
+static size_t expand_vars(char *expanded, char *input, size_t *i, t_shell *shell)
 {
-	char	*val;
-	size_t	n[3];
+    char *val;
+    size_t n[3];
 
-	n[0] = 0; // this is the variable of i to loop through input
-	n[1] = 0; // this is a variable to be used for copy value from val to expanded
-	n[2] = 0; // this is the size of expanded variable to more to next variable
-	*i += 1;
-	if (!input[*i])
-	{
-		expanded[0] = '$';
-		return (1);
-	}
-	while (input[*i + n[2]] == '_' || ft_isalnum(input[*i + n[2]]))
-		n[2]++;
-	val = ft_getenv(ft_substr(input, *i, n[2]), shell->env, -1);
-	*i += n[2];
-	if (!val)
-		return (0);
-	while (val[n[0]])
-		expanded[n[1]++] = val[n[0]++];
-	return (n[1]);
+    n[0] = 0; // Variable to loop through input
+    n[1] = 0; // Variable to copy value from val to expanded
+    n[2] = 0; // Size of expanded variable to move to the next variable
+    *i += 1;
+    // if (!input[*i] || input[*i] == '$')
+    // {
+    //     expanded[0] = '$';
+    //     return (1);
+    // }
+    while (input[*i + n[2]] == '_' || ft_isalnum(input[*i + n[2]]))
+        n[2]++;
+    if (ft_isdigit(input[*i]))
+    {
+        // Handle number after '$'
+        *i += 1;
+        while (input[*i] && !ft_isdigit(input[*i]))
+            *i += 1;
+        // Copy all characters after the first number to expanded
+        while (input[*i])
+            expanded[n[1]++] = input[(*i)++];
+        return (n[1]);
+    }
+    val = ft_getenv(ft_substr(input, *i, n[2]), shell->env, -1);
+    *i += n[2];
+    if (!val)
+        return (0);
+    while (val[n[0]])
+        expanded[n[1]++] = val[n[0]++];
+    return (n[1]);
 }
 
 static size_t	expand_exit_status(char *expanded, size_t *i, t_shell *shell)
@@ -114,29 +131,37 @@ static size_t	expand_exit_status(char *expanded, size_t *i, t_shell *shell)
 	return (j);
 }
 
-char	*expander(char *input, t_shell *shell)
+char	*expander(char* input, t_shell* shell)
 {
-	size_t	n[2];
-	char	*expanded;
-	bool	quotes;
+    size_t n[2];
+    char* expanded;
+    bool quotes;
 
-	n[0] = 0;
-	n[1] = 0;
-	quotes = false;
-	expanded = (char *)ft_calloc((expanded_size(input, shell) + 1) , sizeof(char));
-	while (input[n[0]])
+    n[0] = 0;
+    n[1] = 0;
+    quotes = false;
+    expanded = (char*)ft_calloc((expanded_size(input, shell) + 100), sizeof(char));
+
+    // Check if the input is only "$"
+    if ((ft_strlen(input) == 1 && input[0] == '$' )|| (ft_strlen(input) == 3 && input[1] == '$'))
 	{
-		if (input[n[0]] == 39)
-			quotes = true;
-		if (input[n[0]] == '$' && input[n[0] + 1] == '?' && !quotes)
-			n[1] += expand_exit_status(&(expanded[n[1]]), &n[0], shell);
-		else if (input[n[0]] == '$' && !quotes)
-			n[1] += expand_vars(&(expanded[n[1]]), input, &n[0], shell);
-		else
-			expanded[n[1]++] = input[n[0]++];
-	}
-	free(input);
-	return (expanded);
+		if (input[0] == '$' || input[1] == '$')
+			expanded[0] = '$';
+		return (expanded);
+    }
+
+    while (input[n[0]])
+	{
+        if (input[n[0]] == 39)
+            quotes = true;
+        if (input[n[0]] == '$' && input[n[0] + 1] == '?' && !quotes)
+            n[1] += expand_exit_status(&(expanded[n[1]]), &n[0], shell);
+        else if (input[n[0]] == '$' && !quotes)
+            n[1] += expand_vars(&(expanded[n[1]]), input, &n[0], shell);
+        else
+            expanded[n[1]++] = input[n[0]++];
+    }
+    return (expanded);
 }
 
 // int main(int ac, char **av, char **envp)
@@ -144,7 +169,7 @@ char	*expander(char *input, t_shell *shell)
 //     t_shell shell[1];
 
 // 	shell->env = ft_dup_env(envp);
-//     char input[] = "$HOME";
+//     char input[] = "$a";
 // 	char *expanded = expander(input, shell);
 // 	size_t	i = 0;
 // 	//expand_vars(expanded, input, &i, shell);
@@ -154,4 +179,3 @@ char	*expander(char *input, t_shell *shell)
 //     return 0;
 // }
 
- 
