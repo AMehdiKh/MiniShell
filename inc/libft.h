@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 07:54:13 by Ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/24 16:29:09 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/28 17:31:04 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void		*ft_clear_split(char **ptr, size_t x);
 char		**ft_dup_env(char **main_env);
 char		**extend_env(char **envp, char *newstr);
 int			find_var_in_envp(const char* var, char** env);
-char		*ft_getenv(char *var, char **envp, int n);
+char		*ft_getenv(char *var, char **envp);
 
 void		ft_striteri(char *s, void (*f)(unsigned int, char*));
 void		*ft_memmove(void *dst, const void *src, size_t n);

@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 15:53:59 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/25 15:45:02 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/29 22:16:34 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	ft_quotes_number(char *s)
 	return (n_quote);
 }
 
-char* ft_remove_quotes(char* s, int option) {
+char* ft_remove_quotes(char* s, int option)
+{
     char* str;
     int quote = 0;
     int i = 0;
@@ -87,23 +88,29 @@ char* ft_remove_quotes(char* s, int option) {
     str = ft_calloc((ft_strlen(s) - ft_quotes_number(s)) + 100, sizeof(char));
     if (!str)
         return NULL;
-
-    while (s[i]) {
-        if (!quote && (s[i] == '\'' || s[i] == '\"')) {
+    while (s[i])
+	{
+        if (!quote && (s[i] == '\'' || s[i] == '\"'))
+		{
             quote = s[i++];
         }
-        else if (quote && s[i] == quote) {
+        else if (quote && s[i] == quote)
+		{
             quote = 0;
             i++;
         }
-        else if (quote && s[i] != quote) {
+        else if (quote && s[i] != quote)
+		{
             str[j++] = s[i++];
         }
-        else {
-            if (skip) {
+        else
+		{
+            if (skip)
+			{
                 skip = 0;
             }
-            else if (s[i] == '\'' || s[i] == '\"') {
+            else if (s[i] == '\'' || s[i] == '\"')
+			{
                 skip = 1;
             }
             str[j++] = s[i++];
@@ -112,6 +119,5 @@ char* ft_remove_quotes(char* s, int option) {
 
     if (option)
         free(s);
-
-    return str;
+    return (str);
 }

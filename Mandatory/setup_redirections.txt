@@ -34,3 +34,4 @@ To set up the redirection before executing the commands, you can follow these st
     Repeat the process for the next node in the linked list until there are no more commands.
 
 Note: Make sure to handle any error conditions that may occur during file opening, file descriptor duplication, or command execution.
+

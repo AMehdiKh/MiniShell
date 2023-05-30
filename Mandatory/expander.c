@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/25 20:06:26 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/28 17:31:52 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ size_t expand_size(char *input, size_t *i, t_shell *shell)
     if (var_size == 0)
         return 0;
     var_name = ft_substr(input, 1, var_size);
-    var_value = ft_getenv(var_name, shell->env, -1);
+    var_value = ft_getenv(var_name, shell->env);
     free(var_name);
     (*i) += var_size;
     if (var_value)
@@ -105,7 +105,7 @@ static size_t expand_vars(char *expanded, char *input, size_t *i, t_shell *shell
             expanded[n[1]++] = input[(*i)++];
         return (n[1]);
     }
-    val = ft_getenv(ft_substr(input, *i, n[2]), shell->env, -1);
+    val = ft_getenv(ft_substr(input, *i, n[2]), shell->env);
     *i += n[2];
     if (!val)
         return (0);
@@ -164,6 +164,28 @@ char	*expander(char* input, t_shell* shell)
     return (expanded);
 }
 
+// int		main(int argc, char **argv, char **envp)
+// {
+// 	char *input = "Hello, $USER! The exit status is: $?";
+// 	t_shell data;
+// 	data.env = envp;
+// 	data.in_quotes = false;
+// 	data.in_dquotes = false;
+
+// 	char *expanded_input = expand_input(input, &data);
+// 	if (expanded_input)
+// 	{
+// 		printf("Expanded input: %s\n", expanded_input);
+// 		free(expanded_input);
+// 	}
+// 	else
+// 	{
+// 		printf("Expansion failed.\n");
+// 	}
+
+// 	return 0;
+// }
+
 // int main(int ac, char **av, char **envp)
 // {
 //     t_shell shell[1];
@@ -178,4 +200,3 @@ char	*expander(char* input, t_shell* shell)
 //     free(shell->env);
 //     return 0;
 // }
-

@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:26:41 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/25 21:10:31 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/28 17:31:43 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	cd_oldpwd(char *cwd, t_shell *shell)
 {
 	char	*owd;
 
-	owd = ft_getenv("OLDPWD", shell->env, -1);
+	owd = ft_getenv("OLDPWD", shell->env);
 	if (!owd)
 	{	
 		ft_dprintf(2, "minishell: cd: OLDPWD not set\n");
@@ -50,7 +50,7 @@ int	ft_cd_builtin(char	*path, t_shell *shell)
 	{
 		// printf("owd: [%s]\n", cwd);
 		ft_setenv(shell, "OLDPWD", cwd);
-		chdir(ft_getenv("HOME", shell->env, -1));
+		chdir(ft_getenv("HOME", shell->env));
 		update_wd(shell);
 		return (EXIT_SUCCESS);
 	}

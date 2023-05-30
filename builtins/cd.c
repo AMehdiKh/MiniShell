@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:26:41 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/19 20:28:44 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/28 17:31:30 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	ft_cd_builtin(char	*path, t_shell *shell)
 	{
 		printf("owd: [%s]\n", cwd);
 		ft_setenv(shell, "OLDPWD", cwd);
-		chdir(ft_getenv("HOME", shell->env, -1));
+		chdir(ft_getenv("HOME", shell->env));
 		update_wd(shell);
 		return (EXIT_SUCCESS);
 	}

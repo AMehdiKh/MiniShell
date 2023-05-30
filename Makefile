@@ -6,7 +6,7 @@
 #    By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/27 12:41:59 by ael-khel          #+#    #+#              #
-#    Updated: 2023/05/25 21:09:28 by hahadiou         ###   ########.fr        #
+#    Updated: 2023/05/30 00:07:55 by hahadiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,14 +27,17 @@ SRCS = main.c \
 		ft_split_list.c \
 		utils.c \
 		expander.c \
-		parser.c \
 		executer.c \
 		echo.c \
 		cd.c \
 		pwd.c \
 		env.c \
 		export.c \
-		unset.c
+		unset.c \
+		zaba.c \
+		utils_I_bonus.c \
+		utils_II_bonus.c \
+		parse_cmd_bonus.c
 
 SRC		= $(addprefix $(MANDATORY_PATH)/,$(SRCS))
 OBJ		= $(addprefix $(OBJ_PATH)/,$(SRCS:.c=.o))

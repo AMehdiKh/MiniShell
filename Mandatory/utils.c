@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 19:32:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/25 19:59:39 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 00:11:14 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,21 @@ t_cmd	*ft_newnode_pipe(t_token type)
 	return (new);
 }
 
+int lstlexer_size(t_lexer *lexer)
+{
+    t_lexer *head;
+    int     size;
+
+    head = lexer;
+    size = 0;
+    while (head != NULL)
+    {
+        ++size;
+        head = head->next;
+    }
+    return (size);
+}
+
 void ft_cmdadd_back(t_cmd **lst, t_cmd *new)
 {
     t_cmd *last = *lst;
@@ -118,6 +133,12 @@ void print_token(t_token token)
             printf("STDIN\t|\t");
         case STDOUT:
             printf("STDOUT\t|\t");
+        case STDERR:
+            break ;
+        case PERM_DENIED:
+            break ;
+        case CMD_NOT_FOUND:
+            break ;
     }
 }
 
@@ -210,14 +231,6 @@ void	ft_cmd_clear(t_cmd **lst)
 	while (current)
 	{
 		next = current->next;
-		// if (current->cmd)
-		// 	free(current->cmd);
-        // if (current->argv)
-        // {
-        //     for (int i = 0; current->argv[i]; i++)
-        //         free (current->argv[i]);
-        //     free(current->argv);
-        // }
 		free(current);
 		current = next;
 	}

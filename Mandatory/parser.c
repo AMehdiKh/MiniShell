@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/25 20:06:43 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/29 20:15:31 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*get_cmd(char **paths, char *cmd)
 	return (NULL);
 }
 
-void setup_lr_cmd(t_lexer *tail, t_data *data)
+void	setup_lr_cmd(t_lexer *tail, t_data *data)
 {
     t_lexer *curr = tail;
     data->lr_op = STDIN; // Set default lr_op to STDIN
@@ -78,7 +78,7 @@ void setup_lr_cmd(t_lexer *tail, t_data *data)
     }
 }
 
-void setup_rr_cmd(t_lexer *head, t_data *data)
+void	setup_rr_cmd(t_lexer *head, t_data *data)
 {
     t_lexer *curr = head;
     data->rr_op = STDOUT; // Set default rr_op to STDOUT
@@ -129,13 +129,13 @@ void setup_command(t_shell *shell, t_lexer *lexer, t_token type)
 	setup_rr_cmd(lexer, data);
 	if (type == CMD)
 	{
-		data->cmd_path = ft_split(ft_getenv("PATH", shell->env, -1), ':', 0);
+		data->cmd_path = ft_split(ft_getenv("PATH", shell->env), ':', 0);
 		data->argv = ft_split(lexer->word, ' ', 0);
 		data->abs_cmd = get_cmd(data->cmd_path, data->argv[0]);
-		if (!data->abs_cmd)
-		{
-			ft_dprintf(2, "minishell: %s: command not found\n", lexer->word);
-		}
+		// if (!data->abs_cmd)
+		// {
+		// 	ft_dprintf(2, "minishell: %s: command not found\n", lexer->word);
+		// }
 		for (int i = 0; data->argv[i]; i++)
 			data->argv[i] = ft_remove_quotes(data->argv[i], 1);
 		// if (data->abs_cmd == NULL) // to be handled in execution part
@@ -181,3 +181,17 @@ void    parser(t_shell *shell)
 	// print_cmd_node(shell->cmd);
 	// ft_cmd_clear(&(shell->cmd));
 }
+
+/*
+In the first code provided, the get_argc function is designed to calculate the number of arguments in an array of strings (parsed). It takes the parsed input, which represents a command line input split into individual tokens, and counts the number of non-empty strings in the array.
+
+Here's a step-by-step explanation of what the get_argc function does:
+
+    It initializes a variable i to 0, which will be used to iterate through the parsed array.
+    Inside the while loop, it increments i until it reaches the end of the array (parsed[i] evaluates to NULL).
+    For each element in the array, it checks if the length of the token (string) is non-zero and if it is not an operator (checked using the is_onstr function).
+    If the above conditions are met, it increments the count variable by 1, indicating that a valid argument is found.
+    Once the end of the array is reached, it returns the final value of count, representing the total number of arguments found in the parsed array.
+
+In summary, the get_argc function calculates the number of non-empty strings (arguments) in the parsed array while excluding the operator tokens.
+*/

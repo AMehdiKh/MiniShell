@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 19:37:33 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/25 16:20:32 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/29 22:29:41 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_lexer(t_shell *shell)
 {
-	while (shell->list && !shell->exit_status)
+	while (shell->list && !shell->lexer_status)
 	{
 		ft_newnode(shell);
 		if (*(shell->list->content) == '>')
@@ -32,7 +32,7 @@ int	ft_lexer(t_shell *shell)
 	return (shell->lexer_status);
 }
 
-char	*ft_arg_join(t_shell *shell, t_token type)
+char	*ft_arg_join(t_shell *shell)
 {
 	t_list	*tmp;
 	char	*cmd;
@@ -41,13 +41,10 @@ char	*ft_arg_join(t_shell *shell, t_token type)
 	while (shell->list && !ft_strchr("<|>", *(shell->list->content)))
 	{
 		tmp = shell->list;
-		if (type == BUILTIN)
-			cmd = ft_strjoin(cmd, ft_strjoin(expander(shell->list->content, shell), " ", 1), 4);
-		else
-			cmd = ft_strjoin(cmd, ft_strjoin(ft_remove_quotes(expander(shell->list->content, shell), 1), " ", 1), 4);
+		cmd = ft_strjoin(cmd, ft_strjoin(ft_remove_quotes(expander(shell->list->content, shell), 1), " ", 1), 4);
 		shell->list = shell->list->next;
 		ft_lstdelone(tmp);
-	}
+	}	
 	return (cmd);
 }
 
@@ -76,7 +73,7 @@ void	ft_lexer_cmd(t_shell *shell, t_lexer *node)
 		node->type = BUILTIN;
 	else
 		node->type = CMD;
-	node->word = ft_arg_join(shell, BUILTIN);
+	node->word = ft_arg_join(shell);
 }
 
 void	ft_lexer_pipe(t_shell *shell, t_lexer *node)
@@ -216,7 +213,14 @@ char	*ft_syntax_err(t_list *list, int pipe)
 		return (ft_substr(list->content, 0, 2));
 	else if (!list->next)
 		return (ft_strdup("newline"));
-	else if (ft_strchr("<|>", *(list->next->content)))
+	else if (ft_strchr("<|>", *(list->next->content)) && !pipe)
+	{
+		if (ft_strlen(list->next->content) == 1)
+			return (ft_substr(list->next->content, 0, 1));
+		else
+			return (ft_substr(list->next->content, 0, 2));
+	}
+	else if (ft_strchr("|", *(list->next->content)) && pipe)
 	{
 		if (ft_strlen(list->next->content) == 1)
 			return (ft_substr(list->next->content, 0, 1));

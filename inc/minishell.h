@@ -6,13 +6,12 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 19:44:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/25 17:30:07 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 01:20:27 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef minishell_H
 # define minishell_H
-
 
 #include <string.h>
 #include <errno.h>
@@ -34,6 +33,20 @@
 typedef	struct s_shell	t_shell;
 typedef	struct	s_cmd	t_cmd;
 typedef struct s_data	t_data;
+
+typedef struct s_pipex
+{
+	int		ac;
+	int		heredoc;
+	int		pipefd[2];
+	int		prev_in;
+	int		exit_code;
+	char	**av;
+	char	**env;
+	char	**cmd;
+	char	**path;
+	char	*path_cmd;
+}		t_pipex;
 
 struct	s_data
 {
@@ -112,7 +125,7 @@ void	heredoc(t_shell *, char *, bool, int pipe);
 /*
     EXPANSION
 */
-char    *ft_getenv(char *, char **, int );
+char    *ft_getenv(char *, char **);
 char	*expander(char *, t_shell *);
 
 
@@ -130,5 +143,31 @@ void	executer(t_shell *, int io[2]);
 void 	print_token(t_token);
 void 	mini_print_token(t_token);
 void	execute_commands(t_shell *, t_cmd*);
+int		lstlexer_size(t_lexer *lexer);
+void	exec(t_lexer *lexer, t_shell *shell);
+
+
+/* ############# - main_bonus.c - ############# */
+int ft_heredoc(t_lexer *lexer);
+void	ft_pipex(t_pipex *pipex, t_shell *shell, t_lexer *lexer);
+void	ft_check_cmd(char *arg, t_pipex *pipex);
+
+/* ########### - parse_cmd_bonus.c - ########### */
+void	ft_cmds_parse(char *arg, t_pipex *pipex);
+void	ft_parse_path(t_pipex *pipex);
+void	ft_slash_end(t_pipex *pipex);
+
+/* ############ - utils_I_bonus.c - ############ */
+int		ft_open(const char *pathname, int flags, mode_t mode);
+void	ft_pipe(t_pipex *pipex);
+pid_t	ft_fork(t_pipex *pipex);
+void	ft_dup2(int old, int new);
+void	ft_execve(t_pipex *pipex);
+
+/* ############ - utils_II_bonus.c - ############ */
+int		ft_heredoc_cmp(t_pipex *pipex, char *heredoc);
+int		ft_file2(t_lexer *);
+void	ft_close_pipe(t_pipex *pipex);
+void	ft_clear(char **ptr);
 
 #endif
