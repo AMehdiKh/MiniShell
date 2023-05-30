@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+         #
+#    By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/27 12:41:59 by ael-khel          #+#    #+#              #
-#    Updated: 2023/05/30 03:02:15 by ael-khel         ###   ########.fr        #
+#    Updated: 2023/05/30 05:48:18 by hahadiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		= cc
 FLAGS	= -Wall -Wextra -Werror -IINC
-RLFLGS	= -L/Users/ael-khel/homebrew/opt/readline/lib -lreadline
-RLOFLGS	= -I/Users/ael-khel/homebrew/opt/readline/include
+RLFLGS	= -L/Users/hahadiou/goinfre/homebrew/opt/readline/lib -lreadline
+RLOFLGS	= -I/Users/hahadiou/goinfre/homebrew/opt/readline/include
 
 NAME	= minishell
 
@@ -23,14 +23,21 @@ MANDATORY_PATH	= Mandatory
 OBJ_PATH	= obj
 
 SRCS = main.c \
-		preprocessor.c \
+		lexer.c \
+		lexer_utils.c \
 		ft_split_list.c \
-		utils.c \
+		ft_split_cmd.c \
 		expander.c \
-		zaba.c \
-		utils_I_bonus.c \
-		utils_II_bonus.c \
-		parse_cmd_bonus.c
+		parser.c \
+		utils_II.c \
+		utils_I.c \
+		parse_cmd.c \
+		echo.c \
+		pwd.c \
+		env.c \
+		cd.c \
+		unset.c \
+		exit.c
 
 SRC		= $(addprefix $(MANDATORY_PATH)/,$(SRCS))
 OBJ		= $(addprefix $(OBJ_PATH)/,$(SRCS:.c=.o))

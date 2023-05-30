@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/28 17:31:52 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 04:19:48 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,11 +87,6 @@ static size_t expand_vars(char *expanded, char *input, size_t *i, t_shell *shell
     n[1] = 0; // Variable to copy value from val to expanded
     n[2] = 0; // Size of expanded variable to move to the next variable
     *i += 1;
-    // if (!input[*i] || input[*i] == '$')
-    // {
-    //     expanded[0] = '$';
-    //     return (1);
-    // }
     while (input[*i + n[2]] == '_' || ft_isalnum(input[*i + n[2]]))
         n[2]++;
     if (ft_isdigit(input[*i]))
@@ -100,7 +95,6 @@ static size_t expand_vars(char *expanded, char *input, size_t *i, t_shell *shell
         *i += 1;
         while (input[*i] && !ft_isdigit(input[*i]))
             *i += 1;
-        // Copy all characters after the first number to expanded
         while (input[*i])
             expanded[n[1]++] = input[(*i)++];
         return (n[1]);
@@ -141,15 +135,6 @@ char	*expander(char* input, t_shell* shell)
     n[1] = 0;
     quotes = false;
     expanded = (char*)ft_calloc((expanded_size(input, shell) + 100), sizeof(char));
-
-    // Check if the input is only "$"
-    if ((ft_strlen(input) == 1 && input[0] == '$' )|| (ft_strlen(input) == 3 && input[1] == '$'))
-	{
-		if (input[0] == '$' || input[1] == '$')
-			expanded[0] = '$';
-		return (expanded);
-    }
-
     while (input[n[0]])
 	{
         if (input[n[0]] == 39)
@@ -163,40 +148,3 @@ char	*expander(char* input, t_shell* shell)
     }
     return (expanded);
 }
-
-// int		main(int argc, char **argv, char **envp)
-// {
-// 	char *input = "Hello, $USER! The exit status is: $?";
-// 	t_shell data;
-// 	data.env = envp;
-// 	data.in_quotes = false;
-// 	data.in_dquotes = false;
-
-// 	char *expanded_input = expand_input(input, &data);
-// 	if (expanded_input)
-// 	{
-// 		printf("Expanded input: %s\n", expanded_input);
-// 		free(expanded_input);
-// 	}
-// 	else
-// 	{
-// 		printf("Expansion failed.\n");
-// 	}
-
-// 	return 0;
-// }
-
-// int main(int ac, char **av, char **envp)
-// {
-//     t_shell shell[1];
-
-// 	shell->env = ft_dup_env(envp);
-//     char input[] = "$a";
-// 	char *expanded = expander(input, shell);
-// 	size_t	i = 0;
-// 	//expand_vars(expanded, input, &i, shell);
-//     //int size = expanded_size(input, shell);
-// 	printf("expanded: %s\n", expanded);
-//     free(shell->env);
-//     return 0;
-// }

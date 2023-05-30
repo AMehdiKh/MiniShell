@@ -1,32 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/25 03:53:49 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 05:06:08 by hahadiou         ###   ########.fr       */
+/*   Created: 2023/05/07 19:02:03 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/05/30 05:12:18 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_echo_builtin(size_t ac, char **av)
+int	ft_pwd_builtin()
 {
-	size_t	i;
-	int		n;
+    char	wd[PATH_MAX];
+	char	*dir;
 	
-	n = (ft_strncmp("-n", av[1], 3) == 0);
-	i = 1 + n;
-	while (i < ac)
+	dir = getcwd(wd, PATH_MAX);
+    if (!dir)
 	{
-		write(1, av[i], ft_strlen(av[i]));
-		if (i != (ac - 1))
-			write(1, " ", 1);
-		++i;
-	}
-	if (!n)
-		write(1, "\n", 1);
-	return (EXIT_SUCCESS);
+        perror("minishell: pwd: ");
+        return (-1);
+    }
+    ft_dprintf(1, "%s\n", dir);
+    return (EXIT_SUCCESS);
 }

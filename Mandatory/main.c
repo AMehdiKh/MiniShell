@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 03:26:29 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/30 03:51:19 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,6 @@ static	char	*ft_unclosed_quote(char *line, size_t i, int pipe)
 	}
 	return (line);
 }
-
-//	export LDFLAGS="-L/Users/ael-khel/homebrew/opt/readline/lib"
-//	export CPPFLAGS="-I/Users/ael-khel/homebrew/opt/readline/include/readline"
 
 int	main(int ac, char **av, char **env)
 {

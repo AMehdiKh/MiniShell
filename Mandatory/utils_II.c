@@ -1,35 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_II_bonus.c                                   :+:      :+:    :+:   */
+/*   utils_II.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/14 03:03:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 02:43:09 by ael-khel         ###   ########.fr       */
+/*   Created: 2023/04/09 19:32:45 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/05/30 05:01:02 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_heredoc_cmp(t_parser *pipex, char *heredoc)
+int ft_heredoc(t_lexer *lexer, int stdin)
 {
-	size_t	i;
+	char	*heredoc;
+    int     pfds[2];
 
-	if (!heredoc)
-		return (1);
-	if (!*pipex->av[2] && *heredoc == '\n')
-		return (1);
-	if (ft_strlen(pipex->av[2]) != ft_strlen(heredoc) - 1)
-		return (0);
-	i = 0;
-	while (pipex->av[2][i])
+    pipe(pfds);
+	while (1)
 	{
-		if (pipex->av[2][i] != heredoc[i])
-			return (0);
-		++i;
+		ft_dprintf(2, "> ");
+		heredoc = get_next_line(stdin);
+		if (ft_strnstr(heredoc, lexer->word, ft_strlen(lexer->word)))
+			break ;
+		ft_dprintf(pfds[1], "%s", heredoc);
+		free(heredoc);
 	}
-	return (1);
+    free(heredoc);
+    close(pfds[1]);
+    return (pfds[0]);
 }
 
 int	ft_file2(t_lexer *lexer)
@@ -62,5 +62,30 @@ void	ft_clear(char **ptr)
 		while (ptr[i])
 			free(ptr[i++]);
 		free(ptr);
+	}
+}
+
+void	ft_newnode(t_shell *shell)
+{
+	t_lexer	*new;
+	t_lexer *node;
+
+	new = (t_lexer *)malloc(sizeof(t_lexer));
+	if (!new)
+	{
+		exit(0); // to be changed
+	}
+	new->word = NULL;
+	new->next = NULL;
+	node = ft_lexer_last(shell->lexer);
+	if (!node)
+	{
+		shell->lexer = new;
+		new->prev = NULL;
+	}
+	else
+	{
+		(node)->next = new;
+		new->prev = node;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:06:23 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 02:43:09 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/05/30 04:03:05 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_cmds_parse(char *arg, t_parser *pipex)
 {
 	int	code;
 
-	pipex->cmd = ft_split(arg, ' ', 0);
+	pipex->cmd = ft_split_cmd(arg);
 	if (!pipex->cmd)
 	{
 		code = errno;
