@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 15:53:59 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/29 22:16:34 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 03:12:22 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,47 +77,32 @@ int	ft_quotes_number(char *s)
 	return (n_quote);
 }
 
-char* ft_remove_quotes(char* s, int option)
+char	*ft_remove_quotes(char *s, int option)
 {
-    char* str;
-    int quote = 0;
-    int i = 0;
-    int j = 0;
-    int skip = 0;
+	char	*str;
+	int		quote;
+	int		i;
+	int		j;
 
-    str = ft_calloc((ft_strlen(s) - ft_quotes_number(s)) + 100, sizeof(char));
-    if (!str)
-        return NULL;
-    while (s[i])
+	if (ft_strchr("(<|>)&;", *s))
+		return (s);
+	str = ft_calloc((ft_strlen(s) - ft_quotes_number(s)) + 1, sizeof(char));
+	if (!str)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s[i])
 	{
-        if (!quote && (s[i] == '\'' || s[i] == '\"'))
-		{
-            quote = s[i++];
-        }
-        else if (quote && s[i] == quote)
-		{
-            quote = 0;
-            i++;
-        }
-        else if (quote && s[i] != quote)
-		{
-            str[j++] = s[i++];
-        }
-        else
-		{
-            if (skip)
-			{
-                skip = 0;
-            }
-            else if (s[i] == '\'' || s[i] == '\"')
-			{
-                skip = 1;
-            }
-            str[j++] = s[i++];
-        }
-    }
-
-    if (option)
-        free(s);
-    return (str);
+		quote = 0;
+		if (s[i] == 39 || s[i] == 34)
+			quote = s[i++];
+		while (quote && s[i] != quote)
+			str[j++] = s[i++];
+		if (quote)
+			++i;
+		str[j++] = s[i++];
+	}
+	if (option)
+		free(s);
+	return (str);
 }

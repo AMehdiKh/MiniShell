@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils_II_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:03:38 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 00:05:59 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 02:43:09 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_heredoc_cmp(t_pipex *pipex, char *heredoc)
+int	ft_heredoc_cmp(t_parser *pipex, char *heredoc)
 {
 	size_t	i;
 
@@ -43,7 +43,7 @@ int	ft_file2(t_lexer *lexer)
 	return (fd);
 }
 
-void	ft_close_pipe(t_pipex *pipex)
+void	ft_close_pipe(t_parser *pipex)
 {
 	if (pipex->prev_in)
 		close(pipex->prev_in);

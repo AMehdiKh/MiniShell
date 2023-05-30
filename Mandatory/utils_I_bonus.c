@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_I_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:51:43 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 00:03:17 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 02:43:09 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	ft_open(const char *pathname, int flags, mode_t mode)
 	return (fd);
 }
 
-void	ft_pipe(t_pipex *pipex)
+void	ft_pipe(t_parser *pipex)
 {
 	int	code;
 
@@ -39,7 +39,7 @@ void	ft_pipe(t_pipex *pipex)
 	}
 }
 
-pid_t	ft_fork(t_pipex *pipex)
+pid_t	ft_fork(t_parser *pipex)
 {
 	pid_t	pid;
 	int		code;
@@ -64,7 +64,7 @@ void	ft_dup2(int old, int new)
 	close(old);
 }
 
-void	ft_execve(t_pipex *pipex)
+void	ft_execve(t_parser *pipex)
 {
 	int	code;
 

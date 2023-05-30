@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:46:12 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/30 00:04:24 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 02:28:50 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ struct s_lexer
 {
 	t_token			type;
 	char			*word;
+	bool			expand;
 	struct s_lexer	*prev;
 	struct s_lexer	*next;
 };

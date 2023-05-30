@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 19:32:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/30 00:11:14 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 02:33:47 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,42 +37,6 @@ void	ft_newnode(t_shell *shell)
 	}
 }
 
-t_cmd	*ft_newnode_cmd(t_token type, t_data *data)
-{
-	t_cmd	*new;
-
-	new = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!new)
-		return (NULL);
-	new->cmd = data->abs_cmd;
-    new->argv = data->argv;
-    new->type = type;
-    new->lr_op = data->lr_op;
-    new->rr_op = data->rr_op;
-    new->lr = data->lr;
-    new->rr = data->rr;
-	new->next = NULL;
-	return (new);
-}
-
-t_cmd	*ft_newnode_pipe(t_token type)
-{
-	t_cmd	*new;
-
-	new = (t_cmd *)malloc(sizeof(t_cmd));
-	if (!new)
-		return (NULL);
-	new->cmd = NULL;
-    new->argv = NULL;
-    new->type = type;
-    new->lr_op = -1;
-    new->rr_op = -1;
-    new->lr = NULL;
-    new->rr = NULL;
-	new->next = NULL;
-	return (new);
-}
-
 int lstlexer_size(t_lexer *lexer)
 {
     t_lexer *head;
@@ -86,22 +50,6 @@ int lstlexer_size(t_lexer *lexer)
         head = head->next;
     }
     return (size);
-}
-
-void ft_cmdadd_back(t_cmd **lst, t_cmd *new)
-{
-    t_cmd *last = *lst;
-    
-    if (last)
-    {
-        while (last->next)
-            last = last->next;
-        last->next = new;
-    }
-    else
-    {
-        *lst = new;
-    }
 }
 
 void print_token(t_token token)
@@ -181,95 +129,5 @@ void printList(t_list* list)
         printf("Content: %s\n", list->content);
         // printf("Next: %p\n\n", (void*)list->next);
         list = list->next;
-    }
-}
-
-void print_cmd_node(t_cmd *head)
-{
-    t_cmd *current = head;
-    printf("                   PARSER                         \n");
-    while (current != NULL)
-    {
-        if (current->cmd)
-            printf("cmd: %s\n", current->cmd);
-
-        if (current->argv)
-        {
-            printf("argv: ");
-            for (int i = 0 ; current->argv[i]; i++)
-                printf("%s ", current->argv[i]);
-            printf("\n");
-        }
-        printf("Type: ");
-        if (current->type)
-        mini_print_token(current->type);
-        printf("\n");
-        printf("lr: %s\n", current->lr);
-        printf("rr: %s\n", current->rr);
-        printf("lr_op: ");
-        if (current->lr_op == STDIN)
-            printf("STDIN");
-        else
-            print_token(current->lr_op);
-        printf("\n");
-        printf("rr_op: ");
-        print_token(current->rr_op);
-        printf("\n");
-        printf("\n");
-        current = current->next;
-    }
-}
-
-void	ft_cmd_clear(t_cmd **lst)
-{
-	t_cmd *current;
-	t_cmd *next;
-
-	if (!lst || !(*lst))
-		return ;
-	current = *lst;
-	while (current)
-	{
-		next = current->next;
-		free(current);
-		current = next;
-	}
-	*lst = NULL;
-}
-
-char    *get_last_file_word(t_lexer *head, t_token type[2])
-{
-    char *last_word;
-    t_lexer *current;
-
-    last_word = NULL;
-    current = head;
-    while (current != NULL)
-    {
-        // if (current->type == R_FILE || current->type == W_A_FILE || current->type == W_T_FILE)
-        if (current->type == type[0] || current->type == type[1])
-        {
-            last_word = current->word;
-        }
-        current = current->next;
-    }
-    return (last_word);
-}
-
-void    heredoc(t_shell *shell, char *delimiter, bool expand, int pipe)
-{
-	char	*line[2];
-    
-    while (1)
-    {
-        ft_dprintf(0, "> ");
-        line[0] = get_next_line(0);
-        if (!line[0] || ft_strnstr(line[0], delimiter, ft_strlen(delimiter)))
-           break ;
-        line[1] = expander(line[0], shell);
-        if (line[1] && expand)
-            ft_dprintf(pipe, "%s", line[1]);
-        else
-            ft_dprintf(pipe, "%s", line[0]);
     }
 }

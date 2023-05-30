@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parse_cmd_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:06:23 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 00:22:16 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 02:43:09 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_cmds_parse(char *arg, t_pipex *pipex)
+void	ft_cmds_parse(char *arg, t_parser *pipex)
 {
 	int	code;
 
@@ -25,7 +25,7 @@ void	ft_cmds_parse(char *arg, t_pipex *pipex)
 	}
 }
 
-void	ft_parse_path(t_pipex *pipex)
+void	ft_parse_path(t_parser *pipex)
 {
 	int	code;
 	int	i;
@@ -50,7 +50,7 @@ void	ft_parse_path(t_pipex *pipex)
 	ft_slash_end(pipex);
 }
 
-void	ft_slash_end(t_pipex *pipex)
+void	ft_slash_end(t_parser *pipex)
 {
 	char	*path;
 	int		i;
@@ -68,7 +68,7 @@ void	ft_slash_end(t_pipex *pipex)
 	}
 }
 
-void	ft_check_cmd(char *arg, t_pipex *pipex)
+void	ft_check_cmd(char *arg, t_parser *pipex)
 {
 	int		i;
 

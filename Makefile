@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+         #
+#    By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/27 12:41:59 by ael-khel          #+#    #+#              #
-#    Updated: 2023/05/30 00:07:55 by hahadiou         ###   ########.fr        #
+#    Updated: 2023/05/30 03:02:15 by ael-khel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		= cc
 FLAGS	= -Wall -Wextra -Werror -IINC
-RLFLGS	= -L/Users/hahadiou/goinfre/homebrew/opt/readline/lib -lreadline
-RLOFLGS	= -I/Users/hahadiou/goinfre/homebrew/opt/readline/include
+RLFLGS	= -L/Users/ael-khel/homebrew/opt/readline/lib -lreadline
+RLOFLGS	= -I/Users/ael-khel/homebrew/opt/readline/include
 
 NAME	= minishell
 
@@ -27,13 +27,6 @@ SRCS = main.c \
 		ft_split_list.c \
 		utils.c \
 		expander.c \
-		executer.c \
-		echo.c \
-		cd.c \
-		pwd.c \
-		env.c \
-		export.c \
-		unset.c \
 		zaba.c \
 		utils_I_bonus.c \
 		utils_II_bonus.c \
