@@ -6,13 +6,47 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/30 04:19:48 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 17:20:52 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
 
-static size_t	exit_status_size(t_shell *shell)
+# define QUOTES "\"\'"
+
+static inline bool	single_dollar(char *input_at_i)
+{
+	return ((!input_at_i[1]
+			|| input_at_i[1] == ' '
+			|| input_at_i[1] == '\"'));
+}
+
+bool	is_onstr(const char *str, int ch)
+{
+	size_t	i;
+
+	if (!str)
+		return (NULL);
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == ch)
+			return (true);
+		i += 1;
+	}
+	return (false);
+}
+
+
+void	init_vars(size_t *i, size_t *size, bool *in_quotes, bool *in_dquotes)
+{
+	*i = 0;
+	*size = 0;
+	*in_quotes = false;
+	*in_dquotes = false;
+}
+
+size_t	exit_status_size(t_shell *shell)
 {
 	char	*exit_status;
 	size_t	size;
@@ -23,92 +57,61 @@ static size_t	exit_status_size(t_shell *shell)
 	return (size);
 }
 
-size_t expand_size(char *input, size_t *i, t_shell *shell)
+size_t	expand_size(char *input_at_i, size_t *i, t_shell *data)
 {
-    size_t	var_size;
-	size_t	expanded_size;
-    char	*var_name;
-    char	*var_value;
+	size_t	var_size;
+	char	*var_name;
+	char	*var_value;
 
-    (*i)++;
-    if (!input[1])
-        return 1;
-    var_size = 0;
-    while (input[var_size + 1] && ft_isalnum(input[var_size + 1]))
-        var_size++;
-    if (var_size == 0)
-        return 0;
-    var_name = ft_substr(input, 1, var_size);
-    var_value = ft_getenv(var_name, shell->env);
-    free(var_name);
-    (*i) += var_size;
-    if (var_value)
-	{
-        expanded_size = ft_strlen(var_value);
-        if (input[var_size + 1] == '\"')
-            expanded_size += 2;
-        return (expanded_size);
-    }
-    return (var_size);
+	*i += 1;
+	if (single_dollar(input_at_i))
+		return (1);
+	var_size = 0;
+	while (input_at_i[var_size + 1]
+		&& input_at_i[var_size + 1] != ' '
+		&& !is_onstr(QUOTES, input_at_i[var_size + 1])
+		&& input_at_i[var_size + 1] != '$')
+				var_size += 1;
+	if (var_size == 0)
+		return (0);
+	var_name = ft_substr(input_at_i, 1, var_size);
+    var_value = ft_getenv(var_name, data->env);
+	free(var_name);
+	*i += var_size;
+	if (!var_value)
+		return (0);
+	return (ft_strlen(var_value));
 }
 
-static int	expanded_size(char *input, t_shell *shell)
+int	expanded_size(char *input, t_shell *data)
 {
-	size_t	n[2];
-	bool	quotes; // quotes [0] is single quotes otherwize is double quotes
+	size_t	i;
+	size_t	size;
+	bool	in_quotes;
+	bool	in_dquotes;
 
-	n[0] = 0; // n[0] is the variable to loop through the input
-	n[1] = 0; // n[1] is the size of expanded variable
-	quotes = false;
-	while (input[n[0]])
+	init_vars(&i, &size, &in_quotes, &in_dquotes);
+	while (input[i])
 	{
-		if (input[n[0]] == 39)
-			quotes = true;
-		if (input[n[0]] == '$' && input[n[0] + 1] == '?' && !quotes)
+		if (input[i] == '\"' && !in_quotes)
+			in_dquotes = !in_dquotes;
+		if (input[i] == '\'' && !in_dquotes)
+			in_quotes = !in_quotes;
+		if ((input[i] == '$' && input[i + 1] == '?') && !in_quotes)
 		{
-			n[1] += exit_status_size(shell);
-			n[0]++;
+			size += exit_status_size(data) - 1;
+			i += 1;
 		}
-		else if (input[n[0]] == '$' && !quotes)
-			n[1] += expand_size(&(input[n[0]]), &n[0], shell) - 1;
+		else if (input[i] == '$' && !in_quotes)
+			size += expand_size(&(input[i]), &i, data) - 1;
 		else
-			n[0]++;
-		n[1]++;
+			i += 1;
+		size += 1;
 	}
-	return (n[1]);
+	return (size);
 }
 
-static size_t expand_vars(char *expanded, char *input, size_t *i, t_shell *shell)
-{
-    char *val;
-    size_t n[3];
-
-    n[0] = 0; // Variable to loop through input
-    n[1] = 0; // Variable to copy value from val to expanded
-    n[2] = 0; // Size of expanded variable to move to the next variable
-    *i += 1;
-    while (input[*i + n[2]] == '_' || ft_isalnum(input[*i + n[2]]))
-        n[2]++;
-    if (ft_isdigit(input[*i]))
-    {
-        // Handle number after '$'
-        *i += 1;
-        while (input[*i] && !ft_isdigit(input[*i]))
-            *i += 1;
-        while (input[*i])
-            expanded[n[1]++] = input[(*i)++];
-        return (n[1]);
-    }
-    val = ft_getenv(ft_substr(input, *i, n[2]), shell->env);
-    *i += n[2];
-    if (!val)
-        return (0);
-    while (val[n[0]])
-        expanded[n[1]++] = val[n[0]++];
-    return (n[1]);
-}
-
-static size_t	expand_exit_status(char *expanded, size_t *i, t_shell *shell)
+size_t	expand_exit_status(char *expanded_input_at_i, size_t *i, t_shell *shell)
 {
 	char	*exit_status;
 	size_t	j;
@@ -118,33 +121,66 @@ static size_t	expand_exit_status(char *expanded, size_t *i, t_shell *shell)
 	j = 0;
 	while (exit_status[j])
 	{
-		expanded[j] = exit_status[j];
+		expanded_input_at_i[j] = exit_status[j];
 		j += 1;
 	}
 	free(exit_status);
 	return (j);
 }
 
-char	*expander(char* input, t_shell* shell)
+size_t	expand_variable(char *expanded_input_at_i, char *input,
+	size_t *i, t_shell *data)
 {
-    size_t n[2];
-    char* expanded;
-    bool quotes;
+	char	*var_value;
+	size_t	size;
+	size_t	j;
+	size_t	k;
 
-    n[0] = 0;
-    n[1] = 0;
-    quotes = false;
-    expanded = (char*)ft_calloc((expanded_size(input, shell) + 100), sizeof(char));
-    while (input[n[0]])
+	size = 0;
+	j = 0;
+	k = 0;
+	*i += 1;
+	if (!input[*i] || input[*i] == ' ' || input[*i] == '\"')
 	{
-        if (input[n[0]] == 39)
-            quotes = true;
-        if (input[n[0]] == '$' && input[n[0] + 1] == '?' && !quotes)
-            n[1] += expand_exit_status(&(expanded[n[1]]), &n[0], shell);
-        else if (input[n[0]] == '$' && !quotes)
-            n[1] += expand_vars(&(expanded[n[1]]), input, &n[0], shell);
-        else
-            expanded[n[1]++] = input[n[0]++];
-    }
-    return (expanded);
+		expanded_input_at_i[0] = '$';
+		return (1);
+	}
+	while (input[*i + size] && input[*i + size] != ' '
+		&& input[*i + size] != '\"' && !is_onstr(QUOTES, input[*i + size])
+		&& input[*i + size] != '$')
+		size += 1;
+    var_value = ft_getenv(ft_substr(input, *i, size), data->env);
+	*i += size;
+	if (!var_value)
+		return (0);
+	while (var_value[k])
+		expanded_input_at_i[j++] = var_value[k++];
+	return (j);
+}
+
+char	*ft_expander(char *input, t_shell *data)
+{
+	size_t	i;
+	size_t	j;
+	bool	in_quotes;
+	bool	in_dquotes;
+	char	*expanded_input;
+
+	init_vars(&i, &j, &in_quotes, &in_dquotes);
+	expanded_input = malloc((expanded_size(input, data) + 1) * sizeof(char));
+	while (input[i])
+	{
+		if (input[i] == '\"' && !in_quotes)
+			in_dquotes = !in_dquotes;
+		if (input[i] == '\'' && !in_dquotes)
+			in_quotes = !in_quotes;
+		if (input[i] == '$' && input[i + 1] == '?' && !in_quotes)
+			j += expand_exit_status(&(expanded_input[j]), &i, data);
+		else if (input[i] && input[i] == '$' && !in_quotes)
+			j += expand_variable(&(expanded_input[j]), input, &i, data);
+		else
+			expanded_input[j++] = input[i++];
+	}
+	expanded_input[j] = '\0';
+	return (expanded_input);
 }

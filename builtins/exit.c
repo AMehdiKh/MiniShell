@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:26:41 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 05:50:27 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 18:46:41 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@
 
 void	ft_exit(char *status, char *av, int ac)
 {
-	char		*s;
-	int			result;
-	int			sign;
+	char	*s;
+	long	result;
+	int		sign;
 
 	result = 0;
 	sign = 1;
@@ -35,17 +35,17 @@ void	ft_exit(char *status, char *av, int ac)
 			sign = -sign;
 	while (ft_isdigit(*s))
 		result = (result * 10) + (*s++ - 48);
-	if (*s)
+	if (*s || result > LLONG_MAX)
 	{
 		free(status);
 		ft_dprintf(2, "minishell: exit: %s: numeric argument required\n", av);
-		exit(2);
+		exit(255);
 	}
 	free (status);
 	if (ac > 2)
 	{
 		ft_dprintf(2, "minishell: exit: too many arguments\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	exit ((unsigned char)(result * sign));
 }

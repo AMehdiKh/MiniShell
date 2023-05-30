@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/04 19:44:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/30 05:51:05 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 18:53:38 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,14 @@
 #include <readline/history.h>
 #include "lexer.h"
 #include "libft.h"
+#include <signal.h>
 
 typedef	struct s_shell	t_shell;
 typedef	struct	s_cmd	t_cmd;
 typedef struct s_data	t_data;
 typedef struct s_parser	t_parser;
+
+t_shell	*shell;
 
 struct s_parser
 {
@@ -93,27 +96,33 @@ char    *ft_getenv(char *, char **);
 char	*expander(char *, t_shell *);
 
 /* ############# - main_bonus.c - ############# */
-int		ft_heredoc(t_lexer *lexer, int stdin);
-void	ft_parser(t_parser *pipex, t_shell *shell, t_lexer *lexer);
-void	ft_check_cmd(char *arg, t_parser *pipex);
+int		ft_heredoc(t_shell *shell, t_lexer *lexer, int stdin);
+void	ft_parser(t_parser *parser, t_shell *shell, t_lexer *lexer);
+void	ft_check_cmd(char *arg, t_parser *parser);
 
 /* ########### - parse_cmd_bonus.c - ########### */
-void	ft_cmds_parse(char *arg, t_parser *pipex);
-void	ft_parse_path(t_parser *pipex);
-void	ft_slash_end(t_parser *pipex);
+void	ft_cmds_parse(char *arg, t_parser *parser);
+void	ft_parse_path(t_parser *parser);
+void	ft_slash_end(t_parser *parser);
 
 /* ############ - utils_I_bonus.c - ############ */
 int		ft_open(const char *pathname, int flags, mode_t mode);
-void	ft_pipe(t_parser *pipex);
-pid_t	ft_fork(t_parser *pipex);
+void	ft_pipe(t_parser *parser);
+pid_t	ft_fork(t_parser *parser);
 void	ft_dup2(int old, int new);
-void	ft_execve(t_parser *pipex);
+void	ft_execve(t_parser *parser);
 
 /* ############ - utils_II_bonus.c - ############ */
-int		ft_heredoc_cmp(t_parser *pipex, char *heredoc);
 int		ft_file2(t_lexer *);
-void	ft_close_pipe(t_parser *pipex);
+void	ft_close_pipe(t_parser *parser);
 void	ft_clear(char **ptr);
 char	**ft_split_cmd(char const *s);
+
+
+void	config_signals(void);
+void	dismiss_signal(int signum);
+void	child_signals(int signum);
+
+char	*ft_expander(char *s, t_shell *shell);
 
 #endif

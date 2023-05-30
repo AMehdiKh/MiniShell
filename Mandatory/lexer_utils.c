@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/30 03:55:42 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 16:39:25 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	ft_check_meta(t_shell *shell)
 int	ft_builtin_check(char *s, t_shell *shell)
 {
 	char	*tmp;
-	tmp = ft_remove_quotes(expander(s, shell), 1);
+	tmp = ft_remove_quotes(ft_expander(s, shell), 1);
 	if (!ft_strncmp(tmp, "exit", ft_strlen("exit") + 1)
 		|| !ft_strncmp(tmp, "echo", ft_strlen("echo") + 1)
 		|| !ft_strncmp(tmp, "cd", ft_strlen("cd") + 1)
@@ -93,7 +93,7 @@ char	*ft_arg_join(t_shell *shell)
 	while (shell->list && !ft_strchr("<|>", *(shell->list->content)))
 	{
 		tmp = shell->list;
-		cmd = ft_strjoin(cmd, ft_strjoin(expander(shell->list->content, shell), " ", 1), 4);
+		cmd = ft_strjoin(cmd, ft_strjoin(ft_expander(shell->list->content, shell), " ", 0), 4);
 		shell->list = shell->list->next;
 		ft_lstdelone(tmp);
 	}	
