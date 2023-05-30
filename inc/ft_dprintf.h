@@ -13,8 +13,8 @@
 #ifndef FT_DPRINTF_H
 # define FT_DPRINTF_H
 
-# include <unistd.h>
 # include <stdarg.h>
+# include <unistd.h>
 
 typedef struct s_dprintf
 {
@@ -22,7 +22,7 @@ typedef struct s_dprintf
 	int		fd;
 	int		len;
 	int		spec;
-}	t_dprintf;
+}			t_dprintf;
 
 int			ft_dprintf(int fd, const char *format, ...);
 

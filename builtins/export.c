@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 bool	streq(char *str1, char *str2)
 {
@@ -48,8 +48,9 @@ bool	is_valid_id(char *str)
 char	*get_var_name(const char *s, int c)
 {
 	char	*ptr;
-	
-	int i = 0;
+	int		i;
+
+	i = 0;
 	ptr = ft_calloc(ft_strlen(s), sizeof(char));
 	while (s[i])
 	{
@@ -70,7 +71,9 @@ int	single_export(t_shell *shell)
 	i = 0;
 	while (shell->env[i])
 	{
-		ft_dprintf(STDOUT_FILENO, "declare -x %s=\"%s\"\n", get_var_name(shell->env[i], '='), ft_strchr(shell->env[i], '=') + 1);
+		ft_dprintf(STDOUT_FILENO, "declare -x %s=\"%s\"\n",
+			get_var_name(shell->env[i], '='), ft_strchr(shell->env[i], '=')
+			+ 1);
 		i++;
 	}
 	return (EXIT_SUCCESS);
@@ -78,7 +81,8 @@ int	single_export(t_shell *shell)
 
 int	export_bad_identifier(char *identifier)
 {
-	ft_dprintf(STDERR_FILENO, "minishell: export: `%s': not a valid identifier\n", identifier);
+	ft_dprintf(STDERR_FILENO,
+		"minishell: export: `%s': not a valid identifier\n", identifier);
 	return (EXIT_FAILURE);
 }
 
@@ -88,18 +92,18 @@ int	sirche(char *s)
 	{
 		if (*s == '=')
 			return (1);
-		++s;		
-	}	
+		++s;
+	}
 	return (0);
 }
 
 int	ft_export_builtin(t_shell *shell, char **av)
 {
-	size_t  arg_count;
-    size_t  i;
-    
+	size_t	arg_count;
+	size_t	i;
+
 	i = 0;
-    arg_count = ft_count_strings(av);
+	arg_count = ft_count_strings(av);
 	if (arg_count == 1)
 		return (single_export(shell));
 	shell->exit_status = EXIT_SUCCESS;
@@ -108,7 +112,8 @@ int	ft_export_builtin(t_shell *shell, char **av)
 		if (!is_valid_id(av[i]))
 			shell->exit_status = export_bad_identifier(av[i]);
 		else if (sirche(av[i]) == 1)
-			ft_setenv(shell, get_var_name(av[i], '='), ft_strchr(av[i], '=') + 1);
+			ft_setenv(shell, get_var_name(av[i], '='), ft_strchr(av[i], '=')
+				+ 1);
 		i++;
 	}
 	return (shell->exit_status);

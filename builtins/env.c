@@ -12,21 +12,21 @@
 
 #include "minishell.h"
 
-int ft_env_builtin(char **av, t_shell *shell)
+int	ft_env_builtin(char **av, t_shell *shell)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    if (av[1])
-    {
-        ft_dprintf(2, "env: %s: No such file or directory\n", av[1]);
-        return (127);
-    }
-    while (shell->env[i])
-    {
-        if (strchr(shell->env[i], '='))
-            ft_dprintf(1, "%s\n", shell->env[i]);
-        i++;
-    }
-    return (EXIT_SUCCESS);
+	i = 0;
+	if (av[1])
+	{
+		ft_dprintf(2, "env: %s: No such file or directory\n", av[1]);
+		return (127);
+	}
+	while (shell->env[i])
+	{
+		if (strchr(shell->env[i], '='))
+			ft_dprintf(1, "%s\n", shell->env[i]);
+		i++;
+	}
+	return (EXIT_SUCCESS);
 }

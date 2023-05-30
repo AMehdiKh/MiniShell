@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 // to be fixed
-int ft_unset_builtin(char *var, char **envp)
+int	ft_unset_builtin(char *var, char **envp)
 {
 	char	**temp_env;
 	size_t	var_len;
@@ -24,8 +24,8 @@ int ft_unset_builtin(char *var, char **envp)
 		if (!ft_strncmp(*envp, var, var_len))
 		{
 			temp_env = envp;
-			//free(temp_env[0]);
-            while (*temp_env)
+			// free(temp_env[0]);
+			while (*temp_env)
 			{
 				temp_env[0] = temp_env[1];
 				temp_env++;

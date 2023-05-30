@@ -10,21 +10,21 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "libft.h"
+#include "libft.h"
 
-void    *ft_realloc(void* ptr, size_t size)
+void	*ft_realloc(void *ptr, size_t size)
 {
-	void* new_data;
-    
-    new_data = NULL;
-	if(size)
+	void	*new_data;
+
+	new_data = NULL;
+	if (size)
 	{
-		if(!ptr)
+		if (!ptr)
 		{
 			return (malloc(size));
 		}
 		new_data = malloc(size);
-		if(new_data)
+		if (new_data)
 		{
 			ft_memcpy(new_data, ptr, size);
 			free(ptr);

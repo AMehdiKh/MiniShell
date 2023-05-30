@@ -10,30 +10,29 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
-void ft_setenv(t_shell *shell, char *variable, char *value)
+void	ft_setenv(t_shell *shell, char *variable, char *value)
 {
-    size_t  i;
-    size_t  var_len;
-    size_t  value_len;
-    size_t  entry_len;
-    char    *equal_sign;
-    char    *entry;
-    
+	size_t	i;
+	size_t	var_len;
+	size_t	value_len;
+	size_t	entry_len;
+	char	*equal_sign;
+	char	*entry;
+
 	if (!shell || !variable)
 		return ;
 	// Check if the variable exists in the environment
 	// for (size_t i = 0; shell->env[i]; i++)
-    i = 0;
-    while (shell->env[i])
+	i = 0;
+	while (shell->env[i])
 	{
 		if (strstr(shell->env[i], variable) == shell->env[i])
 		{
 			// Variable found, update its value
 			var_len = ft_strlen(variable);
 			equal_sign = ft_strchr(shell->env[i], '=');
-			
 			if (equal_sign && (equal_sign - shell->env[i] == (long)var_len))
 			{
 				value_len = ft_strlen(value);
@@ -44,13 +43,13 @@ void ft_setenv(t_shell *shell, char *variable, char *value)
 				strncpy(entry, variable, var_len);
 				entry[var_len] = '=';
 				strncpy(entry + var_len + 1, value, value_len);
-				entry[entry_len - 1] = '\0';	
+				entry[entry_len - 1] = '\0';
 				// free(shell->env[i]);
 				shell->env[i] = entry;
 			}
 			return ;
 		}
-        i++;
+		i++;
 	}
 	// Variable not found, add it to the environment
 	var_len = ft_strlen(variable);
@@ -58,7 +57,7 @@ void ft_setenv(t_shell *shell, char *variable, char *value)
 	entry_len = var_len + value_len + 2;
 	entry = (char *)malloc(sizeof(char) * entry_len);
 	if (!entry)
-		return;
+		return ;
 	strncpy(entry, variable, var_len);
 	entry[var_len] = '=';
 	strncpy(entry + var_len + 1, value, value_len);
@@ -92,5 +91,5 @@ void ft_setenv(t_shell *shell, char *variable, char *value)
 // 		free(shell.env[i]);
 // 	free(shell.env);
 
-// 	return 0;
+// 	return (0);
 // }

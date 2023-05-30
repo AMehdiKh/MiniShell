@@ -26,13 +26,13 @@ static bool	ft_search(char *s, char c)
 	return (false);
 }
 
-int ft_heredoc(t_shell *shell, t_lexer *lexer, int stdin)
+int	ft_heredoc(t_shell *shell, t_lexer *lexer, int stdin)
 {
 	char	*heredoc[2];
-    int     pfds[2];
+	int		pfds[2];
 	bool	expand;
 
-    pipe(pfds);
+	pipe(pfds);
 	expand = true;
 	if (ft_search(lexer->word, '\'') || ft_search(lexer->word, '\"'))
 	{
@@ -52,14 +52,14 @@ int ft_heredoc(t_shell *shell, t_lexer *lexer, int stdin)
 			ft_dprintf(pfds[1], "%s", heredoc[0]);
 		free(heredoc[0]);
 	}
-    free(heredoc[0]);
-    close(pfds[1]);
-    return (pfds[0]);
+	free(heredoc[0]);
+	close(pfds[1]);
+	return (pfds[0]);
 }
 
 int	ft_file2(t_lexer *lexer)
 {
-	int		fd;
+	int	fd;
 
 	if (lexer->type == W_A_FILE)
 		fd = ft_open(lexer->word, O_CREAT | O_APPEND | O_WRONLY, 0644);
@@ -93,7 +93,7 @@ void	ft_clear(char **ptr)
 void	ft_newnode(t_shell *shell)
 {
 	t_lexer	*new;
-	t_lexer *node;
+	t_lexer	*node;
 
 	new = (t_lexer *)malloc(sizeof(t_lexer));
 	if (!new)

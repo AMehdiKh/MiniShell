@@ -20,9 +20,9 @@ int	ft_lexer(t_shell *shell)
 		if (*(shell->list->content) == '>')
 			ft_write_redi(shell, ft_lexer_last(shell->lexer));
 		else if (*(shell->list->content) == '<')
-		 	ft_read_redi(shell, ft_lexer_last(shell->lexer));
+			ft_read_redi(shell, ft_lexer_last(shell->lexer));
 		else if (*(shell->list->content) == '|')
-		 	ft_lexer_pipe(shell, ft_lexer_last(shell->lexer));
+			ft_lexer_pipe(shell, ft_lexer_last(shell->lexer));
 		else
 			ft_lexer_cmd(shell, ft_lexer_last(shell->lexer));
 	}
@@ -67,7 +67,7 @@ void	ft_read_redi(t_shell *shell, t_lexer *node)
 {
 	t_list	*tmp;
 	char	*syntax_err;
-	
+
 	syntax_err = ft_syntax_err(shell->list, 0);
 	if (syntax_err)
 	{

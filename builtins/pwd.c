@@ -12,17 +12,17 @@
 
 #include "minishell.h"
 
-int	ft_pwd_builtin()
+int	ft_pwd_builtin(void)
 {
-    char	wd[PATH_MAX];
+	char	wd[PATH_MAX];
 	char	*dir;
-	
+
 	dir = getcwd(wd, PATH_MAX);
-    if (!dir)
+	if (!dir)
 	{
-        perror("minishell: pwd: ");
-        return (-1);
-    }
-    ft_dprintf(1, "%s\n", dir);
-    return (EXIT_SUCCESS);
+		perror("minishell: pwd: ");
+		return (-1);
+	}
+	ft_dprintf(1, "%s\n", dir);
+	return (EXIT_SUCCESS);
 }

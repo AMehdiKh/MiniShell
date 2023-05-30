@@ -36,9 +36,9 @@ static int	ft_last_pipe(char *line)
 	return (0);
 }
 
-static	char	*ft_unclosed_quote(char *line, size_t i, int pipe)
+static char	*ft_unclosed_quote(char *line, size_t i, int pipe)
 {
-	int		quote;
+	int	quote;
 
 	while (line[i] || pipe)
 	{
@@ -65,9 +65,9 @@ static	char	*ft_unclosed_quote(char *line, size_t i, int pipe)
 
 int	main(int ac, char **av, char **env)
 {
-	t_parser parser[1];
-	char	*line;
-	
+	t_parser	parser[1];
+	char		*line;
+
 	if (ac < 1 || av[1])
 		return (1);
 	shell = (t_shell *)malloc(sizeof(t_shell));
@@ -84,10 +84,10 @@ int	main(int ac, char **av, char **env)
 		free(line);
 		if (shell->line && !*shell->line)
 			continue ;
-		if(ft_check_meta(shell))
-		  	continue ;
-		if(ft_lexer(shell))
-		 	continue ;
+		if (ft_check_meta(shell))
+			continue ;
+		if (ft_lexer(shell))
+			continue ;
 		ft_parser(parser, shell, shell->lexer);
 		ft_lexer_clear(&(shell->lexer));
 	}

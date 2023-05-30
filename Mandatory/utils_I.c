@@ -74,7 +74,8 @@ void	ft_execve(t_parser *parser)
 	if (execve(parser->path_cmd, parser->cmd, parser->env) < 0)
 	{
 		code = errno;
-		ft_dprintf(STDERR, "minishell: %s: %s\n", parser->cmd[0], strerror(code));
+		ft_dprintf(STDERR, "minishell: %s: %s\n", parser->cmd[0],
+			strerror(code));
 		ft_clear(parser->cmd);
 		free(parser->path_cmd);
 		if (code == EACCES)

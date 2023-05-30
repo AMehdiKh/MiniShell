@@ -13,15 +13,15 @@
 #ifndef LEXER_H
 # define LEXER_H
 
+# include <stdbool.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <stdio.h>
-# include <stdbool.h>
 
-typedef enum 	e_token t_token;
-typedef struct 	s_lexer t_lexer;
+typedef enum e_token	t_token;
+typedef struct s_lexer	t_lexer;
 
-enum e_token
+enum					e_token
 {
 	STDIN,
 	STDOUT,
@@ -37,13 +37,13 @@ enum e_token
 	CMD_NOT_FOUND = 127
 };
 
-struct s_lexer
+struct					s_lexer
 {
-	t_token			type;
-	char			*word;
-	bool			expand;
-	struct s_lexer	*prev;
-	struct s_lexer	*next;
+	t_token				type;
+	char				*word;
+	bool				expand;
+	struct s_lexer		*prev;
+	struct s_lexer		*next;
 };
 
 #endif

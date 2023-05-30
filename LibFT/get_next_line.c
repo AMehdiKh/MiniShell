@@ -36,7 +36,7 @@ char	*ft_check_nl(char **reserve)
 		ft_free(reserve);
 		*reserve = malloc(len + 1);
 		ft_strlcpy_gnl(*reserve, tmp, (len + 1));
-		free (tmp);
+		free(tmp);
 	}
 	return (line);
 }
@@ -49,8 +49,8 @@ char	*ft_strjoin_gnl(char **reserve, char *buffer)
 	if (!tmp)
 		return (ft_free(reserve));
 	ft_strlcpy_gnl(tmp, *reserve, ft_strlen_gnl(*reserve) + 1);
-	ft_strlcpy_gnl((tmp + ft_strlen_gnl(tmp)),
-		buffer, ft_strlen_gnl(buffer) + 1);
+	ft_strlcpy_gnl((tmp + ft_strlen_gnl(tmp)), buffer, ft_strlen_gnl(buffer)
+		+ 1);
 	ft_free(reserve);
 	return (tmp);
 }
@@ -71,8 +71,8 @@ char	*ft_strdup_gnl(char **reserve)
 
 char	*get_next_line(int fd)
 {
-	char		buffer[(-(BUFFER_SIZE < 0) * BUFFER_SIZE) + (
-			(BUFFER_SIZE > 0) * BUFFER_SIZE) + 1];
+	char		buffer[(-(BUFFER_SIZE < 0) * BUFFER_SIZE) + ((BUFFER_SIZE > 0)
+				* BUFFER_SIZE) + 1];
 	static char	*reserve;
 	int			nbyte;
 

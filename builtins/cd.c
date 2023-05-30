@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 static void	update_wd(t_shell *shell)
 {
@@ -26,7 +26,7 @@ static void	update_wd(t_shell *shell)
 
 // 	owd = ft_getenv("OLDPWD", shell->env);
 // 	if (!owd)
-// 	{	
+// 	{
 // 		ft_dprintf(2, "minishell: cd: OLDPWD not set\n");
 // 		return (EXIT_FAILURE);
 // 	}
@@ -39,7 +39,7 @@ static void	update_wd(t_shell *shell)
 // 	return (EXIT_FAILURE);
 // }
 
-int	ft_cd_builtin(char	*path, t_shell *shell)
+int	ft_cd_builtin(char *path, t_shell *shell)
 {
 	char	cwd[PATH_MAX];
 

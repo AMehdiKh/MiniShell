@@ -40,7 +40,8 @@ void	ft_parse_path(t_parser *parser)
 			{
 				code = errno;
 				ft_clear(parser->cmd);
-				ft_dprintf(STDERR, "minishell: ft_split(): %s\n", strerror(code));
+				ft_dprintf(STDERR, "minishell: ft_split(): %s\n",
+					strerror(code));
 				exit(EXIT_FAILURE);
 			}
 			break ;
@@ -70,7 +71,7 @@ void	ft_slash_end(t_parser *parser)
 
 void	ft_check_cmd(char *arg, t_parser *parser)
 {
-	int		i;
+	int	i;
 
 	ft_cmds_parse(arg, parser);
 	if (!access(parser->cmd[0], F_OK))
@@ -85,9 +86,11 @@ void	ft_check_cmd(char *arg, t_parser *parser)
 		free(parser->path_cmd);
 	}
 	if (parser->path)
-		ft_dprintf(STDERR, "minishell: %s: command not found\n", parser->cmd[0]);
+		ft_dprintf(STDERR, "minishell: %s: command not found\n",
+			parser->cmd[0]);
 	else
-		ft_dprintf(2, "minishell: %s: No such file or directory\n", parser->cmd[0]);
+		ft_dprintf(2, "minishell: %s: No such file or directory\n",
+			parser->cmd[0]);
 	ft_clear(parser->path);
 	ft_clear(parser->cmd);
 	exit(CMD_NOT_FOUND);

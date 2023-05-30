@@ -14,15 +14,15 @@
 
 t_lexer	*ft_redi_parser(t_shell *shell, t_lexer *lexer, int stdin)
 {
-	while (lexer && (lexer->type == R_FILE || lexer->type == W_A_FILE \
-		|| lexer->type == W_T_FILE || lexer->type == HEREDOC))
+	while (lexer && (lexer->type == R_FILE || lexer->type == W_A_FILE
+			|| lexer->type == W_T_FILE || lexer->type == HEREDOC))
 	{
 		if (lexer->type == R_FILE)
 			ft_dup2(ft_open(lexer->word, O_RDONLY, 0), STDIN_FILENO);
 		else if (lexer->type == W_A_FILE || lexer->type == W_T_FILE)
 			ft_dup2(ft_file2(lexer), STDOUT_FILENO);
-        else if (lexer->type == HEREDOC)
-            ft_dup2(ft_heredoc(shell, lexer, stdin), STDIN_FILENO);
+		else if (lexer->type == HEREDOC)
+			ft_dup2(ft_heredoc(shell, lexer, stdin), STDIN_FILENO);
 		lexer = lexer->next;
 	}
 	return (lexer);
@@ -30,8 +30,8 @@ t_lexer	*ft_redi_parser(t_shell *shell, t_lexer *lexer, int stdin)
 
 t_lexer	*ft_grp_shift(t_lexer *lexer)
 {
-	while (lexer && (lexer->type == R_FILE || lexer->type == W_A_FILE 
-		|| lexer->type == W_T_FILE || lexer->type == CMD \
+	while (lexer && (lexer->type == R_FILE || lexer->type == W_A_FILE
+			|| lexer->type == W_T_FILE || lexer->type == CMD
 			|| lexer->type == BUILTIN || lexer->type == HEREDOC))
 		lexer = lexer->next;
 	if (lexer && lexer->type == PIPE)
@@ -39,46 +39,46 @@ t_lexer	*ft_grp_shift(t_lexer *lexer)
 	return (lexer);
 }
 
-static int ft_check_pipe(t_lexer *lexer)
+static int	ft_check_pipe(t_lexer *lexer)
 {
-    while (lexer)
-    {
-        if (lexer->type == PIPE)
-            return (1);
-        lexer = lexer->next;
-    }
-    return (0);
+	while (lexer)
+	{
+		if (lexer->type == PIPE)
+			return (1);
+		lexer = lexer->next;
+	}
+	return (0);
 }
 
-static int ft_check_builtin(t_lexer *lexer)
+static int	ft_check_builtin(t_lexer *lexer)
 {
-    while (lexer)
-    {
-        if (lexer->type == BUILTIN)
-            return (1);
-        lexer = lexer->next;
-    }
-    return (0);
+	while (lexer)
+	{
+		if (lexer->type == BUILTIN)
+			return (1);
+		lexer = lexer->next;
+	}
+	return (0);
 }
 
 int	exec_builtin_child(t_lexer *lexer, t_shell *shell)
 {
-	char **argv;
-	
+	char	**argv;
+
 	argv = ft_split_cmd(lexer->word);
-    if (!ft_strncmp(argv[0], "echo", 5))
-        return (ft_echo_builtin(ft_count_strings(argv), argv));
-    else if (!ft_strncmp(argv[0], "pwd", 4))
-        return (ft_pwd_builtin(shell));
-    else if (!ft_strncmp(argv[0], "env", 4))
-        return (ft_env_builtin(argv, shell));
+	if (!ft_strncmp(argv[0], "echo", 5))
+		return (ft_echo_builtin(ft_count_strings(argv), argv));
+	else if (!ft_strncmp(argv[0], "pwd", 4))
+		return (ft_pwd_builtin(shell));
+	else if (!ft_strncmp(argv[0], "env", 4))
+		return (ft_env_builtin(argv, shell));
 	else if (!ft_strncmp(argv[0], "cd", 3))
 	{
 		ft_cd_builtin(argv[1], shell);
 		return (-1);
 	}
 	else if (!ft_strncmp(argv[0], "unset", 6))
-        return (ft_unset_builtin((argv[1]), shell->env));
+		return (ft_unset_builtin((argv[1]), shell->env));
 	else if (!ft_strncmp(argv[0], "exit", 5))
 		ft_exit_builtin(ft_count_strings(argv), argv[1]);
 	else if (!ft_strncmp(argv[0], "export", 7))
@@ -91,8 +91,8 @@ int	exec_builtin_child(t_lexer *lexer, t_shell *shell)
 
 void	setup_child(t_lexer *lexer, t_parser *parser, t_shell *shell)
 {
-	t_lexer *cmd;
-	int stdin;
+	t_lexer	*cmd;
+	int		stdin;
 
 	signal(SIGINT, child_signals);
 	cmd = NULL;
@@ -124,14 +124,15 @@ void	ft_parser(t_parser *parser, t_shell *shell, t_lexer *lexer)
 	pid_t	pid;
 	int		stdin;
 	int		stdout;
-	
+	t_lexer	*cmd;
+
 	parser->env = shell->env;
 	stdin = dup(0);
 	stdout = dup(1);
 	if (!ft_check_pipe(lexer) && ft_check_builtin(lexer))
 	{
 		lexer = ft_redi_parser(shell, lexer, stdin);
-		t_lexer *cmd = lexer;
+		cmd = lexer;
 		lexer = lexer->next;
 		lexer = ft_redi_parser(shell, lexer, stdin);
 		if (exec_builtin_child(cmd, shell) < 0)

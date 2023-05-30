@@ -24,7 +24,7 @@ t_list	*ft_lstlast(t_list *lst)
 t_lexer	*ft_lexer_last(t_lexer *lst)
 {
 	if (!lst)
-		return NULL;
+		return (NULL);
 	while (lst->next)
 		lst = lst->next;
 	return (lst);

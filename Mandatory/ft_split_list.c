@@ -77,40 +77,43 @@ int	ft_quotes_number(char *s)
 	return (n_quote);
 }
 
-char* ft_remove_quotes(char* s, int option)
+char	*ft_remove_quotes(char *s, int option)
 {
+	char	*str;
+	int		quote;
+	int		i;
+	int		j;
+	int		skip;
+
 	(void)option;
-    char* str;
-    int quote = 0;
-    int i = 0;
-    int j = 0;
-    int skip = 0;
-
-    str = ft_calloc((ft_strlen(s) - ft_quotes_number(s)) + 1, sizeof(char));
-    if (!str)
-        return NULL;
-
-    while (s[i])
+	quote = 0;
+	i = 0;
+	j = 0;
+	skip = 0;
+	str = ft_calloc((ft_strlen(s) - ft_quotes_number(s)) + 1, sizeof(char));
+	if (!str)
+		return (NULL);
+	while (s[i])
 	{
-        if (!quote && (s[i] == '\'' || s[i] == '\"'))
-            quote = s[i++];
-        else if (quote && s[i] == quote)
+		if (!quote && (s[i] == '\'' || s[i] == '\"'))
+			quote = s[i++];
+		else if (quote && s[i] == quote)
 		{
-            quote = 0;
-            i++;
-        }
-        else if (quote && s[i] != quote)
-            str[j++] = s[i++];
-        else
+			quote = 0;
+			i++;
+		}
+		else if (quote && s[i] != quote)
+			str[j++] = s[i++];
+		else
 		{
-            if (skip)
-                skip = 0;
-            else if (s[i] == '\'' || s[i] == '\"')
-                skip = 1;
-            str[j++] = s[i++];
-        }
-    }
-    // if (option)
-    //     free(s);
-    return (str);
+			if (skip)
+				skip = 0;
+			else if (s[i] == '\'' || s[i] == '\"')
+				skip = 1;
+			str[j++] = s[i++];
+		}
+	}
+	// if (option)
+	//     free(s);
+	return (str);
 }

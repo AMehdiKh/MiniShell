@@ -16,7 +16,7 @@ int	ft_echo_builtin(size_t ac, char **av)
 {
 	size_t	i;
 	int		n;
-	
+
 	n = (ft_strncmp("-n", av[1], 3) == 0);
 	i = 1 + n;
 	while (i < ac)

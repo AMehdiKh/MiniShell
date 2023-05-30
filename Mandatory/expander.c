@@ -10,15 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
-# define QUOTES "\"\'"
+#define QUOTES "\"\'"
 
 static inline bool	single_dollar(char *input_at_i)
 {
-	return ((!input_at_i[1]
-			|| input_at_i[1] == ' '
-			|| input_at_i[1] == '\"'));
+	return ((!input_at_i[1] || input_at_i[1] == ' ' || input_at_i[1] == '\"'));
 }
 
 bool	is_onstr(const char *str, int ch)
@@ -36,7 +34,6 @@ bool	is_onstr(const char *str, int ch)
 	}
 	return (false);
 }
-
 
 void	init_vars(size_t *i, size_t *size, bool *in_quotes, bool *in_dquotes)
 {
@@ -67,15 +64,14 @@ size_t	expand_size(char *input_at_i, size_t *i, t_shell *data)
 	if (single_dollar(input_at_i))
 		return (1);
 	var_size = 0;
-	while (input_at_i[var_size + 1]
-		&& input_at_i[var_size + 1] != ' '
-		&& !is_onstr(QUOTES, input_at_i[var_size + 1])
-		&& input_at_i[var_size + 1] != '$')
-				var_size += 1;
+	while (input_at_i[var_size + 1] && input_at_i[var_size + 1] != ' '
+		&& !is_onstr(QUOTES, input_at_i[var_size + 1]) && input_at_i[var_size
+		+ 1] != '$')
+		var_size += 1;
 	if (var_size == 0)
 		return (0);
 	var_name = ft_substr(input_at_i, 1, var_size);
-    var_value = ft_getenv(var_name, data->env);
+	var_value = ft_getenv(var_name, data->env);
 	free(var_name);
 	*i += var_size;
 	if (!var_value)
@@ -128,8 +124,8 @@ size_t	expand_exit_status(char *expanded_input_at_i, size_t *i, t_shell *shell)
 	return (j);
 }
 
-size_t	expand_variable(char *expanded_input_at_i, char *input,
-	size_t *i, t_shell *data)
+size_t	expand_variable(char *expanded_input_at_i, char *input, size_t *i,
+		t_shell *data)
 {
 	char	*var_value;
 	size_t	size;
@@ -145,11 +141,11 @@ size_t	expand_variable(char *expanded_input_at_i, char *input,
 		expanded_input_at_i[0] = '$';
 		return (1);
 	}
-	while (input[*i + size] && input[*i + size] != ' '
-		&& input[*i + size] != '\"' && !is_onstr(QUOTES, input[*i + size])
-		&& input[*i + size] != '$')
+	while (input[*i + size] && input[*i + size] != ' ' && input[*i
+		+ size] != '\"' && !is_onstr(QUOTES, input[*i + size]) && input[*i
+		+ size] != '$')
 		size += 1;
-    var_value = ft_getenv(ft_substr(input, *i, size), data->env);
+	var_value = ft_getenv(ft_substr(input, *i, size), data->env);
 	*i += size;
 	if (!var_value)
 		return (0);
