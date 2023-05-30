@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:26:41 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/25 21:10:31 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 05:42:29 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	update_wd(t_shell *shell)
 	char	cwd[PATH_MAX];
 
 	getcwd(cwd, PATH_MAX);
-	// printf("cwd: [%s]\n", cwd);
 	ft_setenv(shell, "PWD", cwd);
 }
 
@@ -25,7 +24,7 @@ static int	cd_oldpwd(char *cwd, t_shell *shell)
 {
 	char	*owd;
 
-	owd = ft_getenv("OLDPWD", shell->env, -1);
+	owd = ft_getenv("OLDPWD", shell->env);
 	if (!owd)
 	{	
 		ft_dprintf(2, "minishell: cd: OLDPWD not set\n");
@@ -33,7 +32,6 @@ static int	cd_oldpwd(char *cwd, t_shell *shell)
 	}
 	if (chdir(owd) == 0)
 	{
-		// ft_dprintf(1, "%s\n", owd);
 		ft_setenv(shell, "OLDPWD", cwd);
 		update_wd(shell);
 		return (EXIT_SUCCESS);
@@ -46,11 +44,10 @@ int	ft_cd_builtin(char	*path, t_shell *shell)
 	char	cwd[PATH_MAX];
 
 	getcwd(cwd, PATH_MAX);
-	if (!path || ft_strchr(path, '~'))
+	if (!path)
 	{
-		// printf("owd: [%s]\n", cwd);
 		ft_setenv(shell, "OLDPWD", cwd);
-		chdir(ft_getenv("HOME", shell->env, -1));
+		chdir(ft_getenv("HOME", shell->env));
 		update_wd(shell);
 		return (EXIT_SUCCESS);
 	}
@@ -58,7 +55,6 @@ int	ft_cd_builtin(char	*path, t_shell *shell)
 		return (cd_oldpwd(cwd, shell));
 	if (chdir(path) == 0)
 	{
-		// printf("owd: [%s]\n", cwd);
 		ft_setenv(shell, "OLDPWD", cwd);
 		update_wd(shell);
 		return (EXIT_SUCCESS);
@@ -66,14 +62,3 @@ int	ft_cd_builtin(char	*path, t_shell *shell)
 	ft_dprintf(2, "minishell: cd: %s: No such file or directory\n", path);
 	return (EXIT_FAILURE);
 }
-
-// int main(int ac, char **av, char **envp)
-// {
-// 	t_shell shell[1];
-// 	shell->env = envp;
-// 	ft_cd("../inc", shell);
-// 	printf("\n   ENV   \n");
-// 	for (int i = 0; shell->env[i]; i++)
-// 		printf("%s\n", shell->env[i]);
-// 	return (0);
-// }

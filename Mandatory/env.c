@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 19:33:10 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/23 23:43:26 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 05:15:40 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ int ft_env_builtin(char **av, t_shell *shell)
     if (av[1])
     {
         ft_dprintf(2, "env: %s: No such file or directory\n", av[1]);
-        shell->exit_status = 127;
-        return (EXIT_FAILURE);
+        return (127);
     }
     while (shell->env[i])
     {
@@ -31,9 +30,3 @@ int ft_env_builtin(char **av, t_shell *shell)
     }
     return (EXIT_SUCCESS);
 }
-
-// int main(int ac, char **av, char **envp)
-// {
-//     printf("%d\n", env(av, envp));
-//     return (0);
-// }

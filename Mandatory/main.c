@@ -6,13 +6,13 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/25 17:30:18 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 03:51:19 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_last_pipe(char *line)
+static int	ft_last_pipe(char *line)
 {
 	size_t	i;
 	size_t	j;
@@ -63,26 +63,22 @@ static	char	*ft_unclosed_quote(char *line, size_t i, int pipe)
 	return (line);
 }
 
-//   export LDFLAGS="-L/Users/ael-khel/homebrew/opt/readline/lib"
-//   export CPPFLAGS="-I/Users/ael-khel/homebrew/opt/readline/include/readline"
-
 int	main(int ac, char **av, char **env)
 {
 	t_shell	shell[1];
+	t_parser pipex[1];
 	char	*line;
-	int		io[2] = {0, 1};
-	(void)io;
+	
+	if (ac < 1 || av[1])
+		return (1);
 	ft_bzero(shell, sizeof(shell));
-	// if (!env)
-	// 	//setup_env(shell);
-	// else
 	shell->env = ft_dup_env(env);
-	while (ac || av[0])
+	while (-42)
 	{
 		shell->lexer_status = 0;
-		line = readline("minishell$> ");
+		line = readline("⥴ ");
 		line = ft_unclosed_quote(line, 0, 0);
-		shell->line = ft_strtrim(line, " ");
+		shell->line = ft_strtrim(line, " \t");
 		add_history(shell->line);
 		free(line);
 		if (shell->line && !*shell->line)
@@ -91,14 +87,8 @@ int	main(int ac, char **av, char **env)
 		  	continue ;
 		if(ft_lexer(shell))
 		 	continue ;
-		// printList(shell->list);
-		// printLexer(shell->lexer);
-		parser(shell);
-		execute_commands(shell, shell->cmd);
-		// executer(shell, io);
+		ft_parser(pipex, shell, shell->lexer);
 		ft_lexer_clear(&(shell->lexer));
-		ft_cmd_clear(&(shell->cmd));
-		// free(shell->line);
 	}
 	return (0);
 }

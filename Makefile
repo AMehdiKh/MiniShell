@@ -6,7 +6,7 @@
 #    By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/27 12:41:59 by ael-khel          #+#    #+#              #
-#    Updated: 2023/05/25 21:09:28 by hahadiou         ###   ########.fr        #
+#    Updated: 2023/05/30 05:48:18 by hahadiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,18 +23,21 @@ MANDATORY_PATH	= Mandatory
 OBJ_PATH	= obj
 
 SRCS = main.c \
-		preprocessor.c \
+		lexer.c \
+		lexer_utils.c \
 		ft_split_list.c \
-		utils.c \
+		ft_split_cmd.c \
 		expander.c \
 		parser.c \
-		executer.c \
+		utils_II.c \
+		utils_I.c \
+		parse_cmd.c \
 		echo.c \
-		cd.c \
 		pwd.c \
 		env.c \
-		export.c \
-		unset.c
+		cd.c \
+		unset.c \
+		exit.c
 
 SRC		= $(addprefix $(MANDATORY_PATH)/,$(SRCS))
 OBJ		= $(addprefix $(OBJ_PATH)/,$(SRCS:.c=.o))

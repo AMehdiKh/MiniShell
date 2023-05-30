@@ -5,179 +5,140 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/25 20:06:43 by hahadiou         ###   ########.fr       */
+/*   Created: 2023/05/29 23:54:37 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/05/30 05:52:46 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	check_cmd(char *cmd)
+t_lexer	*ft_redi_parser(t_lexer *lexer, int stdin)
 {
-	// to add open dir to open directory if given an absolute path to check if it is an directoty or abs path
-	if (access(cmd, F_OK) < 0)
+	while (lexer && (lexer->type == R_FILE || lexer->type == W_A_FILE \
+		|| lexer->type == W_T_FILE || lexer->type == HEREDOC))
 	{
-		ft_dprintf(2, "No such file or directory: %s\n", cmd);
-		// exit(126);
+		if (lexer->type == R_FILE)
+			ft_dup2(ft_open(lexer->word, O_RDONLY, 0), STDIN_FILENO);
+		else if (lexer->type == W_A_FILE || lexer->type == W_T_FILE)
+			ft_dup2(ft_file2(lexer), STDOUT_FILENO);
+        else if (lexer->type == HEREDOC)
+            ft_dup2(ft_heredoc(lexer, stdin), STDIN_FILENO);
+		lexer = lexer->next;
 	}
-	if (access(cmd, X_OK) < 0)
-	{
-		ft_dprintf(2, "Permission denied: %s\n", cmd);
-		// exit(126);
-	}
-	return (1);
+	return (lexer);
 }
 
-char	*get_cmd(char **paths, char *cmd)
+t_lexer	*ft_grp_shift(t_lexer *lexer)
 {
-	// to add open dir to check if there is a / in the begin of command if it is a directoty or abs path
-	char	*tmp;
-	char	*command;
-
-	if (cmd[0] == '.')
-		if (check_cmd(cmd) == 1)
-			return (cmd);
-	if (cmd[0] == '/')
-	{
-		cmd = ft_strchr(cmd, '/');
-		if (ft_strrchr(cmd, '/') == NULL)
-			return (0);
-	}
-	while (*paths)
-	{
-		tmp = ft_strjoin(*paths, "/", 0);
-		command = ft_strjoin(tmp, cmd, 1);
-		if (access(command, F_OK) == 0)
-			return (command);
-		free(command);
-		paths++;
-	}
-	return (NULL);
+	while (lexer && (lexer->type == R_FILE || lexer->type == W_A_FILE 
+		|| lexer->type == W_T_FILE || lexer->type == CMD \
+			|| lexer->type == BUILTIN || lexer->type == HEREDOC))
+		lexer = lexer->next;
+	if (lexer && lexer->type == PIPE)
+		lexer = lexer->next;
+	return (lexer);
 }
 
-void setup_lr_cmd(t_lexer *tail, t_data *data)
+static int ft_check_pipe(t_lexer *lexer)
 {
-    t_lexer *curr = tail;
-    data->lr_op = STDIN; // Set default lr_op to STDIN
-
-    while (curr != NULL)
+    while (lexer)
     {
-        if (curr->type == R_FILE || curr->type == HEREDOC || curr->type == STDIN)
-        {
-            data->lr_op = curr->type;
-            if (curr->type != STDIN)
-                data->lr = curr->word;
-            break;
-        }
-        if (curr->type == PIPE)
-        {
-            data->lr_op = PIPE;
-            break;
-        }
-        curr = curr->prev;
+        if (lexer->type == PIPE)
+            return (1);
+        lexer = lexer->next;
     }
+    return (0);
 }
 
-void setup_rr_cmd(t_lexer *head, t_data *data)
+static int ft_check_builtin(t_lexer *lexer)
 {
-    t_lexer *curr = head;
-    data->rr_op = STDOUT; // Set default rr_op to STDOUT
-
-    while (curr != NULL)
+    while (lexer)
     {
-        if ((curr->type == R_FILE || curr->type == HEREDOC) && curr->type != PIPE)
-        {
-            if (curr->type == R_FILE)
-                data->lr_op = R_FILE;
-            else
-                data->lr_op = HEREDOC;
-            data->lr = curr->word;
-        }
-        if (curr->type == W_A_FILE || curr->type == W_T_FILE || curr->type == STDOUT)
-        {
-            data->rr_op = curr->type;
-            if (curr->type != STDOUT)
-                data->rr = curr->word;
-            break;
-        }
-        if (curr->type == PIPE && data->rr_op != W_A_FILE && data->rr_op != W_T_FILE)
-        {
-            data->rr_op = PIPE;
-            break ;
-        }
-        curr = curr->next;
+        if (lexer->type == BUILTIN)
+            return (1);
+        lexer = lexer->next;
     }
+    return (0);
 }
 
-static	void	init_data(t_data *data)
+int	exec_builtin_child(t_lexer *lexer, t_shell *shell)
 {
-	data->abs_cmd = NULL;
-	data->argv = NULL;
-	data->cmd_path = NULL;
-	data->lr = NULL;
-	data->rr = NULL;
-	data->lr_op = STDIN;
-	data->rr_op = STDOUT;
+	char **argv;
+	
+	argv = ft_split_cmd(lexer->word);
+    if (!ft_strncmp(argv[0], "echo", 5))
+        return (ft_echo_builtin(ft_count_strings(argv), argv));
+    else if (!ft_strncmp(argv[0], "pwd", 4))
+        return (ft_pwd_builtin(shell));
+    else if (!ft_strncmp(argv[0], "env", 4))
+        return (ft_env_builtin(argv, shell));
+	else if (!ft_strncmp(argv[0], "cd", 3))
+        return (ft_cd_builtin(argv[1], shell));
+	else if (!ft_strncmp(argv[0], "unset", 6))
+        return (ft_unset_builtin((argv[1]), shell->env));
+	else if (!ft_strncmp(argv[0], "exit", 5))
+		ft_exit_builtin(ft_count_strings(argv), argv[1]);
+	return (0);
 }
 
-void setup_command(t_shell *shell, t_lexer *lexer, t_token type)
+void	setup_child(t_lexer *lexer, t_parser *pipex, t_shell *shell)
 {
-	t_data	data[1];
+	t_lexer *cmd;
+	int stdin;
 
-	init_data(data);
-	setup_lr_cmd(lexer, data);
-	setup_rr_cmd(lexer, data);
-	if (type == CMD)
+	cmd = NULL;
+	stdin = dup(0);
+	close(pipex->pipefd[0]);
+	ft_dup2(pipex->prev_in, 0);
+	if (ft_check_pipe(lexer))
+		ft_dup2(pipex->pipefd[1], 1);
+	lexer = ft_redi_parser(lexer, stdin);
+	if (!lexer)
+		exit(EXIT_SUCCESS);
+	if (lexer->type == CMD || lexer->type == BUILTIN)
 	{
-		data->cmd_path = ft_split(ft_getenv("PATH", shell->env, -1), ':', 0);
-		data->argv = ft_split(lexer->word, ' ', 0);
-		data->abs_cmd = get_cmd(data->cmd_path, data->argv[0]);
-		if (!data->abs_cmd)
-		{
-			ft_dprintf(2, "minishell: %s: command not found\n", lexer->word);
-		}
-		for (int i = 0; data->argv[i]; i++)
-			data->argv[i] = ft_remove_quotes(data->argv[i], 1);
-		// if (data->abs_cmd == NULL) // to be handled in execution part
-		// {
-		// 	ft_dprintf(2, "minishell: %s: command not found\n", lexer->word);
-		// 	shell->exit_status = 127;
-		// 	return ;
-		// }
-		data->argv[0] = data->abs_cmd;
-		ft_cmdadd_back(&(shell->cmd), ft_newnode_cmd(type, data));
+		cmd = lexer;
+		lexer = lexer->next;
+		lexer = ft_redi_parser(lexer, stdin);
 	}
-	else if (type == BUILTIN)
+	if (cmd)
 	{
-		data->argv = ft_split(lexer->word, ' ', 1);
-		for (int i = 0; data->argv[i]; i++)
-			data->argv[i] = ft_remove_quotes(data->argv[i], 1);
-		// for (int i = 0; data->argv[i]; i++)
-		// 	printf("argv : %s\n", data->argv[i]);
-		data->abs_cmd = ft_strdup(data->argv[0]);
-		ft_cmdadd_back(&(shell->cmd), ft_newnode_cmd(BUILTIN, data));
+		if (cmd->type == CMD)
+			ft_check_cmd(cmd->word, pipex);
+		else
+			exit(exec_builtin_child(cmd, shell));
 	}
 }
 
-void    parser(t_shell *shell)
+void	ft_parser(t_parser *pipex, t_shell *shell, t_lexer *lexer)
 {
-	// printLexer(shell->lexer);
-	t_lexer *head;
-	t_cmd	*head_cmd;
-
-	head = shell->lexer;
-    // head_cmd = create_cmd_list(head, shell);
-	// print_cmd_node(shell->cmd);
-	while (head)
+	pid_t	pid;
+	int		stdin;
+	int		stdout;
+	
+	pipex->env = shell->env;
+	stdin = dup(0);
+	stdout = dup(1);
+	if (!ft_check_pipe(lexer) && ft_check_builtin(lexer))
 	{
-		if (head->type == BUILTIN)
-			setup_command(shell, head, BUILTIN);
-		else if (head->type == CMD)
-			setup_command(shell, head, CMD);
-		head = head->next;
+		lexer = ft_redi_parser(lexer, stdin);
+		t_lexer *cmd = lexer;
+		lexer = lexer->next;
+		lexer = ft_redi_parser(lexer, stdin);
+		exec_builtin_child(cmd, shell);
 	}
-    head_cmd = shell->cmd;
-    // print_cmd_node(head_cmd);
-	// print_cmd_node(shell->cmd);
-	// ft_cmd_clear(&(shell->cmd));
+	ft_dup2(stdin, 0);
+	ft_dup2(stdout, 1);
+	ft_pipe(pipex);
+	pid = ft_fork(pipex);
+	if (!pid)
+		setup_child(lexer, pipex, shell);
+	ft_close_pipe(pipex);
+	lexer = ft_grp_shift(lexer);
+	if (lexer)
+		ft_parser(pipex, shell, lexer);
+	if (!lexer)
+		waitpid(pid, &shell->exit_status, 0);
+	else
+		waitpid(pid, NULL, 0);
 }

@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:26:41 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/19 19:48:05 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 05:50:27 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 #include "minishell.h"
 
-void	ft_exit_builtin(char *status, char *av, int ac)
+void	ft_exit(char *status, char *av, int ac)
 {
 	char		*s;
 	int			result;
@@ -50,9 +50,9 @@ void	ft_exit_builtin(char *status, char *av, int ac)
 	exit ((unsigned char)(result * sign));
 }
 
-void	ft_exit_builtin(int ac, char **av)
+void	ft_exit_builtin(int ac, char *av)
 {
 	if (ac > 1)
-		ft_exit(ft_strtrim(av[1], " "), av[1], ac);
+		ft_exit(ft_strtrim(av, " \t"), av, ac);
 	exit(EXIT_SUCCESS); // incorrect line
 }
