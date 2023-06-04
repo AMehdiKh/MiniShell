@@ -1,34 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_realloc.c                                       :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/15 17:39:55 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/15 17:40:08 by hahadiou         ###   ########.fr       */
+/*   Created: 2023/06/04 15:31:11 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/06/04 15:31:21 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-void	*ft_realloc(void *ptr, size_t size)
+int	ft_check_pipe(t_lexer *lexer)
 {
-	void	*new_data;
-
-	new_data = NULL;
-	if (size)
+	while (lexer)
 	{
-		if (!ptr)
-		{
-			return (malloc(size));
-		}
-		new_data = malloc(size);
-		if (new_data)
-		{
-			ft_memcpy(new_data, ptr, size);
-			free(ptr);
-		}
+		if (lexer->type == PIPE)
+			return (1);
+		lexer = lexer->next;
 	}
-	return (new_data);
+	return (0);
+}
+
+int	ft_check_builtin(t_lexer *lexer)
+{
+	while (lexer)
+	{
+		if (lexer->type == BUILTIN)
+			return (1);
+		lexer = lexer->next;
+	}
+	return (0);
 }

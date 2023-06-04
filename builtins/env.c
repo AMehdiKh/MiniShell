@@ -6,13 +6,13 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 19:33:10 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/30 05:15:40 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 14:45:37 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env_builtin(char **av, t_shell *shell)
+void	ft_env_builtin(char **av, t_shell *shell)
 {
 	int	i;
 
@@ -20,7 +20,8 @@ int	ft_env_builtin(char **av, t_shell *shell)
 	if (av[1])
 	{
 		ft_dprintf(2, "env: %s: No such file or directory\n", av[1]);
-		return (127);
+		shell->exit_status = 127;
+		return ;
 	}
 	while (shell->env[i])
 	{
@@ -28,5 +29,5 @@ int	ft_env_builtin(char **av, t_shell *shell)
 			ft_dprintf(1, "%s\n", shell->env[i]);
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	shell->exit_status = 0;
 }

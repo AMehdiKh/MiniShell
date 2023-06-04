@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 15:53:59 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 16:30:12 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 14:39:39 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,43 +77,40 @@ int	ft_quotes_number(char *s)
 	return (n_quote);
 }
 
+static void	handle_special_cases(char *s, int (*n)[4], char *str)
+{
+	if ((*n)[2])
+		(*n)[2] = 0;
+	else if (s[(*n)[0]] == '\'' || s[(*n)[0]] == '\"')
+		(*n)[2] = 1;
+	str[(*n)[1]++] = s[(*n)[0]++];
+}
+
 char	*ft_remove_quotes(char *s, int option)
 {
 	char	*str;
-	int		quote;
-	int		i;
-	int		j;
-	int		skip;
+	int		n[4];
 
-	(void)option;
-	quote = 0;
-	i = 0;
-	j = 0;
-	skip = 0;
+	n[0] = 0;
+	n[1] = 0;
+	n[2] = 0;
+	n[3] = 0;
 	str = ft_calloc((ft_strlen(s) - ft_quotes_number(s)) + 1, sizeof(char));
-	if (!str)
-		return (NULL);
-	while (s[i])
+	while (s[n[0]])
 	{
-		if (!quote && (s[i] == '\'' || s[i] == '\"'))
-			quote = s[i++];
-		else if (quote && s[i] == quote)
+		if (!n[3] && (s[n[0]] == '\'' || s[n[0]] == '\"'))
+			n[3] = s[n[0]++];
+		else if (n[3] && s[n[0]] == n[3])
 		{
-			quote = 0;
-			i++;
+			n[3] = 0;
+			n[0]++;
 		}
-		else if (quote && s[i] != quote)
-			str[j++] = s[i++];
+		else if (n[3] && s[n[0]] != n[3])
+			str[n[1]++] = s[n[0]++];
 		else
-		{
-			if (skip)
-				skip = 0;
-			else if (s[i] == '\'' || s[i] == '\"')
-				skip = 1;
-			str[j++] = s[i++];
-		}
+			handle_special_cases(s, &n, str);
 	}
-	// if (option)
-	//     free(s);
+	if (option)
+		free(s);
 	return (str);
 }

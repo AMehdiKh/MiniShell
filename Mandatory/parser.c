@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 23:54:37 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/30 18:53:38 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:31:01 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,28 +39,6 @@ t_lexer	*ft_grp_shift(t_lexer *lexer)
 	return (lexer);
 }
 
-static int	ft_check_pipe(t_lexer *lexer)
-{
-	while (lexer)
-	{
-		if (lexer->type == PIPE)
-			return (1);
-		lexer = lexer->next;
-	}
-	return (0);
-}
-
-static int	ft_check_builtin(t_lexer *lexer)
-{
-	while (lexer)
-	{
-		if (lexer->type == BUILTIN)
-			return (1);
-		lexer = lexer->next;
-	}
-	return (0);
-}
-
 int	exec_builtin_child(t_lexer *lexer, t_shell *shell)
 {
 	char	**argv;
@@ -69,23 +47,17 @@ int	exec_builtin_child(t_lexer *lexer, t_shell *shell)
 	if (!ft_strncmp(argv[0], "echo", 5))
 		return (ft_echo_builtin(ft_count_strings(argv), argv));
 	else if (!ft_strncmp(argv[0], "pwd", 4))
-		return (ft_pwd_builtin(shell));
+		return (ft_pwd_builtin());
 	else if (!ft_strncmp(argv[0], "env", 4))
-		return (ft_env_builtin(argv, shell));
+		return (ft_env_builtin(argv, shell), -1);
 	else if (!ft_strncmp(argv[0], "cd", 3))
-	{
-		ft_cd_builtin(argv[1], shell);
-		return (-1);
-	}
+		return (ft_cd_builtin(argv[1], shell), -1);
 	else if (!ft_strncmp(argv[0], "unset", 6))
 		return (ft_unset_builtin((argv[1]), shell->env));
 	else if (!ft_strncmp(argv[0], "exit", 5))
 		ft_exit_builtin(ft_count_strings(argv), argv[1]);
 	else if (!ft_strncmp(argv[0], "export", 7))
-	{
-		ft_export_builtin(shell, argv);
-		return (-1);
-	}
+		return (ft_export_builtin(shell, argv), -1);
 	return (0);
 }
 
@@ -94,7 +66,6 @@ void	setup_child(t_lexer *lexer, t_parser *parser, t_shell *shell)
 	t_lexer	*cmd;
 	int		stdin;
 
-	signal(SIGINT, child_signals);
 	cmd = NULL;
 	stdin = dup(0);
 	close(parser->pipefd[0]);

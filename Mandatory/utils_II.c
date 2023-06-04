@@ -6,25 +6,11 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 19:32:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/30 18:53:38 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 14:53:25 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-static bool	ft_search(char *s, char c)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == c)
-			return (true);
-		i++;
-	}
-	return (false);
-}
 
 int	ft_heredoc(t_shell *shell, t_lexer *lexer, int stdin)
 {
@@ -97,9 +83,7 @@ void	ft_newnode(t_shell *shell)
 
 	new = (t_lexer *)malloc(sizeof(t_lexer));
 	if (!new)
-	{
-		exit(0); // to be changed
-	}
+		return ;
 	new->word = NULL;
 	new->next = NULL;
 	node = ft_lexer_last(shell->lexer);

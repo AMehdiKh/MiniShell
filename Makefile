@@ -6,7 +6,7 @@
 #    By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/27 12:41:59 by ael-khel          #+#    #+#              #
-#    Updated: 2023/05/30 17:37:20 by hahadiou         ###   ########.fr        #
+#    Updated: 2023/06/04 15:32:01 by hahadiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,7 +30,9 @@ SRCS = main.c \
 		ft_split_list.c \
 		ft_split_cmd.c \
 		expander.c \
+		expander_utils.c \
 		parser.c \
+		parser_utils.c \
 		utils_II.c \
 		utils_I.c \
 		parse_cmd.c \
@@ -41,6 +43,7 @@ BUI_SRCS = cd.c \
 			env.c \
 			exit.c \
 			export.c \
+			export_utils.c \
 			pwd.c \
 			unset.c
 

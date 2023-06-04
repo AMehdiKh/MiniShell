@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/05 17:51:43 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 18:53:38 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/03 19:25:53 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	ft_execve(t_parser *parser)
 {
 	int	code;
 
-	ft_clear(parser->path);
+	// ft_clear(parser->path);
 	if (!parser->path_cmd)
 		parser->path_cmd = ft_strdup(parser->cmd[0]);
 	if (execve(parser->path_cmd, parser->cmd, parser->env) < 0)
@@ -76,8 +76,8 @@ void	ft_execve(t_parser *parser)
 		code = errno;
 		ft_dprintf(STDERR, "minishell: %s: %s\n", parser->cmd[0],
 			strerror(code));
-		ft_clear(parser->cmd);
-		free(parser->path_cmd);
+		// ft_clear(parser->cmd);
+		// free(parser->path_cmd);
 		if (code == EACCES)
 			exit(PERM_DENIED);
 		exit(EXIT_FAILURE);
