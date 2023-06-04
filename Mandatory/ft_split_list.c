@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split_list.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/03 15:53:59 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 03:12:22 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/06/04 14:39:39 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,30 +77,38 @@ int	ft_quotes_number(char *s)
 	return (n_quote);
 }
 
+static void	handle_special_cases(char *s, int (*n)[4], char *str)
+{
+	if ((*n)[2])
+		(*n)[2] = 0;
+	else if (s[(*n)[0]] == '\'' || s[(*n)[0]] == '\"')
+		(*n)[2] = 1;
+	str[(*n)[1]++] = s[(*n)[0]++];
+}
+
 char	*ft_remove_quotes(char *s, int option)
 {
 	char	*str;
-	int		quote;
-	int		i;
-	int		j;
+	int		n[4];
 
-	if (ft_strchr("(<|>)&;", *s))
-		return (s);
+	n[0] = 0;
+	n[1] = 0;
+	n[2] = 0;
+	n[3] = 0;
 	str = ft_calloc((ft_strlen(s) - ft_quotes_number(s)) + 1, sizeof(char));
-	if (!str)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (s[i])
+	while (s[n[0]])
 	{
-		quote = 0;
-		if (s[i] == 39 || s[i] == 34)
-			quote = s[i++];
-		while (quote && s[i] != quote)
-			str[j++] = s[i++];
-		if (quote)
-			++i;
-		str[j++] = s[i++];
+		if (!n[3] && (s[n[0]] == '\'' || s[n[0]] == '\"'))
+			n[3] = s[n[0]++];
+		else if (n[3] && s[n[0]] == n[3])
+		{
+			n[3] = 0;
+			n[0]++;
+		}
+		else if (n[3] && s[n[0]] != n[3])
+			str[n[1]++] = s[n[0]++];
+		else
+			handle_special_cases(s, &n, str);
 	}
 	if (option)
 		free(s);

@@ -6,11 +6,11 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:26:41 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 04:21:08 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 14:46:14 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 static void	update_wd(t_shell *shell)
 {
@@ -26,7 +26,7 @@ static int	cd_oldpwd(char *cwd, t_shell *shell)
 
 	owd = ft_getenv("OLDPWD", shell->env);
 	if (!owd)
-	{	
+	{
 		ft_dprintf(2, "minishell: cd: OLDPWD not set\n");
 		return (EXIT_FAILURE);
 	}
@@ -39,12 +39,12 @@ static int	cd_oldpwd(char *cwd, t_shell *shell)
 	return (EXIT_FAILURE);
 }
 
-int	ft_cd_builtin(char	*path, t_shell *shell)
+int	ft_cd_builtin(char *path, t_shell *shell)
 {
 	char	cwd[PATH_MAX];
 
 	getcwd(cwd, PATH_MAX);
-	if (!path || ft_strchr(path, '~'))
+	if (!path)
 	{
 		ft_setenv(shell, "OLDPWD", cwd);
 		chdir(ft_getenv("HOME", shell->env));
@@ -60,5 +60,6 @@ int	ft_cd_builtin(char	*path, t_shell *shell)
 		return (EXIT_SUCCESS);
 	}
 	ft_dprintf(2, "minishell: cd: %s: No such file or directory\n", path);
+	shell->exit_status = EXIT_FAILURE;
 	return (EXIT_FAILURE);
 }

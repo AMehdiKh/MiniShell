@@ -10,20 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "libft.h"
+#include "libft.h"
 
-char *ft_getenv(char *var, char **envp)
+char	*ft_getenv(char *var, char **envp)
 {
-    size_t var_len = strlen(var);
-    size_t i = 0;
+	size_t		var_len;
+	size_t		i;
+	const char	*env_var;
+	char		*eq_pos;
 
-    while (envp && envp[i])
-    {
-        const char *env_var = envp[i];
-        char *eq_pos = strchr(env_var, '=');
-        if (eq_pos && (size_t)(eq_pos - env_var) == var_len && memcmp(var, env_var, var_len) == 0)
-            return strdup(eq_pos + 1);
-        i++;
-    }
-    return NULL;
+	var_len = strlen(var);
+	i = 0;
+	while (envp && envp[i])
+	{
+		env_var = envp[i];
+		eq_pos = strchr(env_var, '=');
+		if (eq_pos && (size_t)(eq_pos - env_var) == var_len && memcmp(var,
+				env_var, var_len) == 0)
+			return (strdup(eq_pos + 1));
+		i++;
+	}
+	return (NULL);
 }

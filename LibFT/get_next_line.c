@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/31 11:30:22 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/04/18 02:43:19 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:27:38 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*ft_check_nl(char **reserve)
 		ft_free(reserve);
 		*reserve = malloc(len + 1);
 		ft_strlcpy_gnl(*reserve, tmp, (len + 1));
-		free (tmp);
+		free(tmp);
 	}
 	return (line);
 }
@@ -49,8 +49,8 @@ char	*ft_strjoin_gnl(char **reserve, char *buffer)
 	if (!tmp)
 		return (ft_free(reserve));
 	ft_strlcpy_gnl(tmp, *reserve, ft_strlen_gnl(*reserve) + 1);
-	ft_strlcpy_gnl((tmp + ft_strlen_gnl(tmp)),
-		buffer, ft_strlen_gnl(buffer) + 1);
+	ft_strlcpy_gnl((tmp + ft_strlen_gnl(tmp)), buffer, ft_strlen_gnl(buffer)
+		+ 1);
 	ft_free(reserve);
 	return (tmp);
 }
@@ -71,8 +71,8 @@ char	*ft_strdup_gnl(char **reserve)
 
 char	*get_next_line(int fd)
 {
-	char		buffer[(-(BUFFER_SIZE < 0) * BUFFER_SIZE) + (
-			(BUFFER_SIZE > 0) * BUFFER_SIZE) + 1];
+	char		buffer[(-(BUFFER_SIZE < 0) * BUFFER_SIZE) + ((BUFFER_SIZE > 0) \
+		* BUFFER_SIZE) + 1];
 	static char	*reserve;
 	int			nbyte;
 

@@ -6,116 +6,52 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 22:42:06 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/24 17:07:26 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 14:55:20 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
-int	ft_export_builtin(t_shell *shell, char **av)
-{
-	size_t  arg_count;
-    size_t  i;
-    
-    arg_count = ft_count_strings(av);
-    i = 0;
-	if (arg_count >= 2)
-	{
-        while (i < arg_count)
-		{
-			int	pos = find_var_in_envp(av[i], shell->env);
-			// printf("pos: [%d]\n", pos);
-			// printf("av: [%s]\n", av[i]);
-			if (pos >= 0)
-			{
-				free(shell->env[pos]);
-				shell->env[pos] = ft_strdup(av[i]);
-			}
-			else
-			{
-				shell->env = extend_env(shell->env, av[i]);
-			}
-            i++;
-		}
-	}
-	return (0);
-}
-
-/*
-bool	is_onid(char *str, char c)
+int	single_export(t_shell *shell)
 {
 	size_t	i;
 
 	i = 0;
-	while (str[i] && str[i] != '=')
+	while (shell->env[i])
 	{
-		if (str[i] == c)
-			return (true);
-		i += 1;
-	}
-	return (false);
-}
-
-static int	single_export(t_data *data)
-{
-	t_vlst	*temp;
-
-	temp = data->envp_lst;
-	while (temp != NULL)
-	{
-		if (temp->is_exported)
-			printf("declare -x %s=\"%s\"\n", temp->var_name, temp->var_value);
-		temp = temp->next;
+		ft_dprintf(STDOUT_FILENO, "declare -x %s=\"%s\"\n",
+			get_var_name(shell->env[i], '='), ft_strchr(shell->env[i], '=')
+			+ 1);
+		i++;
 	}
 	return (EXIT_SUCCESS);
 }
 
-static int	export_bad_identifier(char *identifier)
+int	export_bad_identifier(char *identifier)
 {
-	ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-	ft_putstr_fd(identifier, STDERR_FILENO);
-	ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
+	ft_dprintf(STDERR_FILENO,
+		"minishell: export: `%s': not a valid identifier\n", identifier);
 	return (EXIT_FAILURE);
 }
 
-static void	loop_and_export(char *var_name, t_data *data)
+int	ft_export_builtin(t_shell *shell, char **av)
 {
-	t_vlst	*temp;
-
-	temp = data->envp_lst;
-	while (temp != NULL)
-	{
-		if (streq(var_name, temp->var_name))
-		{
-			temp->is_exported = true;
-			break ;
-		}
-		temp = temp->next;
-	}
-}
-
-int	cmd_export(t_statement *statement, t_data *data)
-{
-	int		exit_status;
+	size_t	arg_count;
 	size_t	i;
 
-	if (statement->argc == 1)
-		return (single_export(data));
-	exit_status = EXIT_SUCCESS;
 	i = 0;
-	while (statement->argv[++i])
-	{	
-		if (!is_valid_id(statement->argv[i]))
-			exit_status = export_bad_identifier(statement->argv[i]);
-		else if (is_onstr(statement->argv[i], '='))
-		{
-			save_user_vars(statement->argv[i], &data->envp_lst, true);
-			continue ;
-		}
-		else
-			loop_and_export(statement->argv[i], data);
+	arg_count = ft_count_strings(av);
+	if (arg_count == 1)
+		return (single_export(shell));
+	shell->exit_status = EXIT_SUCCESS;
+	while (av[i])
+	{
+		if (!is_valid_id(av[i]))
+			shell->exit_status = export_bad_identifier(av[i]);
+		else if (sirche(av[i]) == 1)
+			ft_setenv(shell, get_var_name(av[i], '='), ft_strchr(av[i], '=')
+				+ 1);
+		i++;
 	}
-	return (exit_status);
+	return (shell->exit_status);
 }
-
-*/

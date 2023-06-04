@@ -1,94 +1,97 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parse_cmd_bonus.c                                  :+:      :+:    :+:   */
+/*   parse_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:06:23 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 04:03:05 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/05/30 18:53:38 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_cmds_parse(char *arg, t_parser *pipex)
+void	ft_cmds_parse(char *arg, t_parser *parser)
 {
 	int	code;
 
-	pipex->cmd = ft_split_cmd(arg);
-	if (!pipex->cmd)
+	parser->cmd = ft_split_cmd(arg);
+	if (!parser->cmd)
 	{
 		code = errno;
-		ft_dprintf(STDERR, "pipex: ft_split(): %s\n", strerror(code));
+		ft_dprintf(STDERR, "minishell: ft_split(): %s\n", strerror(code));
 		exit(EXIT_FAILURE);
 	}
 }
 
-void	ft_parse_path(t_parser *pipex)
+void	ft_parse_path(t_parser *parser)
 {
 	int	code;
 	int	i;
 
 	i = 0;
-	while (pipex->env && pipex->env[i])
+	while (parser->env && parser->env[i])
 	{
-		if (!ft_strncmp("PATH=", pipex->env[i], 5))
+		if (!ft_strncmp("PATH=", parser->env[i], 5))
 		{
-			pipex->path = ft_split(&pipex->env[i][5], ':', 0);
-			if (!pipex->path)
+			parser->path = ft_split(&parser->env[i][5], ':', 0);
+			if (!parser->path)
 			{
 				code = errno;
-				ft_clear(pipex->cmd);
-				ft_dprintf(STDERR, "pipex: ft_split(): %s\n", strerror(code));
+				ft_clear(parser->cmd);
+				ft_dprintf(STDERR, "minishell: ft_split(): %s\n",
+					strerror(code));
 				exit(EXIT_FAILURE);
 			}
 			break ;
 		}
 		++i;
 	}
-	ft_slash_end(pipex);
+	ft_slash_end(parser);
 }
 
-void	ft_slash_end(t_parser *pipex)
+void	ft_slash_end(t_parser *parser)
 {
 	char	*path;
 	int		i;
 
-	if (pipex->path)
+	if (parser->path)
 	{
 		i = 0;
-		while (pipex->path[i])
+		while (parser->path[i])
 		{
-			path = ft_strjoin(pipex->path[i], "/", 0);
-			free(pipex->path[i]);
-			pipex->path[i] = path;
+			path = ft_strjoin(parser->path[i], "/", 0);
+			free(parser->path[i]);
+			parser->path[i] = path;
 			++i;
 		}
 	}
 }
 
-void	ft_check_cmd(char *arg, t_parser *pipex)
+void	ft_check_cmd(char *arg, t_parser *parser)
 {
-	int		i;
+	int	i;
 
-	ft_cmds_parse(arg, pipex);
-	if (!access(pipex->cmd[0], F_OK))
-		ft_execve(pipex);
-	ft_parse_path(pipex);
+	ft_cmds_parse(arg, parser);
+	if (!access(parser->cmd[0], F_OK))
+		ft_execve(parser);
+	ft_parse_path(parser);
 	i = -1;
-	while (pipex->path && pipex->path[++i])
+	while (parser->path && parser->path[++i])
 	{
-		pipex->path_cmd = ft_strjoin(pipex->path[i], pipex->cmd[0], 0);
-		if (!access(pipex->path_cmd, F_OK))
-			ft_execve(pipex);
-		free(pipex->path_cmd);
+		parser->path_cmd = ft_strjoin(parser->path[i], parser->cmd[0], 0);
+		if (!access(parser->path_cmd, F_OK))
+			ft_execve(parser);
+		free(parser->path_cmd);
 	}
-	if (pipex->path)
-		ft_dprintf(STDERR, "pipex: %s: command not found\n", pipex->cmd[0]);
+	if (parser->path)
+		ft_dprintf(STDERR, "minishell: %s: command not found\n",
+			parser->cmd[0]);
 	else
-		ft_dprintf(2, "pipex: %s: No such file or directory\n", pipex->cmd[0]);
-	ft_clear(pipex->path);
-	ft_clear(pipex->cmd);
+		ft_dprintf(2, "minishell: %s: No such file or directory\n",
+			parser->cmd[0]);
+	ft_clear(parser->path);
+	ft_clear(parser->cmd);
 	exit(CMD_NOT_FOUND);
 }

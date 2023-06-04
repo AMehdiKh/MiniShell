@@ -6,7 +6,7 @@
 #    By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/27 12:41:59 by ael-khel          #+#    #+#              #
-#    Updated: 2023/05/30 05:48:18 by hahadiou         ###   ########.fr        #
+#    Updated: 2023/06/04 15:32:01 by hahadiou         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,9 +18,11 @@ RLOFLGS	= -I/Users/hahadiou/goinfre/homebrew/opt/readline/include
 NAME	= minishell
 
 INC	= inc
-UTILS_PATH	= LibFT
+UTILS_PATH		= LibFT
 MANDATORY_PATH	= Mandatory
-OBJ_PATH	= obj
+SHARED_PATH		= builtins
+BUI_OBJ_PATH	 = bui_obj
+OBJ_PATH		= obj
 
 SRCS = main.c \
 		lexer.c \
@@ -28,19 +30,27 @@ SRCS = main.c \
 		ft_split_list.c \
 		ft_split_cmd.c \
 		expander.c \
+		expander_utils.c \
 		parser.c \
+		parser_utils.c \
 		utils_II.c \
 		utils_I.c \
 		parse_cmd.c \
-		echo.c \
-		pwd.c \
-		env.c \
-		cd.c \
-		unset.c \
-		exit.c
+		signals.c \
+
+BUI_SRCS = cd.c \
+			echo.c \
+			env.c \
+			exit.c \
+			export.c \
+			export_utils.c \
+			pwd.c \
+			unset.c
 
 SRC		= $(addprefix $(MANDATORY_PATH)/,$(SRCS))
+SH_SRC 	= $(addprefix $(SHARED_PATH)/,$(BUI_SRCS))
 OBJ		= $(addprefix $(OBJ_PATH)/,$(SRCS:.c=.o))
+SH_OBJ	= $(addprefix $(BUI_OBJ_PATH)/,$(BUI_SRCS:.c=.o))
 
 NOC		= \033[0m
 RED		= \033[1;31m
@@ -51,7 +61,7 @@ WHITE	= \033[1;37m
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) $(SH_OBJ)
 	@echo "$(YELLOW)Compiling Utils...$(NOC)"
 	@make -sC $(UTILS_PATH)
 	@echo "$(YELLOW)Compiling minishell...$(NOC)"
@@ -62,11 +72,15 @@ $(OBJ_PATH)/%.o: $(MANDATORY_PATH)/%.c $(INC)/minishell.h $(INC)/lexer.h $(INC)/
 	@mkdir -p obj
 	@$(CC) $(FLAGS) $(RLOFLGS) -I$(INC) -c -o $@ $<
 
+$(BUI_OBJ_PATH)/%.o: $(SHARED_PATH)/%.c $(INC)/$(NAME).h
+	@mkdir -p bui_obj
+	@$(CC) $(FLAGS) -I$(INC) -c -o $@ $<
+
 clean:
 	@echo "$(RED)Deleting OBJS ✔️ $(NOC)"
 	@make clean -sC $(UTILS_PATH)
 	@rm -rf $(OBJ_PATH)
-	@rm -rf $(SH_OBJB_PATH)
+	@rm -rf $(BUI_OBJ_PATH)
 
 fclean: clean
 	@echo "$(RED)Deleting Binary ✔️$(NOC)"

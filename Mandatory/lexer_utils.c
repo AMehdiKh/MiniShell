@@ -6,17 +6,18 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/30 03:55:42 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 14:40:45 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 char	*ft_syntax_err(t_list *list, int pipe)
 {
 	if (ft_strlen(list->content) == 3 && !pipe)
 		return (ft_substr(list->content, 0, 1));
-	else if (ft_strlen(list->content) > 3 || (ft_strlen(list->content) > 1 && pipe))
+	else if (ft_strlen(list->content) > 3 || (ft_strlen(list->content) > 1
+			&& pipe))
 		return (ft_substr(list->content, 0, 2));
 	else if (!list->next)
 		return (ft_strdup("newline"));
@@ -48,13 +49,14 @@ int	ft_check_meta(t_shell *shell)
 	{
 		if (ft_strchr("(&);", tmp->content[0]) && tmp->content[0])
 		{
-			if (ft_strlen(shell->list->content) == 1 || ft_strchr("()", *(tmp->content)))
+			if (ft_strlen(shell->list->content) == 1 || ft_strchr("()",
+					*(tmp->content)))
 				syntax_err = ft_substr(tmp->content, 0, 1);
 			else
 				syntax_err = ft_substr(tmp->content, 0, 2);
 			shell->exit_status = 2;
-			ft_dprintf(2, "minishell: syntax error near unexpected token `%s'\n",
-				syntax_err);
+			ft_dprintf(2, "minishell: syntax error \
+				near unexpected token `%s'\n", syntax_err);
 			free(syntax_err);
 			free(shell->line);
 			ft_lstclear(&(shell->list));
@@ -68,14 +70,14 @@ int	ft_check_meta(t_shell *shell)
 int	ft_builtin_check(char *s, t_shell *shell)
 {
 	char	*tmp;
-	tmp = ft_remove_quotes(expander(s, shell), 1);
-	if (!ft_strncmp(tmp, "exit", ft_strlen("exit") + 1)
-		|| !ft_strncmp(tmp, "echo", ft_strlen("echo") + 1)
-		|| !ft_strncmp(tmp, "cd", ft_strlen("cd") + 1)
-		|| !ft_strncmp(tmp, "pwd", ft_strlen("pwd") + 1)
-		|| !ft_strncmp(tmp, "export", ft_strlen("export") + 1)
-		|| !ft_strncmp(tmp, "unset", ft_strlen("unset") + 1)
-		|| !ft_strncmp(tmp, "env", ft_strlen("env") + 1))
+
+	tmp = ft_remove_quotes(ft_expander(s, shell), 1);
+	if (!ft_strncmp(tmp, "exit", ft_strlen("exit") + 1) || !ft_strncmp(tmp,
+			"echo", ft_strlen("echo") + 1) || !ft_strncmp(tmp, "cd",
+			ft_strlen("cd") + 1) || !ft_strncmp(tmp, "pwd", ft_strlen("pwd")
+			+ 1) || !ft_strncmp(tmp, "export", ft_strlen("export") + 1)
+		|| !ft_strncmp(tmp, "unset", ft_strlen("unset") + 1) || !ft_strncmp(tmp,
+			"env", ft_strlen("env") + 1))
 	{
 		free(tmp);
 		return (1);
@@ -93,9 +95,10 @@ char	*ft_arg_join(t_shell *shell)
 	while (shell->list && !ft_strchr("<|>", *(shell->list->content)))
 	{
 		tmp = shell->list;
-		cmd = ft_strjoin(cmd, ft_strjoin(expander(shell->list->content, shell), " ", 1), 4);
+		cmd = ft_strjoin(cmd, ft_strjoin(ft_expander(shell->list->content, \
+			shell), " ", 0), 4);
 		shell->list = shell->list->next;
 		ft_lstdelone(tmp);
-	}	
+	}
 	return (cmd);
 }

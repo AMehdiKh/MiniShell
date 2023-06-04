@@ -10,25 +10,25 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "libft.h"
+#include "libft.h"
 
-int find_var_in_envp(const char* var, char** env)
+int	find_var_in_envp(const char *var, char **env)
 {
-    int     found;
-    size_t  var_len;
-    size_t  i;
+	int		found;
+	size_t	var_len;
+	size_t	i;
 
-    found = -1;
-    var_len = ft_strlen(var);
-    i = 0;
-    while (env[i])
-    {
-        if (ft_strncmp(var, env[i], var_len) == 0 && env[i][var_len] == '=')
-        {
-            found = 1;
-            break ;
-        }
-        i++;
-    }
-    return (found);
+	found = -1;
+	var_len = ft_strlen(var);
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strncmp(var, env[i], var_len) == 0 && env[i][var_len] == '=')
+		{
+			found = 1;
+			break ;
+		}
+		i++;
+	}
+	return (found);
 }

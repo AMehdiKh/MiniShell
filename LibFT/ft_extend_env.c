@@ -6,11 +6,11 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 23:04:52 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/15 23:05:02 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:30:19 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "libft.h"
+#include "libft.h"
 
 char	**extend_env(char **envp, char *newstr)
 {
@@ -27,8 +27,8 @@ char	**extend_env(char **envp, char *newstr)
 		ft_clear_split(envp, ft_count_strings(envp));
 		return (envp);
 	}
-    i = 0;
-    while (i < len)
+	i = 0;
+	while (i < len)
 	{
 		out[i] = ft_strdup(envp[i]);
 		if (!out[i])
@@ -37,7 +37,7 @@ char	**extend_env(char **envp, char *newstr)
 			ft_clear_split(out, ft_count_strings(out));
 			return (NULL);
 		}
-        i++;
+		i++;
 	}
 	out[i] = ft_strdup(newstr);
 	if (!out[i])

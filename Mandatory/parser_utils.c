@@ -1,37 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   parser_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/14 22:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/30 05:20:18 by hahadiou         ###   ########.fr       */
+/*   Created: 2023/06/04 15:31:11 by hahadiou          #+#    #+#             */
+/*   Updated: 2023/06/04 15:31:21 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// to be fixed
-int ft_unset_builtin(char *var, char **envp)
+int	ft_check_pipe(t_lexer *lexer)
 {
-	char	**temp_env;
-	size_t	var_len;
-
-	var_len = ft_strlen(var);
-	while (*envp)
+	while (lexer)
 	{
-		if (!ft_strncmp(*envp, var, var_len))
-		{
-			temp_env = envp;
-			//free(temp_env[0]);
-            while (*temp_env)
-			{
-				temp_env[0] = temp_env[1];
-				temp_env++;
-			}
-		}
-		envp++;
+		if (lexer->type == PIPE)
+			return (1);
+		lexer = lexer->next;
+	}
+	return (0);
+}
+
+int	ft_check_builtin(t_lexer *lexer)
+{
+	while (lexer)
+	{
+		if (lexer->type == BUILTIN)
+			return (1);
+		lexer = lexer->next;
 	}
 	return (0);
 }

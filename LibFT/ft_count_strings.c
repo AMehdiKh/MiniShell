@@ -10,14 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "libft.h"
+#include "libft.h"
 
-size_t ft_count_strings(char **strings)
+size_t	ft_count_strings(char **strings)
 {
-    size_t count;
-    
-    count = 0;
-    while (strings[count])
-        count++;
-    return (count);
+	size_t	count;
+
+	count = 0;
+	while (strings[count])
+		count++;
+	return (count);
 }

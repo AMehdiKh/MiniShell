@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:46:12 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/05/30 02:28:50 by ael-khel         ###   ########.fr       */
+/*   Updated: 2023/06/03 20:14:20 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
+# include <stdbool.h>
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
-# include <stdio.h>
-# include <stdbool.h>
 
-typedef enum 	e_token t_token;
-typedef struct 	s_lexer t_lexer;
+typedef enum e_token	t_token;
+typedef struct s_lexer	t_lexer;
 
-enum e_token
+enum					e_token
 {
 	STDIN,
 	STDOUT,
@@ -37,13 +37,13 @@ enum e_token
 	CMD_NOT_FOUND = 127
 };
 
-struct s_lexer
+struct					s_lexer
 {
-	t_token			type;
-	char			*word;
-	bool			expand;
-	struct s_lexer	*prev;
-	struct s_lexer	*next;
+	t_token				type;
+	char				*word;
+	bool				expand;
+	struct s_lexer		*prev;
+	struct s_lexer		*next;
 };
 
 #endif

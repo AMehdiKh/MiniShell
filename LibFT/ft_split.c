@@ -24,12 +24,12 @@ static int	ft_end_quoted(const char **s, int *quote, int option)
 		*s += 1;
 		while (*(*s + i))
 		{
-			if (*(*s + i) == *quote && (*(*s + (i + 1)) == ' '
-					|| *(*s + (i + 1)) == '\0'))
+			if (*(*s + i) == *quote && (*(*s + (i + 1)) == ' ' || *(*s + (i
+							+ 1)) == '\0'))
 				return (1 + option);
-			else if (*(*s + i) == ' ' && *(*s + (i - 1)) != *quote
-				&& *(*s + (i + 1)) == *quote
-				&& (*(*s + (i + 2)) != '\0' && *(*s + (i + 2)) != ' '))
+			else if (*(*s + i) == ' ' && *(*s + (i - 1)) != *quote && *(*s + (i
+						+ 1)) == *quote && (*(*s + (i + 2)) != '\0' && *(*s + (i
+							+ 2)) != ' '))
 				return (0);
 			++i;
 		}
@@ -50,9 +50,8 @@ static size_t	ft_word_len(const char **s, char c, int option, int *e_quote)
 	wl += ((quote && !*e_quote) || *e_quote == 2);
 	while (*(*s + wl))
 	{
-		if ((*e_quote && *(*s + wl) == quote && (*(*s + (wl + 1)) == ' '
-					|| *(*s + (wl + 1)) == '\0'))
-			|| (!*e_quote && *(*s + wl) == c))
+		if ((*e_quote && *(*s + wl) == quote && (*(*s + (wl + 1)) == ' ' || *(*s
+						+ (wl + 1)) == '\0')) || (!*e_quote && *(*s + wl) == c))
 		{
 			wl += (*e_quote == 2);
 			break ;
@@ -83,7 +82,6 @@ static char	**ft_insert(const char *s, char c, size_t wc, int option)
 		if (!ptr[x])
 			return (ft_clear_split(ptr, x));
 		ft_strlcpy(ptr[x], s, wl + 1);
-
 		s += (wl + (e_quote == 1));
 		++x;
 	}
@@ -106,8 +104,8 @@ static size_t	ft_word_count(const char *s, char c)
 		e_quote = ft_end_quoted(&s, &quote, 0);
 		while (*s)
 		{
-			if ((e_quote && *s == quote && (*(s + 1) == ' '
-						|| *(s + 1) == '\0')) || (!e_quote && *s == c))
+			if ((e_quote && *s == quote && (*(s + 1) == ' ' || *(s
+							+ 1) == '\0')) || (!e_quote && *s == c))
 			{
 				s += e_quote;
 				break ;

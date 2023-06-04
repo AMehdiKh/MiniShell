@@ -6,11 +6,28 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 03:51:19 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 15:26:45 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_shell	*g_shell;
+
+static void	destroy(t_shell	*shell, char *line)
+{
+	ft_clear(shell->env);
+	free(shell);
+	free(line);
+	ft_dprintf(STDOUT_FILENO, "exit\n");
+}
+
+static void	setup_shell(char **env)
+{
+	g_shell = (t_shell *)malloc(sizeof(t_shell));
+	g_shell->env = ft_dup_env(env);
+	config_signals();
+}
 
 static int	ft_last_pipe(char *line)
 {
@@ -36,9 +53,9 @@ static int	ft_last_pipe(char *line)
 	return (0);
 }
 
-static	char	*ft_unclosed_quote(char *line, size_t i, int pipe)
+static	char	*ft_unclosed_quote(char *line, size_t i, int pipe, int quote)
 {
-	int		quote;
+	char	*read;
 
 	while (line[i] || pipe)
 	{
@@ -49,8 +66,10 @@ static	char	*ft_unclosed_quote(char *line, size_t i, int pipe)
 		{
 			if ((!line[i] && quote) || pipe)
 			{
-				write(1, "> ", 2);
-				line = ft_strjoin(line, get_next_line(0), 4);
+				read = readline("> ");
+				if (read == NULL)
+					return (free(line), free(read), NULL);
+				line = ft_strjoin(line, read, 4);
 			}
 			if (line[i] == quote)
 				quote = 0;
@@ -58,37 +77,36 @@ static	char	*ft_unclosed_quote(char *line, size_t i, int pipe)
 		}
 		++i;
 		if (!line[i] && ft_last_pipe(line))
-			line = ft_unclosed_quote(line, i, 1);
+			line = ft_unclosed_quote(line, i, 1, quote);
 	}
 	return (line);
 }
 
 int	main(int ac, char **av, char **env)
 {
-	t_shell	shell[1];
-	t_parser pipex[1];
-	char	*line;
-	
-	if (ac < 1 || av[1])
-		return (1);
-	ft_bzero(shell, sizeof(shell));
-	shell->env = ft_dup_env(env);
-	while (-42)
+	char		*line;
+
+	setup_shell(env);
+	while (ac || av[1])
 	{
-		shell->lexer_status = 0;
+		g_shell->lexer_status = 0;
 		line = readline("⥴ ");
-		line = ft_unclosed_quote(line, 0, 0);
-		shell->line = ft_strtrim(line, " \t");
-		add_history(shell->line);
-		free(line);
-		if (shell->line && !*shell->line)
+		if (line == NULL)
+			return (destroy(g_shell, line), 0);
+		line = ft_unclosed_quote(line, 0, 0, (int){0});
+		if (line == NULL)
 			continue ;
-		if(ft_check_meta(shell))
-		  	continue ;
-		if(ft_lexer(shell))
-		 	continue ;
-		ft_parser(pipex, shell, shell->lexer);
-		ft_lexer_clear(&(shell->lexer));
+		g_shell->line = ft_strtrim(line, " \t");
+		add_history(g_shell->line);
+		free(line);
+		if (g_shell->line && !*g_shell->line)
+			continue ;
+		if (ft_check_meta(g_shell))
+			continue ;
+		if (ft_lexer(g_shell))
+			continue ;
+		ft_parser((t_parser [1]){0}, g_shell, g_shell->lexer);
+		ft_lexer_clear(&(g_shell->lexer));
 	}
 	return (0);
 }

@@ -10,12 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "libft.h"
+#include "libft.h"
 
 void	ft_lexer_clear(t_lexer **lexer)
 {
-	t_lexer *current;
-	t_lexer *next;
+	t_lexer	*current;
+	t_lexer	*next;
 
 	if (!lexer || !(*lexer))
 		return ;
