@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 15:31:11 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/06/04 15:31:21 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:30:01 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,10 @@ int	ft_check_builtin(t_lexer *lexer)
 		lexer = lexer->next;
 	}
 	return (0);
+}
+
+void	ft_save_std(int std[2])
+{
+	std[0] = dup(0);
+	std[1] = dup(1);
 }

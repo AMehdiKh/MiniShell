@@ -6,11 +6,23 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 19:32:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/06/04 14:53:25 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:11:11 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static	char	*check_quotes(char *word, bool *expand)
+{
+	if (ft_search(word, '\'') || ft_search(word, '\"'))
+	{
+		*expand = false;
+		return (word = ft_remove_quotes(word, 0));
+	}
+	else
+		*expand = true;
+	return (word);
+}
 
 int	ft_heredoc(t_shell *shell, t_lexer *lexer, int stdin)
 {
@@ -19,12 +31,7 @@ int	ft_heredoc(t_shell *shell, t_lexer *lexer, int stdin)
 	bool	expand;
 
 	pipe(pfds);
-	expand = true;
-	if (ft_search(lexer->word, '\'') || ft_search(lexer->word, '\"'))
-	{
-		expand = false;
-		lexer->word = ft_remove_quotes(lexer->word, 0);
-	}
+	lexer->word = check_quotes(lexer->word, &expand);
 	while (1)
 	{
 		ft_dprintf(2, "> ");
@@ -61,19 +68,6 @@ void	ft_close_pipe(t_parser *parser)
 	parser->prev_in = dup(parser->pipefd[0]);
 	close(parser->pipefd[0]);
 	close(parser->pipefd[1]);
-}
-
-void	ft_clear(char **ptr)
-{
-	int	i;
-
-	i = 0;
-	if (ptr)
-	{
-		while (ptr[i])
-			free(ptr[i++]);
-		free(ptr);
-	}
 }
 
 void	ft_newnode(t_shell *shell)

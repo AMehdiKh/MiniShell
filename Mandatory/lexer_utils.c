@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/06/04 14:40:45 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:38:56 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,13 @@ int	ft_builtin_check(char *s, t_shell *shell)
 	char	*tmp;
 
 	tmp = ft_remove_quotes(ft_expander(s, shell), 1);
-	if (!ft_strncmp(tmp, "exit", ft_strlen("exit") + 1) || !ft_strncmp(tmp,
-			"echo", ft_strlen("echo") + 1) || !ft_strncmp(tmp, "cd",
-			ft_strlen("cd") + 1) || !ft_strncmp(tmp, "pwd", ft_strlen("pwd")
-			+ 1) || !ft_strncmp(tmp, "export", ft_strlen("export") + 1)
-		|| !ft_strncmp(tmp, "unset", ft_strlen("unset") + 1) || !ft_strncmp(tmp,
-			"env", ft_strlen("env") + 1))
+	if (!ft_strncmp(tmp, "exit", ft_strlen("exit") + 1) \
+	|| !ft_strncmp(tmp, "echo", ft_strlen("echo") + 1) \
+	|| !ft_strncmp(tmp, "cd", ft_strlen("cd") + 1) \
+	|| !ft_strncmp(tmp, "pwd", ft_strlen("pwd") + 1) \
+	|| !ft_strncmp(tmp, "export", ft_strlen("export") + 1) \
+	|| !ft_strncmp(tmp, "unset", ft_strlen("unset") + 1) \
+	|| !ft_strncmp(tmp, "env", ft_strlen("env") + 1))
 	{
 		free(tmp);
 		return (1);
@@ -101,4 +102,12 @@ char	*ft_arg_join(t_shell *shell)
 		ft_lstdelone(tmp);
 	}
 	return (cmd);
+}
+
+char	*setup_red(t_token type, t_shell *shell)
+{
+	if (type == R_FILE)
+		return (ft_remove_quotes(shell->list->next->content, 0));
+	else
+		return (ft_strdup(shell->list->next->content));
 }
