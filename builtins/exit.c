@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 09:26:41 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 18:46:41 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/05 22:35:21 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,5 @@ void	ft_exit_builtin(int ac, char *av)
 {
 	if (ac > 1)
 		ft_exit(ft_strtrim(av, " \t"), av, ac);
-	exit(EXIT_SUCCESS); // incorrect line
+	exit(EXIT_SUCCESS);
 }

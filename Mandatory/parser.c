@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/29 23:54:37 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/06/04 15:31:01 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 18:06:22 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	setup_child(t_lexer *lexer, t_parser *parser, t_shell *shell)
 	t_lexer	*cmd;
 	int		stdin;
 
+	signal(SIGINT, child_signals);
 	cmd = NULL;
 	stdin = dup(0);
 	close(parser->pipefd[0]);
@@ -90,27 +91,24 @@ void	setup_child(t_lexer *lexer, t_parser *parser, t_shell *shell)
 	}
 }
 
-void	ft_parser(t_parser *parser, t_shell *shell, t_lexer *lexer)
+void	ft_parser(t_parser *parser, t_shell *shell, t_lexer *lexer, int std[2])
 {
 	pid_t	pid;
-	int		stdin;
-	int		stdout;
 	t_lexer	*cmd;
 
 	parser->env = shell->env;
-	stdin = dup(0);
-	stdout = dup(1);
+	ft_save_std(std);
 	if (!ft_check_pipe(lexer) && ft_check_builtin(lexer))
 	{
-		lexer = ft_redi_parser(shell, lexer, stdin);
+		lexer = ft_redi_parser(shell, lexer, std[0]);
 		cmd = lexer;
 		lexer = lexer->next;
-		lexer = ft_redi_parser(shell, lexer, stdin);
+		lexer = ft_redi_parser(shell, lexer, std[0]);
 		if (exec_builtin_child(cmd, shell) < 0)
 			return ;
 	}
-	ft_dup2(stdin, 0);
-	ft_dup2(stdout, 1);
+	ft_dup2(std[0], 0);
+	ft_dup2(std[1], 1);
 	ft_pipe(parser);
 	pid = ft_fork(parser);
 	if (!pid)
@@ -118,7 +116,7 @@ void	ft_parser(t_parser *parser, t_shell *shell, t_lexer *lexer)
 	ft_close_pipe(parser);
 	lexer = ft_grp_shift(lexer);
 	if (lexer)
-		ft_parser(parser, shell, lexer);
+		ft_parser(parser, shell, lexer, std);
 	if (!lexer)
 	{
 		waitpid(pid, &shell->exit_status, 0);

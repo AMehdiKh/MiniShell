@@ -6,21 +6,23 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/15 23:04:52 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/06/04 15:30:19 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 16:19:21 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	**extend_env(char **envp, char *newstr)
+static void	allocation_failed(char **envp, char **out)
 {
-	size_t	len;
-	size_t	i;
-	char	**out;
+	ft_clear_split(envp, ft_count_strings(envp));
+	ft_clear_split(out, ft_count_strings(out));
+}
 
-	if (!newstr)
-		return (envp);
-	len = ft_count_strings(envp);
+static char	**allocate_new_env(char **envp, size_t len, char *newstr)
+{
+	char	**out;
+	size_t	i;
+
 	out = (char **)malloc(sizeof(char *) * (len + 2));
 	if (!out)
 	{
@@ -32,21 +34,23 @@ char	**extend_env(char **envp, char *newstr)
 	{
 		out[i] = ft_strdup(envp[i]);
 		if (!out[i])
-		{
-			ft_clear_split(envp, ft_count_strings(envp));
-			ft_clear_split(out, ft_count_strings(out));
-			return (NULL);
-		}
+			return (allocation_failed(envp, out), NULL);
 		i++;
 	}
 	out[i] = ft_strdup(newstr);
 	if (!out[i])
-	{
-		ft_clear_split(envp, ft_count_strings(envp));
-		ft_clear_split(out, ft_count_strings(out));
-		return (NULL);
-	}
+		return (allocation_failed(envp, out), NULL);
 	out[i + 1] = NULL;
 	ft_clear_split(envp, ft_count_strings(envp));
 	return (out);
+}
+
+char	**extend_env(char **envp, char *newstr)
+{
+	size_t	len;
+
+	if (!newstr)
+		return (envp);
+	len = ft_count_strings(envp);
+	return (allocate_new_env(envp, len, newstr));
 }

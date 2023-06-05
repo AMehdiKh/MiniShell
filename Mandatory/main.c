@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/24 23:02:44 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/06/04 15:26:45 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/04 17:15:23 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		if (ft_lexer(g_shell))
 			continue ;
-		ft_parser((t_parser [1]){0}, g_shell, g_shell->lexer);
+		ft_parser((t_parser [1]){0}, g_shell, g_shell->lexer, (int []){0, 1});
 		ft_lexer_clear(&(g_shell->lexer));
 	}
 	return (0);
