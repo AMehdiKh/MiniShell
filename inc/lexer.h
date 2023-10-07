@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/08 20:46:12 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/06/04 16:27:53 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/15 14:36:57 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 
 # include <stdbool.h>
 # include <stdio.h>
-# include <stdlib.h>
-# include <string.h>
 
 typedef enum e_token	t_token;
 typedef struct s_lexer	t_lexer;
@@ -41,7 +39,6 @@ struct					s_lexer
 {
 	t_token				type;
 	char				*word;
-	bool				expand;
 	struct s_lexer		*prev;
 	struct s_lexer		*next;
 };

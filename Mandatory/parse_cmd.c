@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 03:06:23 by ael-khel          #+#    #+#             */
-/*   Updated: 2023/05/30 18:53:38 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/15 14:43:39 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ft_parse_path(t_parser *parser)
 	{
 		if (!ft_strncmp("PATH=", parser->env[i], 5))
 		{
-			parser->path = ft_split(&parser->env[i][5], ':', 0);
+			parser->path = ft_split(&parser->env[i][5], ':');
 			if (!parser->path)
 			{
 				code = errno;

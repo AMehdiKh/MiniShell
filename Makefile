@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+         #
+#    By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/27 12:41:59 by ael-khel          #+#    #+#              #
-#    Updated: 2023/06/04 15:32:01 by hahadiou         ###   ########.fr        #
+#    Updated: 2023/06/15 14:49:41 by ael-khel         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC		= cc
-FLAGS	= -Wall -Wextra -Werror -IINC
-RLFLGS	= -L/Users/hahadiou/goinfre/homebrew/opt/readline/lib -lreadline
-RLOFLGS	= -I/Users/hahadiou/goinfre/homebrew/opt/readline/include
+FLAGS	= -Wall -Wextra -Werror
+RLFLGS	= -L/Users/ael-khel/homebrew/opt/readline/lib -lreadline
+RLOFLGS	= -I/Users/ael-khel/homebrew/opt/readline/include
 
 NAME	= minishell
 
@@ -65,7 +65,7 @@ $(NAME): $(OBJ) $(SH_OBJ)
 	@echo "$(YELLOW)Compiling Utils...$(NOC)"
 	@make -sC $(UTILS_PATH)
 	@echo "$(YELLOW)Compiling minishell...$(NOC)"
-	@$(CC) $(FLAGS) -L $(UTILS_PATH) $(RLFLGS) -o $@ $^ -lft
+	@$(CC) $^ -L $(UTILS_PATH) -lft $(RLFLGS) -I$(INC) -o $@
 	@echo "$(GREEN)$@$(NOC)"
 
 $(OBJ_PATH)/%.o: $(MANDATORY_PATH)/%.c $(INC)/minishell.h $(INC)/lexer.h $(INC)/libft.h 
@@ -74,7 +74,7 @@ $(OBJ_PATH)/%.o: $(MANDATORY_PATH)/%.c $(INC)/minishell.h $(INC)/lexer.h $(INC)/
 
 $(BUI_OBJ_PATH)/%.o: $(SHARED_PATH)/%.c $(INC)/$(NAME).h
 	@mkdir -p bui_obj
-	@$(CC) $(FLAGS) -I$(INC) -c -o $@ $<
+	@$(CC) $(FLAGS) $(RLOFLGS) -I$(INC) -c -o $@ $<
 
 clean:
 	@echo "$(RED)Deleting OBJS ✔️ $(NOC)"
@@ -90,6 +90,3 @@ fclean: clean
 re: fclean all
 
 .PHONY:	all clean fclean re
-
-# $(CC) $(M_OBJS) $(LIBFT) -L/Users/ael-khel/homebrew/opt/readline/lib -lreadline -o $@
-# $(CC) -I/Users/ael-khel/homebrew/opt/readline/include $(CFLAGS) -c $< -o $@

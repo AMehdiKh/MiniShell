@@ -6,7 +6,7 @@
 /*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/15 07:54:13 by Ael-khel          #+#    #+#             */
-/*   Updated: 2023/06/04 15:14:13 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/15 14:42:48 by hahadiou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char					*ft_strjoin(char const *s1, char const *s2, int option);
 char					*ft_strchr(const char *s, int c);
 char					*ft_strdup(const char *s);
 char					*ft_litoa(int n);
-char					**ft_split(char const *s, char c, int option);
+char					**ft_split(char const *s, char c);
 void					*ft_clear_split(char **ptr, size_t x);
 char					**ft_dup_env(char **main_env);
 char					**extend_env(char **envp, char *newstr);

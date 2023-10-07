@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   utils_II.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/09 19:32:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/06/04 16:11:11 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:02:53 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <malloc/_malloc.h>
 
 static	char	*check_quotes(char *word, bool *expand)
 {
@@ -24,7 +25,7 @@ static	char	*check_quotes(char *word, bool *expand)
 	return (word);
 }
 
-int	ft_heredoc(t_shell *shell, t_lexer *lexer, int stdin)
+int	ft_heredoc(t_shell *shell, t_lexer *lexer)
 {
 	char	*heredoc[2];
 	int		pfds[2];
@@ -35,12 +36,15 @@ int	ft_heredoc(t_shell *shell, t_lexer *lexer, int stdin)
 	while (1)
 	{
 		ft_dprintf(2, "> ");
-		heredoc[0] = get_next_line(stdin);
-		if (ft_strnstr(heredoc[0], lexer->word, ft_strlen(lexer->word)))
+		heredoc[0] = get_next_line(shell->parser->_stdin);
+		if (ft_heredoc_cmp(lexer->word, heredoc[0]))
 			break ;
 		heredoc[1] = ft_expander(heredoc[0], shell);
 		if (heredoc[1] && expand)
+		{
 			ft_dprintf(pfds[1], "%s", heredoc[1]);
+			free(heredoc[1]);
+		}
 		else
 			ft_dprintf(pfds[1], "%s", heredoc[0]);
 		free(heredoc[0]);

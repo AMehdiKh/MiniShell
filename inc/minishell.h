@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 15:18:29 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/06/04 17:32:03 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/15 15:13:46 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,7 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # include <signal.h>
-# include <stdbool.h>
-# include <stdio.h>
-# include <stdlib.h>
 # include <string.h>
-# include <sys/types.h>
-# include <sys/wait.h>
-# include <unistd.h>
 
 typedef struct s_shell	t_shell;
 typedef struct s_cmd	t_cmd;
@@ -38,6 +32,8 @@ struct					s_parser
 {
 	int					pipefd[2];
 	int					prev_in;
+	int					_stdin;
+	int					_stdout;
 	char				**av;
 	char				**cmd;
 	char				**path;
@@ -62,8 +58,8 @@ struct					s_shell
 void					ft_setenv(t_shell *shell, char *s, char *e);
 int						ft_cd_builtin(char *s, t_shell *shell);
 int						ft_echo_builtin(size_t i, char **e);
-void					ft_env_builtin(char **e, t_shell *s);
-void					ft_exit_builtin(int i, char *s);
+int						ft_env_builtin(char **e, t_shell *s);
+void					ft_exit_builtin(int i, char *s, t_shell *shell);
 int						ft_export_builtin(t_shell *s, char **e);
 int						ft_pwd_builtin(void);
 int						ft_unset_builtin(char *s, char **e);
@@ -94,9 +90,9 @@ char					*ft_expander(char *s, t_shell *sh);
 int						expanded_size(char *input, t_shell *shell);
 size_t					expand_size(char *input, size_t *i, t_shell *shell);
 size_t					exit_status_size(t_shell *shell);
-int						ft_heredoc(t_shell *shell, t_lexer *lexer, int stdin);
+int						ft_heredoc(t_shell *shell, t_lexer *lexer);
 bool					ft_search(char *s, char c);
-void					ft_parser(t_parser *p, t_shell *s, t_lexer *l, int *a);
+void					ft_parser(t_parser *p, t_shell *s, t_lexer *l);
 void					ft_check_cmd(char *arg, t_parser *parser);
 void					ft_cmds_parse(char *arg, t_parser *parser);
 void					ft_parse_path(t_parser *parser);
@@ -120,8 +116,9 @@ int						sirche(char *s);
 int						ft_check_pipe(t_lexer *lexer);
 int						ft_check_builtin(t_lexer *lexer);
 char					*setup_red(t_token type, t_shell *shell);
-void					ft_save_std(int std[2]);
+void					ft_save_std(t_parser *parser);
 int						ft_execute_builtin(t_shell *s, t_lexer *l, int se);
 int						exec_builtin_child(t_lexer *lexer, t_shell *shell);
-t_lexer					*ft_redi_parser(t_shell *s, t_lexer *l, int std);
+t_lexer					*ft_redi_parser(t_shell *s, t_lexer *l);
+int						ft_heredoc_cmp(char *limiter, char *heredoc);
 #endif

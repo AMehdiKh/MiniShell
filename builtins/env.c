@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 19:33:10 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/06/04 14:45:37 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/05 22:57:36 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <stdlib.h>
 
-void	ft_env_builtin(char **av, t_shell *shell)
+int	ft_env_builtin(char **av, t_shell *shell)
 {
 	int	i;
 
@@ -21,7 +22,7 @@ void	ft_env_builtin(char **av, t_shell *shell)
 	{
 		ft_dprintf(2, "env: %s: No such file or directory\n", av[1]);
 		shell->exit_status = 127;
-		return ;
+		return (127);
 	}
 	while (shell->env[i])
 	{
@@ -30,4 +31,5 @@ void	ft_env_builtin(char **av, t_shell *shell)
 		i++;
 	}
 	shell->exit_status = 0;
+	return (EXIT_SUCCESS);
 }

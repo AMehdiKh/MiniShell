@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hahadiou <hahadiou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-khel <ael-khel@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 23:08:45 by hahadiou          #+#    #+#             */
-/*   Updated: 2023/06/04 16:38:56 by hahadiou         ###   ########.fr       */
+/*   Updated: 2023/06/06 00:13:42 by ael-khel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ int	ft_check_meta(t_shell *shell)
 			else
 				syntax_err = ft_substr(tmp->content, 0, 2);
 			shell->exit_status = 2;
-			ft_dprintf(2, "minishell: syntax error \
-				near unexpected token `%s'\n", syntax_err);
+			ft_dprintf(2, "minishell: syntax error "
+				"near unexpected token `%s'\n", syntax_err);
 			free(syntax_err);
 			free(shell->line);
 			ft_lstclear(&(shell->list));
